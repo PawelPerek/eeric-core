@@ -1,5 +1,5 @@
 #[derive(Clone)]
-struct Memory(Vec<u8>);
+pub struct Memory(Vec<u8>);
 
 impl Memory {
     fn get(&self, address: usize) -> u8 {

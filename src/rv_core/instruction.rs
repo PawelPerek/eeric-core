@@ -1,8 +1,8 @@
 pub mod format;
 
 use format::{
-    R, I, S, U,
-    Vsetvli,
+    base::*,
+    vector::*
 };
 
 pub enum Instruction {
