@@ -12,10 +12,15 @@ impl std::ops::Index<usize> for IntegerRegisters {
     }
 }
 
+
 impl std::ops::IndexMut<usize> for IntegerRegisters {
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+        // Rust prohibits returning &mut 0 because reference would outlive the value on the stack.
+        // Small static variables are basically free so IMO it's the best second choice
+        static mut DISCARD_VALUE: u64 = 0;
+
         match index {
-            0 => &mut 0,
+            0 => unsafe { &mut DISCARD_VALUE },
             _ => &mut self.0[index - 1]
         }
     }

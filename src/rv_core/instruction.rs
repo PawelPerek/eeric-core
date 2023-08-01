@@ -35,11 +35,14 @@ pub enum Instruction {
 
     // Load/store operations
 
+    Ld(I),
     Lw(I),
     Lh(I),
     Lb(I),
+    Lwu(I),
     Lhu(I),
     Lbu(I),
+    Sd(S),
     Sw(S),
     Sh(S),
     Sb(S),
