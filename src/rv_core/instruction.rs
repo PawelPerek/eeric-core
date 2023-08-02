@@ -18,7 +18,7 @@ pub enum Instruction {
     Sltu(R),
     Sltiu(I),
     Lui(U),
-    Auip(U),
+    Auipc(U),
 
     // Logic instructions
 

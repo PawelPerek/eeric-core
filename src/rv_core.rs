@@ -6,6 +6,8 @@ use instruction::{format, Instruction};
 use memory::Memory;
 use registers::Registers;
 
+use crate::rv_core::instruction::executor::base::sll;
+
 struct RvCore {
     registers: Registers,
     memory: Memory
@@ -24,140 +26,48 @@ impl RvCore {
     }
 
     fn execute(&mut self, input: Instruction) {
-        use format::{
-            base::*, 
-            vector::*
-        };
         use Instruction::*;
         use instruction::executor::*;
 
         match input {
-            Add(R { rd, rs1, rs2 }) => {
-                let rs1 = self.registers.x[rs1];
-                let rs2 = self.registers.x[rs2];
-                self.registers.x[rd] = rs1 + rs2;
-            }
-            Sub(R { rd, rs1, rs2 }) => {
-                let rs1 = self.registers.x[rs1];
-                let rs2 = self.registers.x[rs2];
-                self.registers.x[rd] = rs1 - rs2;
-            }
-            Addi(I { rd, rs, imm12 }) => {
-                let rs = self.registers.x[rs];
-                self.registers.x[rd] = rs + imm12;
-            }
-            Slt(R { rd, rs1, rs2 }) => {
-                let rs1 = self.registers.x[rs1] as i64;
-                let rs2 = self.registers.x[rs2] as i64;
-                self.registers.x[rd] = if rs1 < rs2 { 1 } else { 0 };
-            }
-            Slti(I { rd, rs, imm12 }) => {
-                let rs = self.registers.x[rs];
-                self.registers.x[rd] = if rs < imm12 { 1 } else { 0 };
-            }
-            Sltu(R { rd, rs1, rs2 }) => {
-                let rs1 = self.registers.x[rs1];
-                let rs2 = self.registers.x[rs2];
-                self.registers.x[rd] = if rs1 < rs2 { 1 } else { 0 };
-            }
-            Sltiu(I { rd, rs, imm12 }) => {
-                let rs = self.registers.x[rs] as i64;
-                self.registers.x[rd] = if rs < imm12 as i64 { 1 } else { 0 };
-            }
-            Lui(U { rd, imm20 }) => self.registers.x[rd] = imm20 << 12,
-            Auip(U { rd, imm20 }) => {
-                let pc = self.registers.pc;
-                self.registers.x[rd] = pc + imm20 << 12;
-            }
+            Add(args)   => base::add(args, &mut self.registers.x),
+            Sub(args)   => base::sub(args, &mut self.registers.x),
+            Addi(args)  => base::addi(args, &mut self.registers.x),
+            Slt(args)   => base::slt(args, &mut self.registers.x),
+            Slti(args)  => base::slti(args, &mut self.registers.x),
+            Sltu(args)  => base::sltu(args, &mut self.registers.x),
+            Sltiu(args) => base::sltiu(args, &mut self.registers.x),
+            Lui(args)   => base::lui(args, &mut self.registers.x),
+            Auipc(args) => base::auipc(args, &mut self.registers.x, self.registers.pc),
 
-            And(R { rd, rs1, rs2 }) => {
-                let rs1 = self.registers.x[rs1];
-                let rs2 = self.registers.x[rs2];
-                self.registers.x[rd] = rs1 & rs2;
-            }
-            Or(R { rd, rs1, rs2 }) => {
-                let rs1 = self.registers.x[rs1];
-                let rs2 = self.registers.x[rs2];
-                self.registers.x[rd] = rs1 | rs2;
-            }
-            Xor(R { rd, rs1, rs2 }) => {
-                let rs1 = self.registers.x[rs1];
-                let rs2 = self.registers.x[rs2];
-                self.registers.x[rd] = rs1 ^ rs2;
-            }
-            Andi(I { rd, rs, imm12 }) => {
-                let rs = self.registers.x[rs];
-                self.registers.x[rd] = rs & imm12;
-            }
-            Ori(I { rd, rs, imm12 }) => {
-                let rs = self.registers.x[rs];
-                self.registers.x[rd] = rs | imm12;
-            }
-            Xori(I { rd, rs, imm12 }) => {
-                let rs = self.registers.x[rs];
-                self.registers.x[rd] = rs ^ imm12;
-            }
-            Sll(R { rd, rs1, rs2 }) => {
-                let rs1 = self.registers.x[rs1];
-                let rs2 = self.registers.x[rs2] & 0b11111;
-                self.registers.x[rd] = rs1 << rs2;
-            }
-            Srl(R { rd, rs1, rs2 }) => {
-                let rs1 = self.registers.x[rs1];
-                let rs2 = self.registers.x[rs2] & 0b11111;
-                self.registers.x[rd] = rs1 >> rs2;
-            }
-            Sra(R { rd, rs1, rs2 }) => {
-                let rs1 = self.registers.x[rs1] as i64;
-                let rs2 = self.registers.x[rs2] as i64 & 0b11111;
-                self.registers.x[rd] = (rs1 >> rs2) as u64;
-            }
-            Slli(I { rd, rs, imm12 }) => {
-                let rs = self.registers.x[rs];
-                let shamt = imm12 & 0b11111;
-                self.registers.x[rd] = rs << shamt;
-            }
-            Srli(I { rd, rs, imm12 }) => {
-                let rs = self.registers.x[rs];
-                let shamt = imm12 & 0b11111;
-                self.registers.x[rd] = rs >> shamt;
-            }
-            Srai(I { rd, rs, imm12 }) => {
-                let rs = self.registers.x[rs] as i64;
-                let shamt = imm12 & 0b11111;
-                self.registers.x[rd] = (rs >> shamt) as u64;
-            },
-            Ld(I {rd, rs, imm12}) => {
-                let address = (self.registers.x[rs] + imm12) as usize;
-                let value = u64::from_le_bytes(self.memory.0[address .. address + 8].try_into().unwrap());
-                self.registers.x[rd] = value;
-            },
-            Lw(I {rd, rs, imm12}) => {
-                let address = (self.registers.x[rs] + imm12) as usize;
-                let value = u32::from_le_bytes(self.memory.0[address .. address + 4].try_into().unwrap());
-                self.registers.x[rd] = value as u64;
-            },
-            Lh(I {rd, rs, imm12}) => {
-                let address: usize = (self.registers.x[rs] + imm12) as usize;
-                let value = u16::from_le_bytes(self.memory.0[address .. address + 2].try_into().unwrap());
-                self.registers.x[rd] = value as u64;
-            },
-            Lb(I {rd, rs, imm12}) => {
-                let address: usize = (self.registers.x[rs] + imm12) as usize;
-                let value = self.memory.0[address];
-                self.registers.x[rd] = value as u64;
-            },
-            Lhu(_) => todo!(),
-            Lbu(_) => todo!(),
-            Sw(_) => todo!(),
-            Sh(_) => todo!(),
-            Sb(_) => todo!(),
-            Lwu(_) => todo!(),
-            Sd(_) => todo!(),
+            And(args) => base::and(args, &mut self.registers.x),
+            Or(args) => base::or(args, &mut self.registers.x),
+            Xor(args) => base::xor(args, &mut self.registers.x),
+            Andi(args) => base::andi(args, &mut self.registers.x),
+            Ori(args) => base::ori(args, &mut self.registers.x),
+            Xori(args) => base::xori(args, &mut self.registers.x),
+            Sll(args) => base::sll(args, &mut self.registers.x),
+            Srl(args) => base::srl(args, &mut self.registers.x),
+            Sra(args) => base::sra(args, &mut self.registers.x),
+            Slli(args) => base::slli(args, &mut self.registers.x),
+            Srli(args) => base::srli(args, &mut self.registers.x),
+            Srai(args) => base::srai(args, &mut self.registers.x),
 
-            Vaddvv(args) => vadd::vv(args, &mut self.registers.v),
-            Vaddvx(args) => vadd::vx(args, &mut self.registers.v, &mut self.registers.x),
-            Vaddvi(args) => vadd::vi(args, &mut self.registers.v)
+            Ld(args) => base::ld(args, &mut self.registers.x, &self.memory),
+            Lw(args) => base::lw(args, &mut self.registers.x, &self.memory),
+            Lwu(args) => base::lwu(args, &mut self.registers.x, &self.memory),
+            Lh(args) => base::lh(args, &mut self.registers.x, &self.memory),
+            Lhu(args) => base::lhu(args, &mut self.registers.x, &self.memory),
+            Lb(args) => base::lb(args, &mut self.registers.x, &self.memory),
+            Lbu(args) => base::lbu(args, &mut self.registers.x, &self.memory),
+            Sd(args) => base::sd(args, &self.registers.x, &mut self.memory),
+            Sw(args) => base::sw(args, &self.registers.x, &mut self.memory),
+            Sh(args) => base::sh(args, &self.registers.x, &mut self.memory),
+            Sb(args) => base::sb(args, &self.registers.x, &mut self.memory),
+
+            Vaddvv(args) => v::vadd::vv(args, &mut self.registers.v),
+            Vaddvx(args) => v::vadd::vx(args, &mut self.registers.v, &self.registers.x),
+            Vaddvi(args) => v::vadd::vi(args, &mut self.registers.v)
         }
     }
 }
@@ -165,10 +75,7 @@ impl RvCore {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use format::{
-        base::*, 
-        vector::*
-    };
+    use format::base::*;
     use Instruction::*;
 
     #[test]
@@ -287,7 +194,7 @@ mod tests {
         let mut machine = RvCore::new_zeroed();
 
         machine.registers.pc = 0x100;
-        machine.execute(Auip(U { rd: 3, imm20: 5 }));
+        machine.execute(Auipc(U { rd: 3, imm20: 5 }));
 
         assert_eq!(machine.registers.x[3], 256 + 5 << 12); // rd: 256 + (5 << 12)
     }
