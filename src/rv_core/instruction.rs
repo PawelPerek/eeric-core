@@ -1,5 +1,7 @@
 pub mod format;
 
+pub mod executor;
+
 use format::{
     base::*,
     vector::*
@@ -48,5 +50,9 @@ pub enum Instruction {
     Sb(S),
 
     // Vector config
+
+    Vaddvv(Opivv),
+    Vaddvx(Opivx),
+    Vaddvi(Opivi)
 
 }

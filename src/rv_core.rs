@@ -29,6 +29,7 @@ impl RvCore {
             vector::*
         };
         use Instruction::*;
+        use instruction::executor::*;
 
         match input {
             Add(R { rd, rs1, rs2 }) => {
@@ -153,6 +154,10 @@ impl RvCore {
             Sb(_) => todo!(),
             Lwu(_) => todo!(),
             Sd(_) => todo!(),
+
+            Vaddvv(args) => vadd::vv(args, &mut self.registers.v),
+            Vaddvx(args) => vadd::vx(args, &mut self.registers.v, &mut self.registers.x),
+            Vaddvi(args) => vadd::vi(args, &mut self.registers.v)
         }
     }
 }

@@ -38,7 +38,7 @@ pub struct Opivx {
 // Vector - Immediate
 pub struct Opivi {
     vd: usize,
-    imm5: u32,
+    imm5: u64,
     vs2: usize
 }
 
