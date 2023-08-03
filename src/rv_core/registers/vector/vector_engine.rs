@@ -19,10 +19,10 @@ pub enum LMUL {
 
 /// Vector unit size of microarchitecture
 #[derive(Clone)]
-pub struct VLEN(u16);
+pub struct VLEN(usize);
 
 impl VLEN {
-    fn new(length: u16) -> Result<Self, &'static str> {
+    fn new(length: usize) -> Result<Self, &'static str> {
         // VLEN=32 is the smallest VLEN required (Zvl32b)
         if length >= 32 && length.count_ones() == 1 {
             Ok(Self(length))
@@ -42,10 +42,10 @@ impl Default for VLEN {
 // RISC-V vector extension spec v1.0 defines four SEW lengths:
 // (000 - 8b, 001 - 16b, 010 - 32b, 011 - 64b).
 #[derive(Clone)]
-pub struct SEW(u16);
+pub struct SEW(usize);
 
 impl SEW {
-    pub fn new(length: u16) -> Result<Self, &'static str> {
+    pub fn new(length: usize) -> Result<Self, &'static str> {
         if length <= 64 && length >= 8 && length.count_ones() == 1 {
             Ok(Self(length))
         } else {
@@ -53,8 +53,12 @@ impl SEW {
         }
     }
 
+    pub fn bit_length(&self) -> usize {
+        self.0
+    }
+
     pub fn byte_length(&self) -> usize {
-        (self.0 / 8).into()
+        self.0 / 8
     } 
 }
 
@@ -71,7 +75,7 @@ pub enum MaskBehavior {
     Agnostic,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct VectorEngine {
     lmul: LMUL,
     vlen: VLEN,

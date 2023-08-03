@@ -65,9 +65,22 @@ impl RvCore {
             Sh(args) => base::sh(args, &self.registers.x, &mut self.memory),
             Sb(args) => base::sb(args, &self.registers.x, &mut self.memory),
 
+            Beq(_) => todo!(),
+            Bne(_) => todo!(),
+            Bge(_) => todo!(),
+            Bgeu(_) => todo!(),
+            Blt(_) => todo!(),
+            Bltu(_) => todo!(),
+            Jal(_) => todo!(),
+            Jalr(_) => todo!(),
+            
             Vaddvv(args) => v::vadd::vv(args, &mut self.registers.v),
             Vaddvx(args) => v::vadd::vx(args, &mut self.registers.v, &self.registers.x),
-            Vaddvi(args) => v::vadd::vi(args, &mut self.registers.v)
+            Vaddvi(args) => v::vadd::vi(args, &mut self.registers.v),
+            Vmvvv(args) => v::vmv::vv(args, &mut self.registers.v),
+            Vmvvx(args) => v::vmv::vx(args, &mut self.registers.v, &self.registers.x),
+            Vmvvi(args) => v::vmv::vi(args, &mut self.registers.v),
+
         }
     }
 }

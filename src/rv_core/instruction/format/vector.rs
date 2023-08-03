@@ -22,55 +22,62 @@ pub struct Vsetvl {
 
 // Vector - Vector
 pub struct Opivv {
-    vd: usize,
-    vs1: usize,
-    vs2: usize
+    pub vd: usize,
+    pub vs1: usize,
+    pub vs2: usize,
+    pub vm: bool
 }
 
 // Vector - Scalar (Register)
 
 pub struct Opivx {
-    vd: usize,
-    rs1: usize,
-    vs2: usize
+    pub vd: usize,
+    pub rs1: usize,
+    pub vs2: usize,
+    pub vm: bool
 }
 
 // Vector - Immediate
 pub struct Opivi {
-    vd: usize,
-    imm5: u64,
-    vs2: usize
+    pub vd: usize,
+    pub imm5: u64,
+    pub vs2: usize,
+    pub vm: bool
 }
 
 /// OPM - Mask instructions
 
 // Vector - Vector
 pub struct Opmvv {
-    dest: usize, // Note: can be either vd/rd
-    vs1: usize,
-    vs2: usize
+    pub dest: usize, // Note: can be either vd/rd
+    pub vs1: usize,
+    pub vs2: usize,
+    pub vm: bool
 }
 
 // Vector - Scalar (Register)
 pub struct Opmvx {
-    dest: usize, // Note: can be either vd/rd
-    rs1: usize,
-    vs2: usize
+    pub dest: usize, // Note: can be either vd/rd
+    pub rs1: usize,
+    pub vs2: usize,
+    pub vm: bool
 }
 
 /// OPF - Floating point instructions
 
 // Vector - Vector
 pub struct Opfvv {
-    dest: usize, // Note: can be either vd/rd
-    vs1: usize,
-    vs2: usize
+    pub dest: usize, // Note: can be either vd/rd
+    pub vs1: usize,
+    pub vs2: usize,
+    pub vm: bool
 }
 
 // Vector - Scalar (FP Register)
 pub struct Opfvf {
-    vd: usize,
-    rs1: usize,
-    vs2: usize
+    pub vd: usize,
+    pub rs1: usize,
+    pub vs2: usize,
+    pub vm: bool
 }
 

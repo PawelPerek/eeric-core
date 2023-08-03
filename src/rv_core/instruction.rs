@@ -8,8 +8,7 @@ use format::{
 };
 
 pub enum Instruction {
-    // Arithmetic instructions
-
+    // Arithmetic Operations
     Add(R),
     Sub(R),
     Addi(I),
@@ -20,8 +19,7 @@ pub enum Instruction {
     Lui(U),
     Auipc(U),
 
-    // Logic instructions
-
+    // Logic operations
     And(R),
     Or(R),
     Xor(R),
@@ -36,7 +34,6 @@ pub enum Instruction {
     Srai(I),
 
     // Load/store operations
-
     Ld(I),
     Lw(I),
     Lh(I),
@@ -49,10 +46,24 @@ pub enum Instruction {
     Sh(S),
     Sb(S),
 
+    // Branching
+
+    Beq(S),
+    Bne(S),
+    Bge(S),
+    Bgeu(S),
+    Blt(S),
+    Bltu(S),
+    Jal(U),
+    Jalr(I),
+
     // Vector config
 
     Vaddvv(Opivv),
     Vaddvx(Opivx),
-    Vaddvi(Opivi)
+    Vaddvi(Opivi),
+    Vmvvv(Opivv),
+    Vmvvx(Opivx),
+    Vmvvi(Opivi)
 
 }
