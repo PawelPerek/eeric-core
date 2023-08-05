@@ -32,8 +32,7 @@ impl Iterator for Vreg {
         if span.end <= self.raw.len() {
             let mut padded_bytes = [0; 8];
             let len = self.raw[span.clone()].len();
-    
-            padded_bytes[(8-len)..].copy_from_slice(&self.raw[span]);
+            padded_bytes[..len].copy_from_slice(&self.raw[span]);
     
             self.ptr += byte_step;
 
@@ -50,7 +49,7 @@ mod tests {
 
     #[test]
     fn e8() {
-        let mut vector_data = vec![0x76, 0x54, 0x32, 0x10];
+        let vector_data = vec![0x76, 0x54, 0x32, 0x10];
 
         let mut vreg = Vreg::new(vector_data, SEW::new(8).unwrap());
 
@@ -63,7 +62,7 @@ mod tests {
 
     #[test]
     fn e16() {
-        let mut vector_data = vec![0x76, 0x54, 0x32, 0x10];
+        let vector_data = vec![0x76, 0x54, 0x32, 0x10];
 
         let mut vreg = Vreg::new(vector_data, SEW::new(16).unwrap());
 
@@ -74,7 +73,7 @@ mod tests {
 
     #[test]
     fn e32() {
-        let mut vector_data = vec![0x76, 0x54, 0x32, 0x10];
+        let vector_data = vec![0x76, 0x54, 0x32, 0x10];
 
         let mut vreg = Vreg::new(vector_data, SEW::new(8).unwrap());
 

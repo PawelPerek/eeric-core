@@ -39,7 +39,7 @@ impl VectorRegisters {
         }
     }
 
-    pub fn acquire2<'a>(&'a self, rs1: usize, rs2: usize ) -> Acquired2Registers {
+    pub fn acquire2(&self, rs1: usize, rs2: usize ) -> Acquired2Registers {
         Acquired2Registers { 
             rs1: Vreg::new(
                 self.register_view(rs1), 

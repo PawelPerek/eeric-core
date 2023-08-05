@@ -118,16 +118,14 @@ impl VectorEngine {
     }
 
     pub fn lmul(&self) -> f32 {
-        use LMUL::*;
-
         match self.lmul {
-            MF8 => 0.125,
-            MF4 => 0.25,
-            MF2 => 0.5,
-            M1 => 1.,
-            M2 => 2.,
-            M4 => 4.,
-            M8 => 8.,
+            LMUL::MF8 => 0.125,
+            LMUL::MF4 => 0.25,
+            LMUL::MF2 => 0.5,
+            LMUL::M1 => 1.,
+            LMUL::M2 => 2.,
+            LMUL::M4 => 4.,
+            LMUL::M8 => 8.,
         }
     }
 }
