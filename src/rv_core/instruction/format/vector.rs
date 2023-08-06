@@ -81,3 +81,28 @@ pub struct Opfvf {
     pub vm: bool
 }
 
+/// Other encoding spaces
+
+// VRXUNARY0 - OMPVV with vs2 as function opcode
+pub type Vrxunary0 = Opmvv;
+
+// VWXUNARY0 - OMPVX with vs1 as function opcode
+pub type Vwxunary0 = Opmvx;
+
+// VXUNARY0 - OMPVV with vs1 as function opcode
+pub type Vxunary0 = Opmvv;
+
+// VMUNARY0 - OMPVV with vs1 as function opcode
+pub type Vmunary0 = Opmvv;
+
+// VWFUNARY0 - OPFVV with vs1 as function opcode
+pub type Vwfunary0 = Opfvv;
+
+// VRFUNARY0 - OPFVF with vs2 as function opcode
+pub type Vrfunary0 = Opfvf;
+
+// VFUNARY0 - OPFVV with vs1 as function opcode
+pub type Vfunary0 = Opfvv;
+
+// VFUNARY1 - OPFVV with vs1 as function opcode
+pub type Vfunary1 = Opfvv;

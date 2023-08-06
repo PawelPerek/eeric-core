@@ -1,5 +1,4 @@
 pub mod format;
-
 pub mod executor;
 
 use format::{
@@ -62,8 +61,462 @@ pub enum Instruction {
     Vaddvv(Opivv),
     Vaddvx(Opivx),
     Vaddvi(Opivi),
+
+    Vsubvv(Opivv),
+    Vsubvx(Opivx),
+
+    Vrsubvx(Opivx),
+    Vrsubvi(Opivi),
+    
+    Vminuvv(Opivv),
+    Vminuvx(Opivx),
+
+    Vminvv(Opivv),
+    Vminvx(Opivx),
+
+    Vmaxuvv(Opivv),
+    Vmaxuvx(Opivx),
+
+    Vmaxvv(Opivv),
+    Vmaxvx(Opivx),
+
+    Vandvv(Opivv),
+    Vandvx(Opivx),
+    Vandvi(Opivi),
+
+    Vorvv(Opivv),
+    Vorvx(Opivx),
+    Vorvi(Opivi),
+
+    Vxorvv(Opivv),
+    Vxorvx(Opivx),
+    Vxorvi(Opivi),
+
+    Vrgathervv(Opivv),
+    Vrgathervx(Opivx),
+    Vrgathervi(Opivi),
+
+    Vrgatherei16vv(Opivv),
+
+    Vslideupvx(Opivx),
+    Vslideupvi(Opivi),
+
+    Vslidedownvx(Opivx),
+    Vslidedownvi(Opivi),
+
+    Vadcvvm(Opivv),
+    Vadcvxm(Opivx),
+    Vadcvim(Opivi),
+
+    Vmadcvvm(Opivv),
+    Vmadcvxm(Opivx),
+    Vmadcvim(Opivi),
+    Vmadcvv(Opivv),
+    Vmadcvx(Opivx),
+    Vmadcvi(Opivi),
+
+    Vsbcvvm(Opivv),
+    Vsbcvxm(Opivx),
+
+    Vmsbcvvm(Opivv),
+    Vmsbcvxm(Opivx),
+    Vmsbcvv(Opivi),
+    Vmsbcvx(Opivx),
+
+    Vmergevvm(Opivv),
+    Vmergevxm(Opivx),
+    Vmergevim(Opivi),
+
     Vmvvv(Opivv),
     Vmvvx(Opivx),
-    Vmvvi(Opivi)
+    Vmvvi(Opivi),
 
+    Vmseqvv(Opivv),
+    Vmseqvx(Opivx),
+    Vmseqvi(Opivi),
+
+    Vmsnevv(Opivv),
+    Vmsnevx(Opivx),
+    Vmsnevi(Opivi),
+
+    Vmsltuvv(Opivv),
+    Vmsltuvx(Opivx),
+
+    Vmsltvv(Opivv),
+    Vmsltvx(Opivx),
+
+    Vmsleuvv(Opivv),
+    Vmsleuvx(Opivx),
+    Vmsleuvi(Opivi),
+
+    Vmslevv(Opivv),
+    Vmslevx(Opivx),
+    Vmslevi(Opivi),
+
+    Vmsgtuvx(Opivx),
+    Vmsgtuvi(Opivi),
+
+    Vmsgtvx(Opivx),
+    Vmsgtvi(Opivi),
+
+    Vsadduvv(Opivv),
+    Vsadduvx(Opivx),
+    Vsadduvi(Opivi),
+
+    Vsaddvv(Opivv),
+    Vsaddvx(Opivx),
+    Vsaddvi(Opivi),
+
+    Vssubuvv(Opivv),
+    Vssubuvx(Opivx),
+
+    Vssubvv(Opivv),
+    Vssubvx(Opivx),
+
+    Vsllvv(Opivv),
+    Vsllvx(Opivx),
+    Vsllvi(Opivi),
+
+    Vsmulvv(Opivv),
+    Vsmulvx(Opivx),
+
+    Vmv1rv(Opivi),
+    Vmv2rv(Opivi),
+    Vmv4rv(Opivi),
+    Vmv8rv(Opivi),
+
+    Vsrlvv(Opivv),
+    Vsrlvx(Opivx),
+    Vsrlvi(Opivi),
+
+    Vsravv(Opivv),
+    Vsravx(Opivx),
+    Vsravi(Opivi),
+
+    Vssrlvv(Opivv),
+    Vssrlvx(Opivx),
+    Vssrlvi(Opivi),
+
+    Vssravv(Opivv),
+    Vssravx(Opivx),
+    Vssravi(Opivi),
+
+    Vnsrlwv(Opivv),
+    Vnsrlwx(Opivx),
+    Vnsrlwi(Opivi),
+
+    Vnsrawv(Opivv),
+    Vnsrawx(Opivx),
+    Vnsrawi(Opivi),
+
+    Vnclipuwv(Opivv),
+    Vnclipuwx(Opivx),
+    Vnclipuwi(Opivi),
+
+    Vnclipwv(Opivv),
+    Vnclipwx(Opivx),
+    Vnclipwi(Opivi),
+
+    Vwredsumuvs(Opivv),
+
+    Vwredsumvs(Opivv),
+
+    Vredsumvs(Opmvv),
+
+    Vredandvs(Opmvv),
+
+    Vredorvs(Opmvv),
+
+    Vredxorvs(Opmvv),
+
+    Vredminuvs(Opmvv),
+
+    Vredminvs(Opmvv),
+
+    Vredmaxuvs(Opmvv),
+
+    Vredmaxvs(Opmvv),
+
+    Vaadduvv(Opmvv),
+    Vaadduvx(Opmvx),
+
+    Vaaddvv(Opmvv),
+    Vaaddvx(Opmvx),
+
+    Vasubuvv(Opmvv),
+    Vasubuvx(Opmvx),
+
+    Vasubvv(Opmvv),
+    Vasubvx(Opmvx),
+
+    Vslide1upvx(Opmvx),
+    
+    Vslide1downvx(Opmvx),
+
+    Vmvxs(Vwxunary0),
+    Vcpopm(Vwxunary0),
+    Vfirstm(Vwxunary0),
+
+    Vmvsx(Vrxunary0),
+
+    Vzextvf8(Vxunary0),
+    Vsextvf8(Vxunary0),
+    Vzextvf4(Vxunary0),
+    Vsextvf4(Vxunary0),
+    Vzextvf2(Vxunary0),
+    Vsextvf2(Vxunary0),
+
+    Vmsbfm(Vmunary0),
+    Vmsofm(Vmunary0),
+    Vmsifm(Vmunary0),
+    Viotam(Vmunary0),
+    Vidv(Vmunary0),
+
+    Vcompressvm(Opmvv),
+    
+    Vmandnmm(Opmvv),
+
+    Vmandmm(Opmvv),
+
+    Vmormm(Opmvv),
+
+    Vmxormm(Opmvv),
+
+    Vmournmm(Opmvv),
+
+    Vmnandmm(Opmvv),
+
+    Vmnormm(Opmvv),
+
+    Vmxnormm(Opmvv),
+
+    Vdivuvv(Opmvv),
+    Vdivuvx(Opmvx),
+
+    Vdivvv(Opmvv),
+    Vdivvx(Opmvx),
+
+    Vremuvv(Opmvv),
+    Vremuvx(Opmvx),
+
+    Vremvv(Opmvv),
+    Vremvx(Opmvx),
+
+    Vmulhuvv(Opmvv),
+    Vmulhuvx(Opmvx),
+
+    Vmulvv(Opmvv),
+    Vmulvx(Opmvx),
+
+    Vmulhsuvv(Opmvv),
+    Vmulhsuvx(Opmvx),
+
+    Vmulhvv(Opmvv),
+    Vmulhvx(Opmvx),
+
+    Vmaddvv(Opmvv),
+    Vmaddvx(Opmvx),
+
+    Vnmsubvv(Opmvv),
+    Vnmsubvx(Opmvx),
+
+    Vmaccvv(Opmvv),
+    Vmaccvx(Opmvx),
+
+    Vnmsacvv(Opmvv),
+    Vnmsacvx(Opmvx),
+
+    Vwadduvv(Opmvv),
+    Vwadduvx(Opmvx),
+
+    Vwaddvv(Opmvv),
+    Vwaddvx(Opmvx),
+
+    Vwsubuvv(Opmvv),
+    Vwsubuvx(Opmvx),
+
+    Vwsubvv(Opmvv),
+    Vwsubvx(Opmvx),
+
+    Vwadduwv(Opmvv),
+    Vwadduwx(Opmvx),
+    
+    Vwaddwv(Opmvv),
+    Vwaddwx(Opmvx),
+
+    Vwsubuwv(Opmvv),
+    Vwsubuwx(Opmvx),
+
+    Vwsubwv(Opmvv),
+    Vwsubwx(Opmvx),
+
+    Vwmuluwv(Opmvv),
+    Vwmuluwx(Opmvx),
+
+    Vwmulsuwv(Opmvv),
+    Vwmulsuwx(Opmvx),
+
+    Vwmulwv(Opmvv),
+    Vwmulwx(Opmvx),
+
+    Vwmaccuwv(Opmvv),
+    Vwmaccuwx(Opmvx),
+
+    Vwmaccwv(Opmvv),
+    Vwmaccwx(Opmvx),
+
+    Vwmaccuswx(Opmvx),
+
+    Vwmaccsuwv(Opmvv),
+    Vwmaccsuwx(Opmvx),
+
+    Vfaddvv(Opfvv),
+    Vfaddvf(Opfvf),
+
+    Vfredusumvs(Opfvv),
+
+    Vfsubvv(Opfvv),
+    Vfsubvf(Opfvf),
+
+    Vfredosumvs(Opfvv),
+
+    Vfminvv(Opfvv),
+    Vfminvf(Opfvf),
+
+    Vfredminvs(Opfvv),
+
+    Vfmaxvv(Opfvv),
+    Vfmaxvf(Opfvf),
+
+    Vfredmaxvs(Opfvv),
+
+    Vfsgnjvv(Opfvv),
+    Vfsgnjvf(Opfvf),
+
+    Vfsgnjnvv(Opfvv),
+    Vfsgnjnvf(Opfvf),
+
+    Vfsgnjxvv(Opfvv),
+    Vfsgnjxvf(Opfvf),
+
+    Vfslide1upvf(Opfvf),
+
+    Vfslide1downvf(Opfvf),
+
+    Vfmvfs(Vwfunary0),
+
+    Vfmvsf(Vrfunary0),
+
+    Vfcvtxufv(Vfunary0),
+    Vfcvtxfv(Vfunary0),
+    Vfcvtfxuv(Vfunary0),
+    Vfcvtfxv(Vfunary0),
+    VfcvtRtzxufv(Vfunary0),
+    VfcvtRtzxfv(Vfunary0),
+
+    Vfwcvtxufv(Vfunary0),
+    Vfwcvtxfv(Vfunary0),
+    Vfwcvtfxuv(Vfunary0),
+    Vfwcvtfxv(Vfunary0),
+    Vfwcvtffv(Vfunary0),
+    VfwcvtRtzxufv(Vfunary0),
+    VfwcvtRtzxfv(Vfunary0),
+
+    Vfncvtxufw(Vfunary0),
+    Vfncvtxfw(Vfunary0),
+    Vfncvtfxuw(Vfunary0),
+    Vfncvtfxw(Vfunary0),
+    Vfncvtffw(Vfunary0),
+    VfncvtRodffw(Vfunary0),
+    VfncvtRtzxufw(Vfunary0),
+    VfncvtRtzxfw(Vfunary0),
+
+    Vfsqrtv(Vfunary1),
+    Vfrsqrt7v(Vfunary1),
+    Vfrec7v(Vfunary1),
+    Vfclassv(Vfunary1),
+
+    Vfmergevfm(Opfvf),
+    Vfmvvf(Opfvf),
+
+    Vmfeqvv(Opfvv),
+    Vmfeqvf(Opfvf),
+
+    Vmflevv(Opfvv),
+    Vmflevf(Opfvf),
+
+    Vmfltvv(Opfvv),
+    Vmfltvf(Opfvf),
+    
+    Vmfnevv(Opfvv),
+    Vmfnevf(Opfvf),
+
+    Vmfgtvf(Opfvf),
+
+    Vmfgevf(Opfvf),
+
+    Vfdivvv(Opfvv),
+    Vfdivvf(Opfvf),
+
+    Vfrdirvf(Opfvf),
+
+    Vfmulvv(Opfvv),
+    Vfmulvf(Opfvf),
+
+    Vfrsubvf(Opfvf),
+
+    Vfmaddvv(Opfvv),
+    Vfmaddvf(Opfvf),
+
+    Vfnmaddvv(Opfvv),
+    Vfnmaddvf(Opfvf),
+
+    Vfmsubvv(Opfvv),
+    Vfmsubvf(Opfvf),
+
+    Vfnmsubvv(Opfvv),
+    Vfnmsubvf(Opfvf),
+
+    Vfmaccvv(Opfvv),
+    Vfmaccvf(Opfvf),
+
+    Vfnmaccvv(Opfvv),
+    Vfnmaccvf(Opfvf),
+
+    Vfmsacvv(Opfvv),
+    Vfmsacvf(Opfvf),
+
+    Vfnmsacvv(Opfvv),
+    Vfnmsacvf(Opfvf),
+
+    Vfwaddvv(Opfvv),
+    Vfwaddvf(Opfvf),
+
+    Vfwredusumvs(Opfvv),
+
+    Vfwsubvv(Opfvv),
+    Vfwsubvf(Opfvf),
+
+    Vfwredosumvs(Opfvv),
+
+    Vfwaddwv(Opfvv),
+    Vfwaddwf(Opfvf),
+
+    Vfwsubwv(Opfvv),
+    Vfwsubwf(Opfvf),
+
+    Vfwmulvv(Opfvv),
+    Vfwmulvf(Opfvf),
+
+    Vfwmaccvv(Opfvv),
+    Vfwmaccvf(Opfvf),
+
+    Vfwnmaccvv(Opfvv),
+    Vfwnmaccvf(Opfvf),
+
+    Vfwmsacvv(Opfvv),
+    Vfwmsacvf(Opfvf),
+
+    Vfwnmsacvv(Opfvv),
+    Vfwnmsacvf(Opfvf),
 }
