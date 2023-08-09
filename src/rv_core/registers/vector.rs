@@ -4,41 +4,104 @@ mod vreg;
 use vector_engine::VectorEngine;
 use vreg::Vreg;
 
+use self::vector_engine::SEW;
+
 #[derive(Clone)]
 pub struct VectorRegisters{
-    vregs: [Vreg; 32],
+    // Vector register holds 32 * VLENB bytes
+    raw: Vec<u8>,
     vec_engine: VectorEngine
 }
 
 impl VectorRegisters {
-    fn acquire<'a>(&'a self, rs1: usize) -> AcquiredRegisters {
-        AcquiredRegisters { rs1: &self.vregs[rs1], rs2: None }
+    fn start_ptr(&self, nth: usize) -> usize {
+        nth * self.vec_engine.vlenb()
     }
 
-    fn acquire2<'a>(&'a self, rs1: usize, rs2: usize ) -> AcquiredRegisters {
-        AcquiredRegisters { rs1: &self.vregs[rs1], rs2: Some(&self.vregs[rs1]) }
+    pub fn register_view(&self, nth: usize) -> Vec<u8> {
+        let start = self.start_ptr(nth);
+
+        // Note: Since we are working on multiples of two
+        // multiplying 2^n (vlenb) by 2^(-n) (lmul) will not create floating point errors
+        let end = start + (self.vec_engine.vlenb() as f32 * self.vec_engine.lmul()) as usize - 1;
+
+        let range = start .. end;
+
+        self.raw[range].to_owned()
+    }
+
+    pub fn acquire(&self, rs1: usize) -> AcquiredRegister {
+        AcquiredRegister { 
+            rs: Vreg::new(
+                self.register_view(rs1), 
+                SEW::new(self.vec_engine.sew()).unwrap()
+            )
+        }
+    }
+
+    pub fn acquire2(&self, rs1: usize, rs2: usize ) -> Acquired2Registers {
+        Acquired2Registers { 
+            rs1: Vreg::new(
+                self.register_view(rs1), 
+                SEW::new(self.vec_engine.sew()).unwrap()
+            ), 
+            rs2: Vreg::new(
+                self.register_view(rs2), 
+                SEW::new(self.vec_engine.sew()).unwrap()
+            )
+        }
+    }
+
+    pub fn get(&self, nth: usize) -> Vreg {
+        Vreg::new(self.register_view(nth), SEW::new(self.vec_engine.sew()).unwrap())
+    }
+
+    pub fn apply(&mut self, nth: usize, vreg: Vreg) {
+        let start = self.start_ptr(nth);
+        self.raw[start..].copy_from_slice(&vreg.raw)
     }
 }
 
-pub struct AcquiredRegisters<'a>{
-    rs1: &'a Vreg,
-    rs2: Option<&'a Vreg>
+pub struct AcquiredRegister{
+    rs: Vreg
 }
 
-impl<'a> AcquiredRegisters<'a> {
-    fn execute<F>(&self, builder: F) -> Vreg 
+pub struct Acquired2Registers{
+    rs1: Vreg,
+    rs2: Vreg
+}
+
+
+impl AcquiredRegister {
+    pub fn execute<F>(&self, builder: F) -> Vreg 
         where
-            F: Fn(u64, u64) -> u64 
+            F: Fn(u64) -> u64 
     {
-        // todo: xd
-        Vreg(vec![])
+        // TODO: sew pass can be probably done more elegantly
+        Vreg::new(
+            self.rs.clone().map(builder).flat_map(u64::to_le_bytes).collect(),
+            self.rs.sew.clone()
+        )
     }
 }
 
-impl Default for VectorRegisters {
-    fn default() -> Self {
+
+impl Acquired2Registers {
+    pub fn execute<F>(&self, builder: F) -> Vreg 
+        where
+            F: Fn((u64, u64)) -> u64 
+    {
+        Vreg::new(
+            self.rs1.clone().zip(self.rs2.clone()).map(builder).flat_map(u64::to_le_bytes).collect(), 
+            self.rs1.sew.clone()
+        )
+    }
+}
+
+impl VectorRegisters {
+    fn new(vlen: usize) -> Self {
         Self { 
-            vregs: [(); 32].map(|_| Vreg(vec![])), 
+            raw: vec![0x00; vlen * 32], 
             vec_engine: VectorEngine::new(
                 Default::default(),
                 Default::default(),
@@ -48,19 +111,13 @@ impl Default for VectorRegisters {
             ).unwrap()
         }
     }
+
+    fn new_vlen128() -> Self { Self::new(128) }
 }
 
-impl std::ops::Index<usize> for VectorRegisters {
-    type Output = Vreg;
-
-    fn index(&self, index: usize) -> &Self::Output {
-        &self.vregs[index]
-    }
-}
-
-impl std::ops::IndexMut<usize> for VectorRegisters {
-    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
-        &mut self.vregs[index]
+impl Default for VectorRegisters {
+    fn default() -> Self {
+        Self::new_vlen128()
     }
 }
 
@@ -70,9 +127,12 @@ mod tests {
 
     #[test]
     fn api() {
-        let mut vregs = VectorRegisters::default();
+        let mut vregs = VectorRegisters {
+            raw: Default::default(),
+            vec_engine: Default::default()
+        };
 
-        let result: Vreg = vregs.acquire2(0, 8).execute(|rs1_el, rs2_el| rs1_el + rs2_el);
-        vregs[0] = result;
+        let result: Vreg = vregs.acquire2(0, 8).execute(|(rs1_el, rs2_el)| rs1_el + rs2_el);
+        vregs.apply(0, result);
     }
 }

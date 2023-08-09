@@ -1,3 +1,5 @@
+use std::{cell::RefCell, rc::Rc};
+
 /// Vector length multiplier
 #[derive(Default, Clone)]
 pub enum LMUL {
@@ -17,10 +19,10 @@ pub enum LMUL {
 
 /// Vector unit size of microarchitecture
 #[derive(Clone)]
-pub struct VLEN(u16);
+pub struct VLEN(usize);
 
 impl VLEN {
-    fn new(length: u16) -> Result<Self, &'static str> {
+    fn new(length: usize) -> Result<Self, &'static str> {
         // VLEN=32 is the smallest VLEN required (Zvl32b)
         if length >= 32 && length.count_ones() == 1 {
             Ok(Self(length))
@@ -39,20 +41,25 @@ impl Default for VLEN {
 /// Size of an element inside vector
 // RISC-V vector extension spec v1.0 defines four SEW lengths:
 // (000 - 8b, 001 - 16b, 010 - 32b, 011 - 64b).
-// 4 more bit configurations are reserved for the future, presumably:
-// (100 - 128b, 101 - 256b, 110 - 512b, 111 - 1024b).
-// This simulator will accept any SEW as long as it's not longer than VLEN.
 #[derive(Clone)]
-pub struct SEW(u16);
+pub struct SEW(usize);
 
 impl SEW {
-    fn new(length: u16) -> Result<Self, &'static str> {
-        if length >= 8 && length.count_ones() == 1 {
+    pub fn new(length: usize) -> Result<Self, &'static str> {
+        if length <= 64 && length >= 8 && length.count_ones() == 1 {
             Ok(Self(length))
         } else {
-            Err("Length of SEW must be greater or equal 8 and a power of two")
+            Err("Length of SEW must be one of the 8, 16, 32, 64")
         }
     }
+
+    pub fn bit_length(&self) -> usize {
+        self.0
+    }
+
+    pub fn byte_length(&self) -> usize {
+        self.0 / 8
+    } 
 }
 
 impl Default for SEW {
@@ -68,7 +75,7 @@ pub enum MaskBehavior {
     Agnostic,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct VectorEngine {
     lmul: LMUL,
     vlen: VLEN,
@@ -94,7 +101,31 @@ impl VectorEngine {
                 inactive_elements
             })
         } else {
-            Err("SEW can't be longer than LMUL")
+            Err("SEW can't be longer than VLEN")
+        }
+    }
+
+    pub fn vlen(&self) -> usize {
+        self.vlen.0 as usize
+    }
+
+    pub fn sew(&self) -> usize {
+        self.sew.0 as usize
+    }
+
+    pub fn vlenb(&self) -> usize {
+        self.vlen() / 8
+    }
+
+    pub fn lmul(&self) -> f32 {
+        match self.lmul {
+            LMUL::MF8 => 0.125,
+            LMUL::MF4 => 0.25,
+            LMUL::MF2 => 0.5,
+            LMUL::M1 => 1.,
+            LMUL::M2 => 2.,
+            LMUL::M4 => 4.,
+            LMUL::M8 => 8.,
         }
     }
 }
