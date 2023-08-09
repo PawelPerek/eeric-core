@@ -9,5 +9,5 @@ use crate::rv_core::{
 };
 
 pub fn vs(Opmvv { dest, vs1, vs2, vm }: Opmvv, v: &mut VectorRegisters) {
-    v.apply(dest, v.acquire2(vs2, vs1).execute(|(vel2, vel1)| vel2 - vel1));
+    v.apply(dest, v.acquire2(vs2, vs1).map(|(vel2, vel1)| vel2 - vel1));
 }

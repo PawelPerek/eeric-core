@@ -73,7 +73,7 @@ pub struct Acquired2Registers{
 
 
 impl AcquiredRegister {
-    pub fn execute<F>(&self, builder: F) -> Vreg 
+    pub fn map<F>(&self, builder: F) -> Vreg 
         where
             F: Fn(u64) -> u64 
     {
@@ -87,7 +87,7 @@ impl AcquiredRegister {
 
 
 impl Acquired2Registers {
-    pub fn execute<F>(&self, builder: F) -> Vreg 
+    pub fn map<F>(&self, builder: F) -> Vreg 
         where
             F: Fn((u64, u64)) -> u64 
     {
@@ -132,7 +132,7 @@ mod tests {
             vec_engine: Default::default()
         };
 
-        let result: Vreg = vregs.acquire2(0, 8).execute(|(rs1_el, rs2_el)| rs1_el + rs2_el);
+        let result: Vreg = vregs.acquire2(0, 8).map(|(rs1_el, rs2_el)| rs1_el + rs2_el);
         vregs.apply(0, result);
     }
 }
