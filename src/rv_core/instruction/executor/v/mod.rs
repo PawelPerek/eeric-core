@@ -1,9 +1,12 @@
 pub mod vadd;
+pub mod vand;
 pub mod vmax;
 pub mod vmaxu;
 pub mod vmin;
 pub mod vminu;
 pub mod vmv;
+pub mod vor;
 pub mod vredsum;
 pub mod vrsub;
 pub mod vsub;
+pub mod vxor;

@@ -96,17 +96,17 @@ impl RvCore {
             Vmaxvv(args) => v::vmax::vv(args, &mut self.registers.v),
             Vmaxvx(args) => v::vmax::vx(args, &mut self.registers.v, &self.registers.x),
 
-            Vandvv(args) => todo!(),
-            Vandvx(args) => todo!(),
-            Vandvi(args) => todo!(),
+            Vandvv(args) => v::vand::vv(args, &mut self.registers.v),
+            Vandvx(args) => v::vand::vx(args, &mut self.registers.v, &self.registers.x),
+            Vandvi(args) => v::vand::vi(args, &mut self.registers.v),
 
-            Vorvv(args) => todo!(),
-            Vorvx(args) => todo!(),
-            Vorvi(args) => todo!(),
+            Vorvv(args) => v::vor::vv(args, &mut self.registers.v),
+            Vorvx(args) => v::vor::vx(args, &mut self.registers.v, &self.registers.x),
+            Vorvi(args) => v::vor::vi(args, &mut self.registers.v),
 
-            Vxorvv(args) => todo!(),
-            Vxorvx(args) => todo!(),
-            Vxorvi(args) => todo!(),
+            Vxorvv(args) => v::vxor::vv(args, &mut self.registers.v),
+            Vxorvx(args) => v::vxor::vx(args, &mut self.registers.v, &self.registers.x),
+            Vxorvi(args) => v::vxor::vi(args, &mut self.registers.v),
 
             Vrgathervv(args) => todo!(),
             Vrgathervx(args) => todo!(),
@@ -357,59 +357,87 @@ impl RvCore {
             Vfclassv(args) => todo!(),
             Vfmergevfm(args) => todo!(),
             Vfmvvf(args) => todo!(),
+            
             Vmfeqvv(args) => todo!(),
             Vmfeqvf(args) => todo!(),
+
             Vmflevv(args) => todo!(),
             Vmflevf(args) => todo!(),
+
             Vmfltvv(args) => todo!(),
             Vmfltvf(args) => todo!(),
+
             Vmfnevv(args) => todo!(),
             Vmfnevf(args) => todo!(),
+
             Vmfgtvf(args) => todo!(),
+
             Vmfgevf(args) => todo!(),
+
             Vfdivvv(args) => todo!(),
             Vfdivvf(args) => todo!(),
+
             Vfrdirvf(args) => todo!(),
+
             Vfmulvv(args) => todo!(),
             Vfmulvf(args) => todo!(),
+
             Vfrsubvf(args) => todo!(),
+
             Vfmaddvv(args) => todo!(),
             Vfmaddvf(args) => todo!(),
+
             Vfnmaddvv(args) => todo!(),
             Vfnmaddvf(args) => todo!(),
+
             Vfmsubvv(args) => todo!(),
             Vfmsubvf(args) => todo!(),
+
             Vfnmsubvv(args) => todo!(),
             Vfnmsubvf(args) => todo!(),
+
             Vfmaccvv(args) => todo!(),
             Vfmaccvf(args) => todo!(),
+
             Vfnmaccvv(args) => todo!(),
             Vfnmaccvf(args) => todo!(),
+
             Vfmsacvv(args) => todo!(),
             Vfmsacvf(args) => todo!(),
+
             Vfnmsacvv(args) => todo!(),
             Vfnmsacvf(args) => todo!(),
+
             Vfwaddvv(args) => todo!(),
             Vfwaddvf(args) => todo!(),
+
             Vfwredusumvs(args) => todo!(),
+
             Vfwsubvv(args) => todo!(),
             Vfwsubvf(args) => todo!(),
+
             Vfwredosumvs(args) => todo!(),
+
             Vfwaddwv(args) => todo!(),
             Vfwaddwf(args) => todo!(),
+
             Vfwsubwv(args) => todo!(),
             Vfwsubwf(args) => todo!(),
+
             Vfwmulvv(args) => todo!(),
             Vfwmulvf(args) => todo!(),
+
             Vfwmaccvv(args) => todo!(),
             Vfwmaccvf(args) => todo!(),
+
             Vfwnmaccvv(args) => todo!(),
             Vfwnmaccvf(args) => todo!(),
+
             Vfwmsacvv(args) => todo!(),
             Vfwmsacvf(args) => todo!(),
+
             Vfwnmsacvv(args) => todo!(),
             Vfwnmsacvf(args) => todo!(),
-
         }
     }
 }
