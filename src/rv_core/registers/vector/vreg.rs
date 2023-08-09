@@ -49,35 +49,56 @@ mod tests {
 
     #[test]
     fn e8() {
-        let vector_data = vec![0x76, 0x54, 0x32, 0x10];
+        let vector_data = vec![0xef, 0xcd, 0xab, 0x89, 0x67, 0x45, 0x23, 0x01];
 
         let mut vreg = Vreg::new(vector_data, SEW::new(8).unwrap());
 
-        assert_eq!(vreg.next(), Some(0x76));
-        assert_eq!(vreg.next(), Some(0x54));
-        assert_eq!(vreg.next(), Some(0x32));
-        assert_eq!(vreg.next(), Some(0x10));
+
+        assert_eq!(vreg.next(), Some(0xef));
+        assert_eq!(vreg.next(), Some(0xcd));
+        assert_eq!(vreg.next(), Some(0xab));
+        assert_eq!(vreg.next(), Some(0x89));
+        assert_eq!(vreg.next(), Some(0x67));
+        assert_eq!(vreg.next(), Some(0x45));
+        assert_eq!(vreg.next(), Some(0x23));
+        assert_eq!(vreg.next(), Some(0x01));
         assert_eq!(vreg.next(), None);
     }
 
     #[test]
     fn e16() {
-        let vector_data = vec![0x76, 0x54, 0x32, 0x10];
+        let vector_data = vec![0xef, 0xcd, 0xab, 0x89, 0x67, 0x45, 0x23, 0x01];
 
         let mut vreg = Vreg::new(vector_data, SEW::new(16).unwrap());
 
-        assert_eq!(vreg.next(), Some(0x5476));
-        assert_eq!(vreg.next(), Some(0x1032));
+
+        assert_eq!(vreg.next(), Some(0xcdef));
+        assert_eq!(vreg.next(), Some(0x89ab));
+        assert_eq!(vreg.next(), Some(0x4567));
+        assert_eq!(vreg.next(), Some(0x0123));
         assert_eq!(vreg.next(), None);
     }
 
     #[test]
     fn e32() {
-        let vector_data = vec![0x76, 0x54, 0x32, 0x10];
+        let vector_data = vec![0xef, 0xcd, 0xab, 0x89, 0x67, 0x45, 0x23, 0x01];
 
-        let mut vreg = Vreg::new(vector_data, SEW::new(8).unwrap());
+        let mut vreg = Vreg::new(vector_data, SEW::new(32).unwrap());
 
-        assert_eq!(vreg.next(), Some(0x10325476));
+
+        assert_eq!(vreg.next(), Some(0x89abcdef));
+        assert_eq!(vreg.next(), Some(0x01234567));
+        assert_eq!(vreg.next(), None);
+    }
+
+    #[test]
+    fn e64() {
+        let vector_data = vec![0xef, 0xcd, 0xab, 0x89, 0x67, 0x45, 0x23, 0x01];
+
+        let mut vreg = Vreg::new(vector_data, SEW::new(64).unwrap());
+
+
+        assert_eq!(vreg.next(), Some(0x0123456789abcdef));
         assert_eq!(vreg.next(), None);
     }
 }
