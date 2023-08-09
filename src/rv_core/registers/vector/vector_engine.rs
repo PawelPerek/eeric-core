@@ -128,4 +128,8 @@ impl VectorEngine {
             LMUL::M8 => 8.,
         }
     }
+
+    pub fn vlmax(&self) -> usize {
+        ((self.vlen() / self.sew()) as f32 * self.lmul() as f32) as usize
+    }
 }

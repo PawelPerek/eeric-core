@@ -7,6 +7,7 @@ pub mod vminu;
 pub mod vmv;
 pub mod vor;
 pub mod vredsum;
+pub mod vrgather;
 pub mod vrsub;
 pub mod vsub;
 pub mod vxor;
