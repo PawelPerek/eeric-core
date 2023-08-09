@@ -8,17 +8,17 @@ pub struct Vreg {
     pub raw: Vec<u8>,
 
     // There are instructions that double SEW independently on SEW value from vector unit
-    pub sew: SEW,
+    pub eew: SEW,
     ptr: usize
 }
 
 impl Vreg {
-    pub fn new<'ve>(raw: Vec<u8>, sew: SEW) -> Vreg {
-        Vreg { raw, sew, ptr: 0 }
+    pub fn new<'ve>(raw: Vec<u8>, eew: SEW) -> Vreg {
+        Vreg { raw, eew, ptr: 0 }
     } 
 
     pub fn double_sew(self) -> Vreg {
-        Vreg { raw: self.raw, ptr: self.ptr, sew: SEW::new(self.sew.bit_length() * 2).unwrap()}
+        Vreg { raw: self.raw, ptr: self.ptr, eew: SEW::new(self.eew.bit_length() * 2).unwrap()}
     }
 }
 
@@ -26,7 +26,7 @@ impl Iterator for Vreg {
     type Item = u64;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let byte_step: usize = self.sew.byte_length();
+        let byte_step: usize = self.eew.byte_length();
         let span = self.ptr .. self.ptr + byte_step;
         
         if span.end <= self.raw.len() {

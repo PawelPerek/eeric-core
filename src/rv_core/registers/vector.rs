@@ -10,7 +10,7 @@ use self::vector_engine::SEW;
 pub struct VectorRegisters{
     // Vector register holds 32 * VLENB bytes
     raw: Vec<u8>,
-    vec_engine: VectorEngine
+    pub vec_engine: VectorEngine
 }
 
 impl VectorRegisters {
@@ -34,7 +34,16 @@ impl VectorRegisters {
         AcquiredRegister { 
             rs: Vreg::new(
                 self.register_view(rs1), 
-                SEW::new(self.vec_engine.sew()).unwrap()
+                self.vec_engine.sew.clone()
+            )
+        }
+    }
+
+    pub fn acquirei16(&self, rs1: usize) -> AcquiredRegister {
+        AcquiredRegister { 
+            rs: Vreg::new(
+                self.register_view(rs1), 
+                SEW::new_16()
             )
         }
     }
@@ -43,11 +52,11 @@ impl VectorRegisters {
         Acquired2Registers { 
             rs1: Vreg::new(
                 self.register_view(rs1), 
-                SEW::new(self.vec_engine.sew()).unwrap()
+                self.vec_engine.sew.clone()
             ), 
             rs2: Vreg::new(
                 self.register_view(rs2), 
-                SEW::new(self.vec_engine.sew()).unwrap()
+                self.vec_engine.sew.clone()
             )
         }
     }
@@ -77,10 +86,10 @@ impl AcquiredRegister {
         where
             F: Fn(u64) -> u64 
     {
-        // TODO: sew pass can be probably done more elegantly
+        // TODO: eew pass can be probably done more elegantly
         Vreg::new(
             self.rs.clone().map(builder).flat_map(u64::to_le_bytes).collect(),
-            self.rs.sew.clone()
+            self.rs.eew.clone()
         )
     }
 }
@@ -93,7 +102,7 @@ impl Acquired2Registers {
     {
         Vreg::new(
             self.rs1.clone().zip(self.rs2.clone()).map(builder).flat_map(u64::to_le_bytes).collect(), 
-            self.rs1.sew.clone()
+            self.rs1.eew.clone()
         )
     }
 }

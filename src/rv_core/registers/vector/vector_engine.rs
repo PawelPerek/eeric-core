@@ -53,6 +53,22 @@ impl SEW {
         }
     }
 
+    pub fn new_8() -> Self {
+        Self::new(8).unwrap()
+    }
+
+    pub fn new_16() -> Self {
+        Self::new(16).unwrap()
+    }
+
+    pub fn new_32() -> Self {
+        Self::new(32).unwrap()
+    }
+
+    pub fn new_64() -> Self {
+        Self::new(64).unwrap()
+    }
+
     pub fn bit_length(&self) -> usize {
         self.0
     }
@@ -79,7 +95,7 @@ pub enum MaskBehavior {
 pub struct VectorEngine {
     lmul: LMUL,
     vlen: VLEN,
-    sew: SEW,
+    pub sew: SEW,
     tail_elements: MaskBehavior,
     inactive_elements: MaskBehavior,
 }

@@ -108,11 +108,11 @@ impl RvCore {
             Vxorvx(args) => v::vxor::vx(args, &mut self.registers.v, &self.registers.x),
             Vxorvi(args) => v::vxor::vi(args, &mut self.registers.v),
 
-            Vrgathervv(args) => todo!(),
-            Vrgathervx(args) => todo!(),
-            Vrgathervi(args) => todo!(),
+            Vrgathervv(args) => v::vrgather::vv(args, &mut self.registers.v),
+            Vrgathervx(args) => v::vrgather::vx(args, &mut self.registers.v, &self.registers.x),
+            Vrgathervi(args) => v::vrgather::vi(args, &mut self.registers.v),
 
-            Vrgatherei16vv(args) => todo!(),
+            Vrgatherei16vv(args) => v::vrgatherei16::vv(args, &mut self.registers.v),
 
             Vslideupvx(args) => todo!(),
             Vslideupvi(args) => todo!(),
@@ -357,7 +357,7 @@ impl RvCore {
             Vfclassv(args) => todo!(),
             Vfmergevfm(args) => todo!(),
             Vfmvvf(args) => todo!(),
-            
+
             Vmfeqvv(args) => todo!(),
             Vmfeqvf(args) => todo!(),
 
