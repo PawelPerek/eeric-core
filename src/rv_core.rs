@@ -6,9 +6,7 @@ pub use instruction::Instruction;
 use memory::Memory;
 use registers::Registers;
 
-use crate::rv_core::instruction::executor::base::sll;
-
-struct RvCore {
+pub struct RvCore {
     registers: Registers,
     memory: Memory
 }
@@ -25,7 +23,7 @@ impl RvCore {
         Self { registers, memory }
     }
 
-    fn execute(&mut self, input: Instruction) {
+    pub fn execute(&mut self, input: Instruction) {
         use Instruction::*;
         use instruction::executor::*;
 
