@@ -334,13 +334,13 @@ impl RvCore {
             Vwmaccsuwv(args) => todo!(),
             Vwmaccsuwx(args) => todo!(),
 
-            Vfaddvv(args) => todo!(),
-            Vfaddvf(args) => todo!(),
+            Vfaddvv(args) => v::vfadd::vv(args, &mut self.registers.v),
+            Vfaddvf(args) => v::vfadd::vf(args, &mut self.registers.v, &self.registers.f),
             
             Vfredusumvs(args) => todo!(),
             
-            Vfsubvv(args) => todo!(),
-            Vfsubvf(args) => todo!(),
+            Vfsubvv(args) => v::vfsub::vv(args, &mut self.registers.v),
+            Vfsubvf(args) => v::vfsub::vf(args, &mut self.registers.v, &self.registers.f),
             
             Vfredosumvs(args) => todo!(),
             
@@ -416,7 +416,7 @@ impl RvCore {
             Vfmulvv(args) => todo!(),
             Vfmulvf(args) => todo!(),
 
-            Vfrsubvf(args) => todo!(),
+            Vfrsubvf(args) => v::vfrsub::vf(args, &mut self.registers.v, &self.registers.f),
 
             Vfmaddvv(args) => todo!(),
             Vfmaddvf(args) => todo!(),

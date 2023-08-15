@@ -25,26 +25,47 @@ impl std::ops::Add for FP {
     }
 }
 
-impl std::ops::Add<f32> for FP {
-    type Output = Self;
-
-    fn add(self, rhs: f32) -> Self::Output {
-        match self {
-            FP::F32(a) => FP::F32(a + rhs),
-            FP::F64(a) => FP::F64(a + rhs as f64),
-            _ => panic!("Mismatched FP types")
-        }
-    }
-}
-
 impl std::ops::Add<f64> for FP {
     type Output = Self;
 
     fn add(self, rhs: f64) -> Self::Output {
         match self {
             FP::F32(a) => FP::F32(a + rhs as f32),
-            FP::F64(a) => FP::F64(a + rhs),
+            FP::F64(a) => FP::F64(a + rhs)
+        }
+    }
+}
+
+impl std::ops::Sub for FP {
+    type Output = Self;
+
+    fn sub(self, rhs: Self) -> Self::Output {
+        match (self, rhs) {
+            (FP::F32(a), FP::F32(b)) => FP::F32(a - b),
+            (FP::F64(a), FP::F64(b)) => FP::F64(a - b),
             _ => panic!("Mismatched FP types")
+        }
+    }
+}
+
+impl std::ops::Sub<f64> for FP {
+    type Output = Self;
+
+    fn sub(self, rhs: f64) -> Self::Output {
+        match self {
+            FP::F32(a) => FP::F32(a - rhs as f32),
+            FP::F64(a) => FP::F64(a - rhs)
+        }
+    }
+}
+
+impl std::ops::Sub<FP> for f64 {
+    type Output = FP;
+
+    fn sub(self, rhs: FP) -> Self::Output {
+        match rhs {
+            FP::F32(a) => FP::F32(self as f32 - a),
+            FP::F64(a) => FP::F64(self - a)
         }
     }
 }
