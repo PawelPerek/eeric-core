@@ -443,25 +443,25 @@ pub enum Instruction {
     Vwsubwv(Opmvv),
     Vwsubwx(Opmvx),
 
-    Vwmuluwv(Opmvv),
-    Vwmuluwx(Opmvx),
+    Vwmuluvv(Opmvv),
+    Vwmuluvx(Opmvx),
 
-    Vwmulsuwv(Opmvv),
-    Vwmulsuwx(Opmvx),
+    Vwmulsuvv(Opmvv),
+    Vwmulsuvx(Opmvx),
 
-    Vwmulwv(Opmvv),
-    Vwmulwx(Opmvx),
+    Vwmulvv(Opmvv),
+    Vwmulvx(Opmvx),
 
-    Vwmaccuwv(Opmvv),
-    Vwmaccuwx(Opmvx),
+    Vwmaccuvv(Opmvv),
+    Vwmaccuvx(Opmvx),
 
-    Vwmaccwv(Opmvv),
-    Vwmaccwx(Opmvx),
+    Vwmaccvv(Opmvv),
+    Vwmaccvx(Opmvx),
 
-    Vwmaccuswx(Opmvx),
+    Vwmaccusvx(Opmvx),
 
-    Vwmaccsuwv(Opmvv),
-    Vwmaccsuwx(Opmvx),
+    Vwmaccsuvv(Opmvv),
+    Vwmaccsuvx(Opmvx),
 
     Vfaddvv(Opfvv),
     Vfaddvf(Opfvf),

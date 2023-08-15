@@ -381,73 +381,73 @@ impl RvCore {
             Vremvv(args) => v::vrem::vv(args, &mut self.registers.v),
             Vremvx(args) => v::vrem::vx(args, &mut self.registers.v, &self.registers.x),
             
-            Vmulhuvv(args) => todo!(),
-            Vmulhuvx(args) => todo!(),
+            Vmulhuvv(args) => v::vmulhu::vv(args, &mut self.registers.v),
+            Vmulhuvx(args) => v::vmulhu::vx(args, &mut self.registers.v, &self.registers.x),
             
-            Vmulvv(args) => todo!(),
-            Vmulvx(args) => todo!(),
+            Vmulvv(args) => v::vmul::vv(args, &mut self.registers.v),
+            Vmulvx(args) => v::vmul::vx(args, &mut self.registers.v, &self.registers.x),
             
-            Vmulhsuvv(args) => todo!(),
-            Vmulhsuvx(args) => todo!(),
+            Vmulhsuvv(args) => v::vmulhsu::vv(args, &mut self.registers.v),
+            Vmulhsuvx(args) => v::vmulhsu::vx(args, &mut self.registers.v, &self.registers.x),
             
-            Vmulhvv(args) => todo!(),
-            Vmulhvx(args) => todo!(),
+            Vmulhvv(args) => v::vmulh::vv(args, &mut self.registers.v),
+            Vmulhvx(args) => v::vmulh::vx(args, &mut self.registers.v, &self.registers.x),
             
-            Vmaddvv(args) => todo!(),
-            Vmaddvx(args) => todo!(),
+            Vmaddvv(args) => v::vmadd::vv(args, &mut self.registers.v),
+            Vmaddvx(args) => v::vmadd::vx(args, &mut self.registers.v, &self.registers.x),
             
-            Vnmsubvv(args) => todo!(),
-            Vnmsubvx(args) => todo!(),
+            Vnmsubvv(args) => v::vnmsub::vv(args, &mut self.registers.v),
+            Vnmsubvx(args) => v::vnmsub::vx(args, &mut self.registers.v, &self.registers.x),
             
-            Vmaccvv(args) => todo!(),
-            Vmaccvx(args) => todo!(),
+            Vmaccvv(args) => v::vmacc::vv(args, &mut self.registers.v),
+            Vmaccvx(args) => v::vmacc::vx(args, &mut self.registers.v, &self.registers.x),
             
-            Vnmsacvv(args) => todo!(),
-            Vnmsacvx(args) => todo!(),
+            Vnmsacvv(args) => v::vnmsac::vv(args, &mut self.registers.v),
+            Vnmsacvx(args) => v::vnmsac::vx(args, &mut self.registers.v, &self.registers.x),
             
-            Vwadduvv(args) => todo!(),
-            Vwadduvx(args) => todo!(),
+            Vwadduvv(args) => v::vwaddu::vv(args, &mut self.registers.v),
+            Vwadduvx(args) => v::vwaddu::vx(args, &mut self.registers.v, &self.registers.x),
             
-            Vwaddvv(args) => todo!(),
-            Vwaddvx(args) => todo!(),
+            Vwaddvv(args) => v::vwadd::vv(args, &mut self.registers.v),
+            Vwaddvx(args) => v::vwadd::vx(args, &mut self.registers.v, &self.registers.x),
             
-            Vwsubuvv(args) => todo!(),
-            Vwsubuvx(args) => todo!(),
+            Vwsubuvv(args) => v::vwsubu::vv(args, &mut self.registers.v),
+            Vwsubuvx(args) => v::vwsubu::vx(args, &mut self.registers.v, &self.registers.x),
             
-            Vwsubvv(args) => todo!(),
-            Vwsubvx(args) => todo!(),
+            Vwsubvv(args) => v::vwsub::vv(args, &mut self.registers.v),
+            Vwsubvx(args) => v::vwsub::vx(args, &mut self.registers.v, &self.registers.x),
             
-            Vwadduwv(args) => todo!(),
-            Vwadduwx(args) => todo!(),
+            Vwadduwv(args) => v::vwaddu::wv(args, &mut self.registers.v),
+            Vwadduwx(args) => v::vwaddu::wx(args, &mut self.registers.v, &self.registers.x),
             
-            Vwaddwv(args) => todo!(),
-            Vwaddwx(args) => todo!(),
+            Vwaddwv(args) => v::vwadd::wv(args, &mut self.registers.v),
+            Vwaddwx(args) => v::vwadd::wx(args, &mut self.registers.v, &self.registers.x),
             
-            Vwsubuwv(args) => todo!(),
-            Vwsubuwx(args) => todo!(),
+            Vwsubuwv(args) => v::vwsubu::wv(args, &mut self.registers.v),
+            Vwsubuwx(args) => v::vwsubu::wx(args, &mut self.registers.v, &self.registers.x),
             
-            Vwsubwv(args) => todo!(),
-            Vwsubwx(args) => todo!(),
+            Vwsubwv(args) => v::vwsub::wv(args, &mut self.registers.v),
+            Vwsubwx(args) => v::vwsub::wx(args, &mut self.registers.v, &self.registers.x),
             
-            Vwmuluwv(args) => todo!(),
-            Vwmuluwx(args) => todo!(),
+            Vwmuluvv(args) => v::vwmulu::vv(args, &mut self.registers.v),
+            Vwmuluvx(args) => v::vwmulu::vx(args, &mut self.registers.v, &self.registers.x),
             
-            Vwmulsuwv(args) => todo!(),
-            Vwmulsuwx(args) => todo!(),
+            Vwmulsuvv(args) => v::vwmulsu::vv(args, &mut self.registers.v),
+            Vwmulsuvx(args) => v::vwmulsu::vx(args, &mut self.registers.v, &self.registers.x),
             
-            Vwmulwv(args) => todo!(),
-            Vwmulwx(args) => todo!(),
+            Vwmulvv(args) => v::vwmul::vv(args, &mut self.registers.v),
+            Vwmulvx(args) => v::vwmul::vx(args, &mut self.registers.v, &self.registers.x),
             
-            Vwmaccuwv(args) => todo!(),
-            Vwmaccuwx(args) => todo!(),
+            Vwmaccuvv(args) => v::vwmaccu::vv(args, &mut self.registers.v),
+            Vwmaccuvx(args) => v::vwmaccu::vx(args, &mut self.registers.v, &self.registers.x),
             
-            Vwmaccwv(args) => todo!(),
-            Vwmaccwx(args) => todo!(),
+            Vwmaccvv(args) => v::vwmacc::vv(args, &mut self.registers.v),
+            Vwmaccvx(args) => v::vwmacc::vx(args, &mut self.registers.v, &self.registers.x),
             
-            Vwmaccuswx(args) => todo!(),
+            Vwmaccusvx(args) => v::vwmaccus::vx(args, &mut self.registers.v, &self.registers.x),
             
-            Vwmaccsuwv(args) => todo!(),
-            Vwmaccsuwx(args) => todo!(),
+            Vwmaccsuvv(args) => v::vwmaccsu::vv(args, &mut self.registers.v),
+            Vwmaccsuvx(args) => v::vwmaccsu::vx(args, &mut self.registers.v, &self.registers.x),
 
             Vfaddvv(args) => v::vfadd::vv(args, &mut self.registers.v),
             Vfaddvf(args) => v::vfadd::vf(args, &mut self.registers.v, &self.registers.f),
