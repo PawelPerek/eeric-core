@@ -54,6 +54,17 @@ pub enum Instruction {
     Jal(U),
     Jalr(I),
 
+    /// Zicsr extension
+    
+    // RV32/64Zicsr
+
+    Csrrw(Csrr),
+    Csrrs(Csrr),
+    Csrrc(Csrr),
+    Csrrwi(Csri),
+    Csrrsi(Csri),
+    Csrrci(Csri),
+
     /// M extension
     
     // RV32M

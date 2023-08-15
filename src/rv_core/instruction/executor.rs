@@ -3,3 +3,4 @@ pub mod m;
 pub mod f;
 pub mod d;
 pub mod v;
+pub mod zicsr;

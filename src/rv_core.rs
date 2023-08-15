@@ -37,7 +37,6 @@ impl RvCore {
             Sltiu(args) => base::sltiu(args, &mut self.registers.x),
             Lui(args) => base::lui(args, &mut self.registers.x),
             Auipc(args) => base::auipc(args, &mut self.registers.x, self.registers.pc),
-
             And(args) => base::and(args, &mut self.registers.x),
             Or(args) => base::or(args, &mut self.registers.x),
             Xor(args) => base::xor(args, &mut self.registers.x),
@@ -50,7 +49,6 @@ impl RvCore {
             Slli(args) => base::slli(args, &mut self.registers.x),
             Srli(args) => base::srli(args, &mut self.registers.x),
             Srai(args) => base::srai(args, &mut self.registers.x),
-
             Ld(args) => base::ld(args, &mut self.registers.x, &self.memory),
             Lw(args) => base::lw(args, &mut self.registers.x, &self.memory),
             Lwu(args) => base::lwu(args, &mut self.registers.x, &self.memory),
@@ -62,7 +60,6 @@ impl RvCore {
             Sw(args) => base::sw(args, &self.registers.x, &mut self.memory),
             Sh(args) => base::sh(args, &self.registers.x, &mut self.memory),
             Sb(args) => base::sb(args, &self.registers.x, &mut self.memory),
-
             Beq(args) => base::beq(args, &self.registers.x),
             Bne(args) => base::bne(args, &self.registers.x),
             Bge(args) => base::bge(args, &self.registers.x),
@@ -71,7 +68,14 @@ impl RvCore {
             Bltu(args) => base::bltu(args, &self.registers.x),
             Jal(args) => base::jal(args, &self.registers.x),
             Jalr(args) => base::jalr(args, &self.registers.x),
-            
+
+            Csrrw(args) => zicsr::csrrw(args, &mut self.registers.c),
+            Csrrs(args) => zicsr::csrrs(args, &mut self.registers.c),
+            Csrrc(args) => zicsr::csrrc(args, &mut self.registers.c),
+            Csrrwi(args) => zicsr::csrrwi(args, &mut self.registers.c),
+            Csrrsi(args) => zicsr::csrrsi(args, &mut self.registers.c),
+            Csrrci(args) => zicsr::csrrci(args, &mut self.registers.c),
+
             Mul(args) => m::mul(args, &self.registers.x),
             Mulh(args) => m::mulh(args, &self.registers.x),
             Mulhsu(args) => m::mulhsu(args, &self.registers.x),
