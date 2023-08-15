@@ -1,6 +1,4 @@
-use std::{cell::RefCell, rc::Rc};
-
-use super::vector_engine::{SEW, LMUL, VLEN};
+use super::vector_engine::SEW;
 
 #[derive(Clone)]
 // A wrapper over vector unit raw data

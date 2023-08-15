@@ -1,5 +1,3 @@
-use std::{cell::RefCell, rc::Rc};
-
 /// Vector length multiplier
 #[derive(Default, Clone)]
 pub enum LMUL {

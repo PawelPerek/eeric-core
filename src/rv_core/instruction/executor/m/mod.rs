@@ -1,0 +1,27 @@
+
+mod mul;
+pub use mul::mul;
+mod mulh;
+pub use mulh::mulh;
+mod mulhsu;
+pub use mulhsu::mulhsu;
+mod mulhu;
+pub use mulhu::mulhu;
+mod div;
+pub use div::div;
+mod divu;
+pub use divu::divu;
+mod rem;
+pub use rem::rem;
+mod remu;
+pub use remu::remu;
+mod mulw;
+pub use mulw::mulw;
+mod divw;
+pub use divw::divw;
+mod divuw;
+pub use divuw::divuw;
+mod remw;
+pub use remw::remw;
+mod remuw;
+pub use remuw::remuw;

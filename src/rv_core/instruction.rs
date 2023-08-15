@@ -7,6 +7,8 @@ use format::{
 };
 
 pub enum Instruction {
+    /// Base instructions
+
     // Arithmetic Operations
     Add(R),
     Sub(R),
@@ -46,7 +48,6 @@ pub enum Instruction {
     Sb(S),
 
     // Branching
-
     Beq(S),
     Bne(S),
     Bge(S),
@@ -56,7 +57,101 @@ pub enum Instruction {
     Jal(U),
     Jalr(I),
 
-    // Vector config
+    /// M extension
+    
+    // RV32M
+    Mul(R),
+    Mulh(R),
+    Mulhsu(R),
+    Mulhu(R),
+    Div(R),
+    Divu(R),    
+    Rem(R),
+    Remu(R),
+
+    // RV64M
+    Mulw(R),
+    Divw(R),
+    Divuw(R),
+    Remw(R),
+    Remuw(R),
+
+
+    /// F extension
+    
+    // RV32F
+    Flw(I),
+    Fsw(S),
+    Fmadds(S),
+    Fmsubs(S),
+    Fnmsubs(S),
+    Fnmadds(S),
+    Fadds(R),
+    Fsubs(R),
+    Fmuls(R),
+    Fdivs(R),
+    Fsqrts(R),
+    Fsgnjs(R),
+    Fsgnjns(R),
+    Fsgnjxs(R),
+    Fmins(R),
+    Fmaxs(R),
+    Fcvtws(R),
+    Fcvtwus(R),
+    Fmvxw(R),
+    Feqs(R),
+    Flts(R),
+    Fles(R),
+    Fclasss(R),
+    Fcvtsw(R),
+    Fcvtswu(R),
+    Fmvwx(R),
+
+    // RV64F
+    Fcvtls(R),
+    Fcvtlus(R),
+    Fcvtsl(R),
+    Fcvtslu(R),
+
+    /// D extension
+
+    // RV32D
+    Fld(I),
+    Fsd(S),
+    Fmaddd(S),
+    Fmsubd(S),
+    Fnmsubd(S),
+    Fnmaddd(S),
+    Faddd(R),
+    Fsubd(R),
+    Fmuld(R),
+    Fdivd(R),
+    Fsqrtd(R),
+    Fsgnjd(R),
+    Fsgnjnd(R),
+    Fsgnjxd(R),
+    Fmind(R),
+    Fmaxd(R),
+    Fcvtsd(R),
+    Fcvtds(R),
+    Feqd(R),
+    Fltd(R),
+    Fled(R),
+    Fclassd(R),
+    Fcvtwd(R),
+    Fcvtwud(R),
+    Fcvtdw(R),
+    Fcvtdwu(R),
+
+    // RV64D
+    Fcvtld(R),
+    Fcvtlud(R),
+    Fmvxd(R),
+    Fcvtdl(R),
+    Fcvtdlu(R),
+    Fmvdx(R),
+
+    /// V extension
 
     Vaddvv(Opivv),
     Vaddvx(Opivx),

@@ -1,6 +1,5 @@
 use crate::rv_core::{
     instruction::format::vector::{
-        Opivv,
         Opivx,
         Opivi,
     }, 
