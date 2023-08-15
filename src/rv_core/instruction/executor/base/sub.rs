@@ -1,5 +1,5 @@
 use crate::rv_core::{
-    instruction::format::base::R, 
+    instruction::format::R, 
     registers::integer::IntegerRegisters
 };
 

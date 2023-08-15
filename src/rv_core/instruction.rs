@@ -1,10 +1,7 @@
 pub mod format;
 pub mod executor;
 
-use format::{
-    base::*,
-    vector::*
-};
+use format::*;
 
 pub enum Instruction {
     /// Base instructions
@@ -82,10 +79,10 @@ pub enum Instruction {
     // RV32F
     Flw(I),
     Fsw(S),
-    Fmadds(S),
-    Fmsubs(S),
-    Fnmsubs(S),
-    Fnmadds(S),
+    Fmadds(R4),
+    Fmsubs(R4),
+    Fnmsubs(R4),
+    Fnmadds(R4),
     Fadds(R),
     Fsubs(R),
     Fmuls(R),
@@ -118,10 +115,10 @@ pub enum Instruction {
     // RV32D
     Fld(I),
     Fsd(S),
-    Fmaddd(S),
-    Fmsubd(S),
-    Fnmsubd(S),
-    Fnmaddd(S),
+    Fmaddd(R4),
+    Fmsubd(R4),
+    Fnmsubd(R4),
+    Fnmaddd(R4),
     Faddd(R),
     Fsubd(R),
     Fmuld(R),
@@ -215,7 +212,8 @@ pub enum Instruction {
 
     Vmsbcvvm(Opivv),
     Vmsbcvxm(Opivx),
-    Vmsbcvv(Opivi),
+
+    Vmsbcvv(Opivv),
     Vmsbcvx(Opivx),
 
     Vmergevvm(Opivv),

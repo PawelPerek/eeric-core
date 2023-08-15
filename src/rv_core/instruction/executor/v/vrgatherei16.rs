@@ -1,5 +1,5 @@
 use crate::rv_core::{
-    instruction::format::vector::Opivv, 
+    instruction::format::Opivv, 
     registers::vector::VectorRegisters
 };
 

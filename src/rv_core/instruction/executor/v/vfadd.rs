@@ -1,5 +1,5 @@
 use crate::rv_core::{
-    instruction::format::vector::{
+    instruction::format::{
         Opfvv,
         Opfvf
     }, 

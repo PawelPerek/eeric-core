@@ -1,5 +1,5 @@
 use crate::rv_core::{
-    instruction::format::vector::Opfvf, 
+    instruction::format::Opfvf, 
     registers::{
         vector::VectorRegisters, 
         float::FloatRegisters

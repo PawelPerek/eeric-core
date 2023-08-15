@@ -86,69 +86,69 @@ impl RvCore {
             Remw(args) => m::remw(args, &self.registers.x),
             Remuw(args) => m::remuw(args, &self.registers.x),
 
-            Flw(_) => todo!(),
-            Fsw(_) => todo!(),
-            Fmadds(_) => todo!(),
-            Fmsubs(_) => todo!(),
-            Fnmsubs(_) => todo!(),
-            Fnmadds(_) => todo!(),
-            Fadds(_) => todo!(),
-            Fsubs(_) => todo!(),
-            Fmuls(_) => todo!(),
-            Fdivs(_) => todo!(),
-            Fsqrts(_) => todo!(),
-            Fsgnjs(_) => todo!(),
-            Fsgnjns(_) => todo!(),
-            Fsgnjxs(_) => todo!(),
-            Fmins(_) => todo!(),
-            Fmaxs(_) => todo!(),
-            Fcvtws(_) => todo!(),
-            Fcvtwus(_) => todo!(),
-            Fmvxw(_) => todo!(),
-            Feqs(_) => todo!(),
-            Flts(_) => todo!(),
-            Fles(_) => todo!(),
-            Fclasss(_) => todo!(),
-            Fcvtsw(_) => todo!(),
-            Fcvtswu(_) => todo!(),
-            Fmvwx(_) => todo!(),
-            Fcvtls(_) => todo!(),
-            Fcvtlus(_) => todo!(),
-            Fcvtsl(_) => todo!(),
-            Fcvtslu(_) => todo!(),
+            Flw(args) => f::flw(args, &self.registers.f),
+            Fsw(args) => f::fsw(args, &self.registers.f),
+            Fmadds(args) => f::fmadd::s(args, &self.registers.f),
+            Fmsubs(args) => f::fmsub::s(args, &self.registers.f),
+            Fnmsubs(args) => f::fnmsub::s(args, &self.registers.f),
+            Fnmadds(args) => f::fnmadd::s(args, &self.registers.f),
+            Fadds(args) => f::fadd::s(args, &self.registers.f),
+            Fsubs(args) => f::fsub::s(args, &self.registers.f),
+            Fmuls(args) => f::fmul::s(args, &self.registers.f),
+            Fdivs(args) => f::fdiv::s(args, &self.registers.f),
+            Fsqrts(args) => f::fsqrt::s(args, &self.registers.f),
+            Fsgnjs(args) => f::fsgnj::s(args, &self.registers.f),
+            Fsgnjns(args) => f::fsgnjn::s(args, &self.registers.f),
+            Fsgnjxs(args) => f::fsgnjx::s(args, &self.registers.f),
+            Fmins(args) => f::fmin::s(args, &self.registers.f),
+            Fmaxs(args) => f::fmax::s(args, &self.registers.f),
+            Fcvtws(args) => f::fcvt::ws(args, &self.registers.f),
+            Fcvtwus(args) => f::fcvt::wus(args, &self.registers.f),
+            Fmvxw(args) => f::fmv::xw(args, &self.registers.f),
+            Feqs(args) => f::feq::s(args, &self.registers.f),
+            Flts(args) => f::flt::s(args, &self.registers.f),
+            Fles(args) => f::fle::s(args, &self.registers.f),
+            Fclasss(args) => f::fclass::s(args, &self.registers.f),
+            Fcvtsw(args) => f::fcvt::sw(args, &self.registers.f),
+            Fcvtswu(args) => f::fcvt::swu(args, &self.registers.f),
+            Fmvwx(args) => f::fmv::wx(args, &self.registers.f),
+            Fcvtls(args) => f::fcvt::ls(args, &self.registers.f),
+            Fcvtlus(args) => f::fcvt::lus(args, &self.registers.f),
+            Fcvtsl(args) => f::fcvt::sl(args, &self.registers.f),
+            Fcvtslu(args) => f::fcvt::slu(args, &self.registers.f),
             
-            Fld(_) => todo!(),
-            Fsd(_) => todo!(),
-            Fmaddd(_) => todo!(),
-            Fmsubd(_) => todo!(),
-            Fnmsubd(_) => todo!(),
-            Fnmaddd(_) => todo!(),
-            Faddd(_) => todo!(),
-            Fsubd(_) => todo!(),
-            Fmuld(_) => todo!(),
-            Fdivd(_) => todo!(),
-            Fsqrtd(_) => todo!(),
-            Fsgnjd(_) => todo!(),
-            Fsgnjnd(_) => todo!(),
-            Fsgnjxd(_) => todo!(),
-            Fmind(_) => todo!(),
-            Fmaxd(_) => todo!(),
-            Fcvtsd(_) => todo!(),
-            Fcvtds(_) => todo!(),
-            Feqd(_) => todo!(),
-            Fltd(_) => todo!(),
-            Fled(_) => todo!(),
-            Fclassd(_) => todo!(),
-            Fcvtwd(_) => todo!(),
-            Fcvtwud(_) => todo!(),
-            Fcvtdw(_) => todo!(),
-            Fcvtdwu(_) => todo!(),
-            Fcvtld(_) => todo!(),
-            Fcvtlud(_) => todo!(),
-            Fmvxd(_) => todo!(),
-            Fcvtdl(_) => todo!(),
-            Fcvtdlu(_) => todo!(),
-            Fmvdx(_) => todo!(),
+            Fld(args) => d::fld(args, &self.registers.f),
+            Fsd(args) => d::fsd(args, &self.registers.f),
+            Fmaddd(args) => d::fmadd::d(args, &self.registers.f),
+            Fmsubd(args) => d::fmsub::d(args, &self.registers.f),
+            Fnmsubd(args) => d::fnmsub::d(args, &self.registers.f),
+            Fnmaddd(args) => d::fnmadd::d(args, &self.registers.f),
+            Faddd(args) => d::fadd::d(args, &self.registers.f),
+            Fsubd(args) => d::fsub::d(args, &self.registers.f),
+            Fmuld(args) => d::fmul::d(args, &self.registers.f),
+            Fdivd(args) => d::fdiv::d(args, &self.registers.f),
+            Fsqrtd(args) => d::fsqrt::d(args, &self.registers.f),
+            Fsgnjd(args) => d::fsgnj::d(args, &self.registers.f),
+            Fsgnjnd(args) => d::fsgnjn::d(args, &self.registers.f),
+            Fsgnjxd(args) => d::fsgnjx::d(args, &self.registers.f),
+            Fmind(args) => d::fmin::d(args, &self.registers.f),
+            Fmaxd(args) => d::fmax::d(args, &self.registers.f),
+            Fcvtsd(args) => d::fcvt::sd(args, &self.registers.f),
+            Fcvtds(args) => d::fcvt::ds(args, &self.registers.f),
+            Feqd(args) => d::feq::d(args, &self.registers.f),
+            Fltd(args) => d::flt::d(args, &self.registers.f),
+            Fled(args) => d::fle::d(args, &self.registers.f),
+            Fclassd(args) => d::fclass::d(args, &self.registers.f),
+            Fcvtwd(args) => d::fcvt::wd(args, &self.registers.f),
+            Fcvtwud(args) => d::fcvt::wud(args, &self.registers.f),
+            Fcvtdw(args) => d::fcvt::dw(args, &self.registers.f),
+            Fcvtdwu(args) => d::fcvt::dwu(args, &self.registers.f),
+            Fcvtld(args) => d::fcvt::ld(args, &self.registers.f),
+            Fcvtlud(args) => d::fcvt::lud(args, &self.registers.f),
+            Fmvxd(args) => d::fmv::xd(args, &self.registers.f),
+            Fcvtdl(args) => d::fcvt::dl(args, &self.registers.f),
+            Fcvtdlu(args) => d::fcvt::dlu(args, &self.registers.f),
+            Fmvdx(args) => d::fmv::dx(args, &self.registers.f),
 
             Vaddvv(args) => v::vadd::vv(args, &mut self.registers.v),
             Vaddvx(args) => v::vadd::vx(args, &mut self.registers.v, &self.registers.x),
@@ -190,85 +190,86 @@ impl RvCore {
 
             Vrgatherei16vv(args) => v::vrgatherei16::vv(args, &mut self.registers.v),
 
-            Vslideupvx(args) => todo!(),
-            Vslideupvi(args) => todo!(),
+            Vslideupvx(args) => v::vslideup::vx(args, &mut self.registers.v, &self.registers.x),
+            Vslideupvi(args) => v::vslideup::vi(args, &mut self.registers.v),
 
-            Vslidedownvx(args) => todo!(),
-            Vslidedownvi(args) => todo!(),
+            Vslidedownvx(args) => v::vslidedown::vx(args, &mut self.registers.v, &self.registers.x),
+            Vslidedownvi(args) => v::vslidedown::vi(args, &mut self.registers.v),
 
-            Vadcvvm(args) => todo!(),
-            Vadcvxm(args) => todo!(),
-            Vadcvim(args) => todo!(),
+            Vadcvvm(args) => v::vadc::vvm(args, &mut self.registers.v),
+            Vadcvxm(args) => v::vadc::vxm(args, &mut self.registers.v, &self.registers.x),
+            Vadcvim(args) => v::vadc::vim(args, &mut self.registers.v),
 
-            Vmadcvvm(args) => todo!(),
-            Vmadcvxm(args) => todo!(),
-            Vmadcvim(args) => todo!(),
+            Vmadcvvm(args) => v::vmadc::vvm(args, &mut self.registers.v),
+            Vmadcvxm(args) => v::vmadc::vxm(args, &mut self.registers.v, &self.registers.x),
+            Vmadcvim(args) => v::vmadc::vim(args, &mut self.registers.v),
 
-            Vmadcvv(args) => todo!(),
-            Vmadcvx(args) => todo!(),
-            Vmadcvi(args) => todo!(),
+            Vmadcvv(args) => v::vmadc::vv(args, &mut self.registers.v),
+            Vmadcvx(args) => v::vmadc::vx(args, &mut self.registers.v, &self.registers.x),
+            Vmadcvi(args) => v::vmadc::vi(args, &mut self.registers.v),
 
-            Vsbcvvm(args) => todo!(),
-            Vsbcvxm(args) => todo!(),
+            Vsbcvvm(args) => v::vsbc::vvm(args, &mut self.registers.v),
+            Vsbcvxm(args) => v::vsbc::vxm(args, &mut self.registers.v, &self.registers.x),
 
-            Vmsbcvvm(args) => todo!(),
-            Vmsbcvxm(args) => todo!(),
-            Vmsbcvv(args) => todo!(),
-            Vmsbcvx(args) => todo!(),
+            Vmsbcvvm(args) => v::vmsbc::vvm(args, &mut self.registers.v),
+            Vmsbcvxm(args) => v::vmsbc::vxm(args, &mut self.registers.v, &self.registers.x),
 
-            Vmergevvm(args) => todo!(),
-            Vmergevxm(args) => todo!(),
-            Vmergevim(args) => todo!(),
+            Vmsbcvv(args) => v::vmsbc::vv(args, &mut self.registers.v),
+            Vmsbcvx(args) => v::vmsbc::vx(args, &mut self.registers.v, &self.registers.x),
+
+            Vmergevvm(args) => v::vmerge::vvm(args, &mut self.registers.v),
+            Vmergevxm(args) => v::vmerge::vxm(args, &mut self.registers.v, &self.registers.x),
+            Vmergevim(args) => v::vmerge::vim(args, &mut self.registers.v),
             
             Vmvvv(args) => v::vmv::vv(args, &mut self.registers.v),
             Vmvvx(args) => v::vmv::vx(args, &mut self.registers.v, &self.registers.x),
             Vmvvi(args) => v::vmv::vi(args, &mut self.registers.v),
 
-            Vmseqvv(args) => todo!(),
-            Vmseqvx(args) => todo!(),
-            Vmseqvi(args) => todo!(),
+            Vmseqvv(args) => v::vmseq::vv(args, &mut self.registers.v),
+            Vmseqvx(args) => v::vmseq::vx(args, &mut self.registers.v, &self.registers.x),
+            Vmseqvi(args) => v::vmseq::vi(args, &mut self.registers.v),
 
-            Vmsnevv(args) => todo!(),
-            Vmsnevx(args) => todo!(),
-            Vmsnevi(args) => todo!(),
+            Vmsnevv(args) => v::vmsne::vv(args, &mut self.registers.v),
+            Vmsnevx(args) => v::vmsne::vx(args, &mut self.registers.v, &self.registers.x),
+            Vmsnevi(args) => v::vmsne::vi(args, &mut self.registers.v),
             
-            Vmsltuvv(args) => todo!(),
-            Vmsltuvx(args) => todo!(),
+            Vmsltuvv(args) => v::vmsltu::vv(args, &mut self.registers.v),
+            Vmsltuvx(args) => v::vmsltu::vx(args, &mut self.registers.v, &self.registers.x),
             
-            Vmsltvv(args) => todo!(),
-            Vmsltvx(args) => todo!(),
+            Vmsltvv(args) => v::vmslt::vv(args, &mut self.registers.v),
+            Vmsltvx(args) => v::vmslt::vx(args, &mut self.registers.v, &self.registers.x),
             
-            Vmsleuvv(args) => todo!(),
-            Vmsleuvx(args) => todo!(),
-            Vmsleuvi(args) => todo!(),
+            Vmsleuvv(args) => v::vmsleu::vv(args, &mut self.registers.v),
+            Vmsleuvx(args) => v::vmsleu::vx(args, &mut self.registers.v, &self.registers.x),
+            Vmsleuvi(args) => v::vmsleu::vi(args, &mut self.registers.v),
             
-            Vmslevv(args) => todo!(),
-            Vmslevx(args) => todo!(),
-            Vmslevi(args) => todo!(),
+            Vmslevv(args) => v::vmsle::vv(args, &mut self.registers.v),
+            Vmslevx(args) => v::vmsle::vx(args, &mut self.registers.v, &self.registers.x),
+            Vmslevi(args) => v::vmsle::vi(args, &mut self.registers.v),
             
-            Vmsgtuvx(args) => todo!(),
-            Vmsgtuvi(args) => todo!(),
+            Vmsgtuvx(args) => v::vmsgtu::vx(args, &mut self.registers.v, &self.registers.x),
+            Vmsgtuvi(args) => v::vmsgtu::vi(args, &mut self.registers.v),
             
-            Vmsgtvx(args) => todo!(),
-            Vmsgtvi(args) => todo!(),
+            Vmsgtvx(args) => v::vmsgt::vx(args, &mut self.registers.v, &self.registers.x),
+            Vmsgtvi(args) => v::vmsgt::vi(args, &mut self.registers.v),
             
-            Vsadduvv(args) => todo!(),
-            Vsadduvx(args) => todo!(),
-            Vsadduvi(args) => todo!(),
+            Vsadduvv(args) => v::vsaddu::vv(args, &mut self.registers.v),
+            Vsadduvx(args) => v::vsaddu::vx(args, &mut self.registers.v, &self.registers.x),
+            Vsadduvi(args) => v::vsaddu::vi(args, &mut self.registers.v),
             
-            Vsaddvv(args) => todo!(),
-            Vsaddvx(args) => todo!(),
-            Vsaddvi(args) => todo!(),
+            Vsaddvv(args) => v::vsadd::vv(args, &mut self.registers.v),
+            Vsaddvx(args) => v::vsadd::vx(args, &mut self.registers.v, &self.registers.x),
+            Vsaddvi(args) => v::vsadd::vi(args, &mut self.registers.v),
             
-            Vssubuvv(args) => todo!(),
-            Vssubuvx(args) => todo!(),
+            Vssubuvv(args) => v::vssubu::vv(args, &mut self.registers.v),
+            Vssubuvx(args) => v::vssubu::vx(args, &mut self.registers.v, &self.registers.x),
             
-            Vssubvv(args) => todo!(),
-            Vssubvx(args) => todo!(),
+            Vssubvv(args) => v::vssub::vv(args, &mut self.registers.v),
+            Vssubvx(args) => v::vssub::vx(args, &mut self.registers.v, &self.registers.x),
             
-            Vsllvv(args) => todo!(),
-            Vsllvx(args) => todo!(),
-            Vsllvi(args) => todo!(),
+            Vsllvv(args) => v::vsll::vv(args, &mut self.registers.v),
+            Vsllvx(args) => v::vsll::vx(args, &mut self.registers.v, &self.registers.x),
+            Vsllvi(args) => v::vsll::vi(args, &mut self.registers.v),
             
             Vsmulvv(args) => todo!(),
             Vsmulvx(args) => todo!(),
@@ -278,13 +279,13 @@ impl RvCore {
             Vmv4rv(args) => todo!(),
             Vmv8rv(args) => todo!(),
             
-            Vsrlvv(args) => todo!(),
-            Vsrlvx(args) => todo!(),
-            Vsrlvi(args) => todo!(),
+            Vsrlvv(args) => v::vsrl::vv(args, &mut self.registers.v),
+            Vsrlvx(args) => v::vsrl::vx(args, &mut self.registers.v, &self.registers.x),
+            Vsrlvi(args) => v::vsrl::vi(args, &mut self.registers.v),
             
-            Vsravv(args) => todo!(),
-            Vsravx(args) => todo!(),
-            Vsravi(args) => todo!(),
+            Vsravv(args) => v::vsra::vv(args, &mut self.registers.v),
+            Vsravx(args) => v::vsra::vx(args, &mut self.registers.v, &self.registers.x),
+            Vsravi(args) => v::vsra::vi(args, &mut self.registers.v),
             
             Vssrlvv(args) => todo!(),
             Vssrlvx(args) => todo!(),
@@ -555,7 +556,7 @@ impl RvCore {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use instruction::{format::base::*, Instruction::*};
+    use instruction::{format::*, Instruction::*};
 
     #[test]
     fn add() {
@@ -594,7 +595,7 @@ mod tests {
         machine.registers.x[1] = 5; // rs1: 5
         machine.execute(Addi(I {
             rd: 3,
-            rs: 1,
+            rs1: 1,
             imm12: 3,
         }));
 
@@ -623,7 +624,7 @@ mod tests {
         machine.registers.x[1] = 5; // rs1: 5
         machine.execute(Slti(I {
             rd: 3,
-            rs: 1,
+            rs1: 1,
             imm12: 7,
         }));
 
@@ -652,7 +653,7 @@ mod tests {
         machine.registers.x[1] = 5; // rs1: 5
         machine.execute(Sltiu(I {
             rd: 3,
-            rs: 1,
+            rs1: 1,
             imm12: 3,
         }));
 
@@ -715,7 +716,7 @@ mod tests {
     fn andi() {
         let mut machine = logic_test_machine();
 
-        machine.execute(Andi(I {rd: 3, rs: 1, imm12: 0b0110}));
+        machine.execute(Andi(I {rd: 3, rs1: 1, imm12: 0b0110}));
         assert_eq!(machine.registers.x[3], 0b0010);
     }
 
@@ -723,7 +724,7 @@ mod tests {
     fn ori() {
         let mut machine = logic_test_machine();
 
-        machine.execute(Ori(I {rd: 3, rs: 1, imm12: 0b0110}));
+        machine.execute(Ori(I {rd: 3, rs1: 1, imm12: 0b0110}));
         assert_eq!(machine.registers.x[3], 0b1110);
     }
         
@@ -731,7 +732,7 @@ mod tests {
     fn xori() {
         let mut machine = logic_test_machine();
 
-        machine.execute(Xori(I {rd: 3, rs: 1, imm12: 0b0110}));
+        machine.execute(Xori(I {rd: 3, rs1: 1, imm12: 0b0110}));
         assert_eq!(machine.registers.x[3], 0b1100);
     }
         
@@ -763,7 +764,7 @@ mod tests {
     fn slli() {
         let mut machine = logic_test_machine();
 
-        machine.execute(Slli(I {rd: 3, rs: 1, imm12: 3}));
+        machine.execute(Slli(I {rd: 3, rs1: 1, imm12: 3}));
         assert_eq!(machine.registers.x[3], 0b1010000);
     }    
 
@@ -771,7 +772,7 @@ mod tests {
     fn srli() {
         let mut machine = logic_test_machine();
 
-        machine.execute(Srli(I {rd: 3, rs: 1, imm12: 2}));
+        machine.execute(Srli(I {rd: 3, rs1: 1, imm12: 2}));
         assert_eq!(machine.registers.x[3], 0b10);
     }     
 
@@ -779,7 +780,7 @@ mod tests {
     fn srai() {
         let mut machine = logic_test_machine();
 
-        machine.execute(Srai(I {rd: 3, rs: 1, imm12: 2}));
+        machine.execute(Srai(I {rd: 3, rs1: 1, imm12: 2}));
         assert_eq!(machine.registers.x[3], 0b10);
     }      
 

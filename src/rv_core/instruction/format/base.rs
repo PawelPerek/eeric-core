@@ -6,7 +6,7 @@ pub struct R {
 
 pub struct I {
     pub rd: usize,
-    pub rs: usize,
+    pub rs1: usize,
     pub imm12: u64
 }
 
