@@ -13,33 +13,141 @@ pub struct Vreg {
 }
 
 impl Vreg {
-    pub fn new<'ve>(raw: Vec<u8>, eew: SEW) -> Vreg {
+    pub fn new(raw: Vec<u8>, eew: SEW) -> Vreg {
         Vreg { raw, eew, ptr: 0 }
     } 
 
     pub fn double_sew(self) -> Vreg {
         Vreg { raw: self.raw, ptr: self.ptr, eew: SEW::new(self.eew.bit_length() * 2).unwrap()}
     }
+
+    pub fn byte_length(&self) -> usize {
+        self.len() * self.eew.byte_length()
+    }
+
+    pub fn iter_eew(&self) -> VregU64Iterator<'_> {
+        VregU64Iterator { vreg: &self, ptr: 0 }
+    }
+
+    pub fn iter_u64(&self) -> VregU64Iterator<'_> {
+        VregU64Iterator { vreg: &self, ptr: 0 }
+    }
+
+    pub fn iter_f32(&self) -> VregF32Iterator<'_> {
+        VregF32Iterator { vreg: &self, ptr: 0 }
+    } 
+
+    pub fn iter_f64(&self) -> VregF64Iterator<'_> {
+        VregF64Iterator { vreg: &self, ptr: 0 }
+    } 
 }
 
 impl Iterator for Vreg {
-    type Item = u64;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let byte_step: usize = self.eew.byte_length();
-        let span = self.ptr .. self.ptr + byte_step;
-        
-        if span.end <= self.raw.len() {
-            let mut padded_bytes = [0; 8];
-            let len = self.raw[span.clone()].len();
-            padded_bytes[..len].copy_from_slice(&self.raw[span]);
+    type Item = u8;
     
-            self.ptr += byte_step;
+    fn next(&mut self) -> Option<Self::Item> {
+        let element = self.raw.get(self.ptr).copied();
+        self.ptr += 1;
+        element
+    }
+}
 
-            Some(u64::from_le_bytes(padded_bytes))
-        } else {
-            None
+impl FromIterator<u8> for Vreg {
+    fn from_iter<T: IntoIterator<Item=u8>>(iter: T) -> Self {
+        let mut raw = Vec::new();
+        raw.extend(iter);
+
+        Vreg { raw, ptr: 0, eew: SEW::new(8).unwrap() }
+    }
+}
+
+struct VregEEWIterator<'a> {
+    vreg: &'a Vreg,
+    ptr: usize
+}
+
+impl<'a> Iterator for VregEEWIterator<'a> {
+    type Item = u64;
+    
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.ptr + self.vreg.eew.byte_length() > self.vreg.raw.len() {
+            return None;
         }
+        
+        let mut bytes = [0x00_u8; 8];
+
+        let chunk_range = self.ptr .. self.ptr + self.vreg.eew.byte_length();
+        let chunk = &self.vreg.raw[chunk_range];
+        
+        bytes[..chunk.len()].copy_from_slice(chunk);
+
+        Some(u64::from_le_bytes(bytes))
+    }
+}
+
+struct VregU64Iterator<'a> {
+    vreg: &'a Vreg,
+    ptr: usize
+}
+
+impl<'a> Iterator for VregU64Iterator<'a> {
+    type Item = u64;
+    
+    fn next(&mut self) -> Option<Self::Item> {
+        self.vreg.next_chunk().map(u64::from_le_bytes).ok()
+    }
+}
+
+struct VregF32Iterator<'a> {
+    vreg: &'a Vreg,
+    ptr: usize
+}
+
+impl<'a> Iterator for VregF32Iterator<'a> {
+    type Item = f32;
+    
+    fn next(&mut self) -> Option<Self::Item> {
+        self.vreg.next_chunk().map(f32::from_le_bytes).ok()
+    }
+}
+
+struct VregF64Iterator<'a> {
+    vreg: &'a Vreg,
+    ptr: usize
+}
+
+impl<'a> Iterator for VregF64Iterator<'a> {
+    type Item = f64;
+    
+    fn next(&mut self) -> Option<Self::Item> {
+        self.vreg.next_chunk().map(f64::from_le_bytes).ok()
+    }
+}
+
+// impl Iterator for Vreg {
+//     type Item = u64;
+
+//     fn next(&mut self) -> Option<Self::Item> {
+//         let byte_step: usize = self.eew.byte_length();
+//         let span = self.ptr .. self.ptr + byte_step;
+        
+//         if span.end <= self.raw.len() {
+//             let mut padded_bytes = [0; 8];
+//             let len = self.raw[span.clone()].len();
+//             padded_bytes[..len].copy_from_slice(&self.raw[span]);
+    
+//             self.ptr += byte_step;
+
+//             Some(u64::from_le_bytes(padded_bytes))
+//         } else {
+//             None
+//         }
+//     }
+// }
+
+impl ExactSizeIterator for Vreg {
+    fn len(&self) -> usize {
+        self.raw.len() / self.eew.byte_length()
     }
 }
 
@@ -53,16 +161,17 @@ mod tests {
 
         let mut vreg = Vreg::new(vector_data, SEW::new(8).unwrap());
 
+        let mut iter = vreg.iter_eew();
 
-        assert_eq!(vreg.next(), Some(0xef));
-        assert_eq!(vreg.next(), Some(0xcd));
-        assert_eq!(vreg.next(), Some(0xab));
-        assert_eq!(vreg.next(), Some(0x89));
-        assert_eq!(vreg.next(), Some(0x67));
-        assert_eq!(vreg.next(), Some(0x45));
-        assert_eq!(vreg.next(), Some(0x23));
-        assert_eq!(vreg.next(), Some(0x01));
-        assert_eq!(vreg.next(), None);
+        assert_eq!(iter.next(), Some(0xef));
+        assert_eq!(iter.next(), Some(0xcd));
+        assert_eq!(iter.next(), Some(0xab));
+        assert_eq!(iter.next(), Some(0x89));
+        assert_eq!(iter.next(), Some(0x67));
+        assert_eq!(iter.next(), Some(0x45));
+        assert_eq!(iter.next(), Some(0x23));
+        assert_eq!(iter.next(), Some(0x01));
+        assert_eq!(iter.next(), None);
     }
 
     #[test]
@@ -71,12 +180,13 @@ mod tests {
 
         let mut vreg = Vreg::new(vector_data, SEW::new(16).unwrap());
 
+        let mut iter = vreg.iter_eew();
 
-        assert_eq!(vreg.next(), Some(0xcdef));
-        assert_eq!(vreg.next(), Some(0x89ab));
-        assert_eq!(vreg.next(), Some(0x4567));
-        assert_eq!(vreg.next(), Some(0x0123));
-        assert_eq!(vreg.next(), None);
+        assert_eq!(iter.next(), Some(0xcdef));
+        assert_eq!(iter.next(), Some(0x89ab));
+        assert_eq!(iter.next(), Some(0x4567));
+        assert_eq!(iter.next(), Some(0x0123));
+        assert_eq!(iter.next(), None);
     }
 
     #[test]
@@ -85,10 +195,11 @@ mod tests {
 
         let mut vreg = Vreg::new(vector_data, SEW::new(32).unwrap());
 
+        let mut iter = vreg.iter_eew();
 
-        assert_eq!(vreg.next(), Some(0x89abcdef));
-        assert_eq!(vreg.next(), Some(0x01234567));
-        assert_eq!(vreg.next(), None);
+        assert_eq!(iter.next(), Some(0x89abcdef));
+        assert_eq!(iter.next(), Some(0x01234567));
+        assert_eq!(iter.next(), None);
     }
 
     #[test]
@@ -97,8 +208,9 @@ mod tests {
 
         let mut vreg = Vreg::new(vector_data, SEW::new(64).unwrap());
 
+        let mut iter = vreg.iter_eew();
 
-        assert_eq!(vreg.next(), Some(0x0123456789abcdef));
-        assert_eq!(vreg.next(), None);
+        assert_eq!(iter.next(), Some(0x0123456789abcdef));
+        assert_eq!(iter.next(), None);
     }
 }

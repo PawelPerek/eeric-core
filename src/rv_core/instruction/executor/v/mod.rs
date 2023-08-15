@@ -1,4 +1,5 @@
 pub mod vadd;
+pub mod vfadd;
 pub mod vand;
 pub mod vmax;
 pub mod vmaxu;

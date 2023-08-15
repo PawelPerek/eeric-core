@@ -6,13 +6,15 @@ pub use instruction::Instruction;
 use memory::Memory;
 use registers::Registers;
 
+
+
 pub struct RvCore {
-    registers: Registers,
+    pub registers: Registers,
     memory: Memory
 }
 
 impl RvCore {
-    fn new_zeroed() -> Self {
+    pub fn new_zeroed() -> Self {
         RvCore {
             registers: Default::default(),
             memory: Default::default(),
@@ -149,68 +151,93 @@ impl RvCore {
             Vmseqvv(args) => todo!(),
             Vmseqvx(args) => todo!(),
             Vmseqvi(args) => todo!(),
+
             Vmsnevv(args) => todo!(),
             Vmsnevx(args) => todo!(),
             Vmsnevi(args) => todo!(),
+            
             Vmsltuvv(args) => todo!(),
             Vmsltuvx(args) => todo!(),
+            
             Vmsltvv(args) => todo!(),
             Vmsltvx(args) => todo!(),
+            
             Vmsleuvv(args) => todo!(),
             Vmsleuvx(args) => todo!(),
             Vmsleuvi(args) => todo!(),
+            
             Vmslevv(args) => todo!(),
             Vmslevx(args) => todo!(),
             Vmslevi(args) => todo!(),
+            
             Vmsgtuvx(args) => todo!(),
             Vmsgtuvi(args) => todo!(),
+            
             Vmsgtvx(args) => todo!(),
             Vmsgtvi(args) => todo!(),
+            
             Vsadduvv(args) => todo!(),
             Vsadduvx(args) => todo!(),
             Vsadduvi(args) => todo!(),
+            
             Vsaddvv(args) => todo!(),
             Vsaddvx(args) => todo!(),
             Vsaddvi(args) => todo!(),
+            
             Vssubuvv(args) => todo!(),
             Vssubuvx(args) => todo!(),
+            
             Vssubvv(args) => todo!(),
             Vssubvx(args) => todo!(),
+            
             Vsllvv(args) => todo!(),
             Vsllvx(args) => todo!(),
             Vsllvi(args) => todo!(),
+            
             Vsmulvv(args) => todo!(),
             Vsmulvx(args) => todo!(),
+            
             Vmv1rv(args) => todo!(),
             Vmv2rv(args) => todo!(),
             Vmv4rv(args) => todo!(),
             Vmv8rv(args) => todo!(),
+            
             Vsrlvv(args) => todo!(),
             Vsrlvx(args) => todo!(),
             Vsrlvi(args) => todo!(),
+            
             Vsravv(args) => todo!(),
             Vsravx(args) => todo!(),
             Vsravi(args) => todo!(),
+            
             Vssrlvv(args) => todo!(),
             Vssrlvx(args) => todo!(),
             Vssrlvi(args) => todo!(),
+            
             Vssravv(args) => todo!(),
             Vssravx(args) => todo!(),
             Vssravi(args) => todo!(),
+            
             Vnsrlwv(args) => todo!(),
             Vnsrlwx(args) => todo!(),
             Vnsrlwi(args) => todo!(),
+            
             Vnsrawv(args) => todo!(),
             Vnsrawx(args) => todo!(),
             Vnsrawi(args) => todo!(),
+            
             Vnclipuwv(args) => todo!(),
             Vnclipuwx(args) => todo!(),
             Vnclipuwi(args) => todo!(),
+            
             Vnclipwv(args) => todo!(),
             Vnclipwx(args) => todo!(),
             Vnclipwi(args) => todo!(),
+            
             Vwredsumuvs(args) => todo!(),
+            
             Vwredsumvs(args) => todo!(),
+            
             Vredsumvs(args) => todo!(),
             Vredandvs(args) => todo!(),
             Vredorvs(args) => todo!(),
@@ -306,18 +333,27 @@ impl RvCore {
             Vwmaccuswx(args) => todo!(),
             Vwmaccsuwv(args) => todo!(),
             Vwmaccsuwx(args) => todo!(),
+
             Vfaddvv(args) => todo!(),
             Vfaddvf(args) => todo!(),
+            
             Vfredusumvs(args) => todo!(),
+            
             Vfsubvv(args) => todo!(),
             Vfsubvf(args) => todo!(),
+            
             Vfredosumvs(args) => todo!(),
+            
             Vfminvv(args) => todo!(),
             Vfminvf(args) => todo!(),
+            
             Vfredminvs(args) => todo!(),
+            
             Vfmaxvv(args) => todo!(),
             Vfmaxvf(args) => todo!(),
+            
             Vfredmaxvs(args) => todo!(),
+            
             Vfsgnjvv(args) => todo!(),
             Vfsgnjvf(args) => todo!(),
             Vfsgnjnvv(args) => todo!(),

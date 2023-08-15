@@ -17,7 +17,7 @@ pub fn vv(Opivv { vd, vs1, vs2, vm }: Opivv, v: &mut VectorRegisters) {
         if index as usize >= vlmax { 
             0 
         } else { 
-            v.get(vs2).nth(index as usize).unwrap()
+            v.get(vs2).iter_eew().nth(index as usize).unwrap()
         }
     }));
 }
@@ -29,7 +29,7 @@ pub fn vx(Opivx { vd, rs1, vs2, vm }: Opivx, v: &mut VectorRegisters, x: &Intege
     v.apply(vd, if index >= vlmax { 
         v.acquire(vd).map(|_| 0) 
     } else {
-        v.acquire(vd).map(|_| v.get(vs2).nth(index).unwrap())
+        v.acquire(vd).map(|_| v.get(vs2).iter_eew().nth(index).unwrap())
     } );
 }
 
@@ -40,6 +40,6 @@ pub fn vi(Opivi { vd, imm5, vs2, vm }: Opivi, v: &mut VectorRegisters) {
     v.apply(vd, if index >= vlmax { 
         v.acquire(vd).map(|_| 0) 
     } else {
-        v.acquire(vd).map(|_| v.get(vs2).nth(index).unwrap())
+        v.acquire(vd).map(|_| v.get(vs2).iter_eew().nth(index).unwrap())
     } );
 }
