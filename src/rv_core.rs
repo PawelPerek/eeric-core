@@ -271,13 +271,13 @@ impl RvCore {
             Vsllvx(args) => v::vsll::vx(args, &mut self.registers.v, &self.registers.x),
             Vsllvi(args) => v::vsll::vi(args, &mut self.registers.v),
             
-            Vsmulvv(args) => todo!(),
-            Vsmulvx(args) => todo!(),
+            Vsmulvv(args) => v::vsmul::vv(args, &mut self.registers.v),
+            Vsmulvx(args) => v::vsmul::vx(args, &mut self.registers.v, &self.registers.x),
             
-            Vmv1rv(args) => todo!(),
-            Vmv2rv(args) => todo!(),
-            Vmv4rv(args) => todo!(),
-            Vmv8rv(args) => todo!(),
+            Vmv1rv(args) => v::vmv1r::v(args, &mut self.registers.v),
+            Vmv2rv(args) => v::vmv2r::v(args, &mut self.registers.v),
+            Vmv4rv(args) => v::vmv4r::v(args, &mut self.registers.v),
+            Vmv8rv(args) => v::vmv8r::v(args, &mut self.registers.v),
             
             Vsrlvv(args) => v::vsrl::vv(args, &mut self.registers.v),
             Vsrlvx(args) => v::vsrl::vx(args, &mut self.registers.v, &self.registers.x),
@@ -287,127 +287,165 @@ impl RvCore {
             Vsravx(args) => v::vsra::vx(args, &mut self.registers.v, &self.registers.x),
             Vsravi(args) => v::vsra::vi(args, &mut self.registers.v),
             
-            Vssrlvv(args) => todo!(),
-            Vssrlvx(args) => todo!(),
-            Vssrlvi(args) => todo!(),
+            Vssrlvv(args) => v::vssrl::vv(args, &mut self.registers.v),
+            Vssrlvx(args) => v::vssrl::vx(args, &mut self.registers.v, &self.registers.x),
+            Vssrlvi(args) => v::vssrl::vi(args, &mut self.registers.v),
             
-            Vssravv(args) => todo!(),
-            Vssravx(args) => todo!(),
-            Vssravi(args) => todo!(),
+            Vssravv(args) => v::vssra::vv(args, &mut self.registers.v),
+            Vssravx(args) => v::vssra::vx(args, &mut self.registers.v, &self.registers.x),
+            Vssravi(args) => v::vssra::vi(args, &mut self.registers.v),
             
-            Vnsrlwv(args) => todo!(),
-            Vnsrlwx(args) => todo!(),
-            Vnsrlwi(args) => todo!(),
+            Vnsrlwv(args) => v::vnsrl::wv(args, &mut self.registers.v),
+            Vnsrlwx(args) => v::vnsrl::wx(args, &mut self.registers.v, &self.registers.x),
+            Vnsrlwi(args) => v::vnsrl::wi(args, &mut self.registers.v),
             
-            Vnsrawv(args) => todo!(),
-            Vnsrawx(args) => todo!(),
-            Vnsrawi(args) => todo!(),
+            Vnsrawv(args) => v::vnsra::wv(args, &mut self.registers.v),
+            Vnsrawx(args) => v::vnsra::wx(args, &mut self.registers.v, &self.registers.x),
+            Vnsrawi(args) => v::vnsra::wi(args, &mut self.registers.v),
             
-            Vnclipuwv(args) => todo!(),
-            Vnclipuwx(args) => todo!(),
-            Vnclipuwi(args) => todo!(),
+            Vnclipuwv(args) => v::vnclipu::wv(args, &mut self.registers.v),
+            Vnclipuwx(args) => v::vnclipu::wx(args, &mut self.registers.v, &self.registers.x),
+            Vnclipuwi(args) => v::vnclipu::wi(args, &mut self.registers.v),
             
-            Vnclipwv(args) => todo!(),
-            Vnclipwx(args) => todo!(),
-            Vnclipwi(args) => todo!(),
+            Vnclipwv(args) => v::vnclip::wv(args, &mut self.registers.v),
+            Vnclipwx(args) => v::vnclip::wx(args, &mut self.registers.v, &self.registers.x),
+            Vnclipwi(args) => v::vnclip::wi(args, &mut self.registers.v),
             
-            Vwredsumuvs(args) => todo!(),
+            Vwredsumuvs(args) => v::vwredsumu::vs(args, &mut self.registers.v),
+            Vwredsumvs(args) => v::vwredsum::vs(args, &mut self.registers.v),
             
-            Vwredsumvs(args) => todo!(),
+            Vredsumvs(args) => v::vredsum::vs(args, &mut self.registers.v),
+            Vredandvs(args) => v::vredand::vs(args, &mut self.registers.v),
+            Vredorvs(args) => v::vredor::vs(args, &mut self.registers.v),
+            Vredxorvs(args) => v::vredxor::vs(args, &mut self.registers.v),
+            Vredminuvs(args) => v::vredminu::vs(args, &mut self.registers.v),
+            Vredminvs(args) => v::vredmin::vs(args, &mut self.registers.v),
+            Vredmaxuvs(args) => v::vredmaxu::vs(args, &mut self.registers.v),
+            Vredmaxvs(args) => v::vredmax::vs(args, &mut self.registers.v),
+
+            Vaadduvv(args) => v::vaaddu::vv(args, &mut self.registers.v),
+            Vaadduvx(args) => v::vaaddu::vx(args, &mut self.registers.v, &self.registers.x),
+
+            Vaaddvv(args) => v::vaadd::vv(args, &mut self.registers.v),
+            Vaaddvx(args) => v::vaadd::vx(args, &mut self.registers.v, &self.registers.x),
             
-            Vredsumvs(args) => todo!(),
-            Vredandvs(args) => todo!(),
-            Vredorvs(args) => todo!(),
-            Vredxorvs(args) => todo!(),
-            Vredminuvs(args) => todo!(),
-            Vredminvs(args) => todo!(),
-            Vredmaxuvs(args) => todo!(),
-            Vredmaxvs(args) => todo!(),
-            Vaadduvv(args) => todo!(),
-            Vaadduvx(args) => todo!(),
-            Vaaddvv(args) => todo!(),
-            Vaaddvx(args) => todo!(),
-            Vasubuvv(args) => todo!(),
-            Vasubuvx(args) => todo!(),
-            Vasubvv(args) => todo!(),
-            Vasubvx(args) => todo!(),
-            Vslide1upvx(args) => todo!(),
-            Vslide1downvx(args) => todo!(),
-            Vmvxs(args) => todo!(),
-            Vcpopm(args) => todo!(),
-            Vfirstm(args) => todo!(),
-            Vmvsx(args) => todo!(),
-            Vzextvf8(args) => todo!(),
-            Vsextvf8(args) => todo!(),
-            Vzextvf4(args) => todo!(),
-            Vsextvf4(args) => todo!(),
-            Vzextvf2(args) => todo!(),
-            Vsextvf2(args) => todo!(),
-            Vmsbfm(args) => todo!(),
-            Vmsofm(args) => todo!(),
-            Vmsifm(args) => todo!(),
-            Viotam(args) => todo!(),
-            Vidv(args) => todo!(),
-            Vcompressvm(args) => todo!(),
-            Vmandnmm(args) => todo!(),
-            Vmandmm(args) => todo!(),
-            Vmormm(args) => todo!(),
-            Vmxormm(args) => todo!(),
-            Vmournmm(args) => todo!(),
-            Vmnandmm(args) => todo!(),
-            Vmnormm(args) => todo!(),
-            Vmxnormm(args) => todo!(),
-            Vdivuvv(args) => todo!(),
-            Vdivuvx(args) => todo!(),
-            Vdivvv(args) => todo!(),
-            Vdivvx(args) => todo!(),
-            Vremuvv(args) => todo!(),
-            Vremuvx(args) => todo!(),
-            Vremvv(args) => todo!(),
-            Vremvx(args) => todo!(),
+            Vasubuvv(args) => v::vasubu::vv(args, &mut self.registers.v),
+            Vasubuvx(args) => v::vasubu::vx(args, &mut self.registers.v, &self.registers.x),
+            
+            Vasubvv(args) => v::vasub::vv(args, &mut self.registers.v),
+            Vasubvx(args) => v::vasub::vx(args, &mut self.registers.v, &self.registers.x),
+            
+            Vslide1upvx(args) => v::vslide1up::vx(args, &mut self.registers.v, &self.registers.x),
+
+            Vslide1downvx(args) => v::vslide1down::vx(args, &mut self.registers.v, &self.registers.x),
+            
+            Vmvxs(args) => v::vmv::xs(args, &mut self.registers.v),
+            Vcpopm(args) => v::vcpop::m(args, &mut self.registers.v),
+            Vfirstm(args) => v::vfirst::m(args, &mut self.registers.v),
+
+            Vmvsx(args) => v::vmv::sx(args, &mut self.registers.v),
+            
+            Vzextvf8(args) => v::vzext::vf8(args, &mut self.registers.v),
+            Vsextvf8(args) => v::vsext::vf8(args, &mut self.registers.v),
+            Vzextvf4(args) => v::vzext::vf4(args, &mut self.registers.v),
+            Vsextvf4(args) => v::vsext::vf4(args, &mut self.registers.v),
+            Vzextvf2(args) => v::vzext::vf2(args, &mut self.registers.v),
+            Vsextvf2(args) => v::vsext::vf2(args, &mut self.registers.v),
+
+            Vmsbfm(args) => v::vmsbf::m(args, &mut self.registers.v),
+            Vmsofm(args) => v::vmsof::m(args, &mut self.registers.v),
+            Vmsifm(args) => v::vmsif::m(args, &mut self.registers.v),
+            Viotam(args) => v::viota::m(args, &mut self.registers.v),
+            Vidv(args) => v::vid::v(args, &mut self.registers.v),
+
+            Vcompressvm(args) => v::vcompress::vm(args, &mut self.registers.v),
+
+            Vmandnmm(args) => v::vmandn::mm(args, &mut self.registers.v),
+            Vmandmm(args) => v::vmand::mm(args, &mut self.registers.v),
+            Vmormm(args) => v::vmor::mm(args, &mut self.registers.v),
+            Vmxormm(args) => v::vmxor::mm(args, &mut self.registers.v),
+            Vmornmm(args) => v::vmorn::mm(args, &mut self.registers.v),
+            Vmnandmm(args) => v::vmnand::mm(args, &mut self.registers.v),
+            Vmnormm(args) => v::vmnor::mm(args, &mut self.registers.v),
+            Vmxnormm(args) => v::vmxnor::mm(args, &mut self.registers.v),
+
+            Vdivuvv(args) => v::vdivu::vv(args, &mut self.registers.v),
+            Vdivuvx(args) => v::vdivu::vx(args, &mut self.registers.v, &self.registers.x),
+
+            Vdivvv(args) => v::vdiv::vv(args, &mut self.registers.v),
+            Vdivvx(args) => v::vdiv::vx(args, &mut self.registers.v, &self.registers.x),
+            
+            Vremuvv(args) => v::vremu::vv(args, &mut self.registers.v),
+            Vremuvx(args) => v::vremu::vx(args, &mut self.registers.v, &self.registers.x),
+            
+            Vremvv(args) => v::vrem::vv(args, &mut self.registers.v),
+            Vremvx(args) => v::vrem::vx(args, &mut self.registers.v, &self.registers.x),
+            
             Vmulhuvv(args) => todo!(),
             Vmulhuvx(args) => todo!(),
+            
             Vmulvv(args) => todo!(),
             Vmulvx(args) => todo!(),
+            
             Vmulhsuvv(args) => todo!(),
             Vmulhsuvx(args) => todo!(),
+            
             Vmulhvv(args) => todo!(),
             Vmulhvx(args) => todo!(),
+            
             Vmaddvv(args) => todo!(),
             Vmaddvx(args) => todo!(),
+            
             Vnmsubvv(args) => todo!(),
             Vnmsubvx(args) => todo!(),
+            
             Vmaccvv(args) => todo!(),
             Vmaccvx(args) => todo!(),
+            
             Vnmsacvv(args) => todo!(),
             Vnmsacvx(args) => todo!(),
+            
             Vwadduvv(args) => todo!(),
             Vwadduvx(args) => todo!(),
+            
             Vwaddvv(args) => todo!(),
             Vwaddvx(args) => todo!(),
+            
             Vwsubuvv(args) => todo!(),
             Vwsubuvx(args) => todo!(),
+            
             Vwsubvv(args) => todo!(),
             Vwsubvx(args) => todo!(),
+            
             Vwadduwv(args) => todo!(),
             Vwadduwx(args) => todo!(),
+            
             Vwaddwv(args) => todo!(),
             Vwaddwx(args) => todo!(),
+            
             Vwsubuwv(args) => todo!(),
             Vwsubuwx(args) => todo!(),
+            
             Vwsubwv(args) => todo!(),
             Vwsubwx(args) => todo!(),
+            
             Vwmuluwv(args) => todo!(),
             Vwmuluwx(args) => todo!(),
+            
             Vwmulsuwv(args) => todo!(),
             Vwmulsuwx(args) => todo!(),
+            
             Vwmulwv(args) => todo!(),
             Vwmulwx(args) => todo!(),
+            
             Vwmaccuwv(args) => todo!(),
             Vwmaccuwx(args) => todo!(),
+            
             Vwmaccwv(args) => todo!(),
             Vwmaccwx(args) => todo!(),
+            
             Vwmaccuswx(args) => todo!(),
+            
             Vwmaccsuwv(args) => todo!(),
             Vwmaccsuwx(args) => todo!(),
 

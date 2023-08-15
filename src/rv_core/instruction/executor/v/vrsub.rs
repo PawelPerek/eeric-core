@@ -4,8 +4,8 @@ use crate::rv_core::{
         Opivi,
     }, 
     registers::{
-        vector::VectorRegisters, 
-        integer::IntegerRegisters
+        VectorRegisters, 
+        IntegerRegisters
     }
 };
 

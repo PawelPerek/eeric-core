@@ -1,6 +1,6 @@
 use crate::rv_core::{
     instruction::format::I, 
-    registers::integer::IntegerRegisters, 
+    registers::IntegerRegisters, 
     memory::Memory
 };
 

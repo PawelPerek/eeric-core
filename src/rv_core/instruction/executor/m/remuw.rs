@@ -1,7 +1,7 @@
 
 use crate::rv_core::{
     instruction::format::R, 
-    registers::integer::IntegerRegisters
+    registers::IntegerRegisters
 };
 
 pub fn remuw(R { rd, rs1, rs2 }: R, x: &IntegerRegisters) {

@@ -3,10 +3,12 @@ use crate::rv_core::{
         Opivv,
         Opivx,
         Opivi,
+        Vwxunary0,
+        Vrxunary0
     }, 
     registers::{
-        vector::VectorRegisters, 
-        integer::IntegerRegisters
+        VectorRegisters, 
+        IntegerRegisters
     }
 };
 
@@ -20,4 +22,13 @@ pub fn vx(Opivx { vd, rs1, vs2, vm }: Opivx, v: &mut VectorRegisters, x: &Intege
 
 pub fn vi(Opivi { vd, imm5, vs2, vm }: Opivi, v: &mut VectorRegisters) {
     v.apply(vd, v.acquire(vd).map(|_| imm5));
+}
+
+
+pub fn xs(Vwxunary0 { dest, vs2, vm, .. }: Vwxunary0, v: &mut VectorRegisters) {
+    todo!()
+}
+
+pub fn sx(Vrxunary0 { dest, vs1, vm, .. }: Vrxunary0, v: &mut VectorRegisters) {
+    todo!()
 }

@@ -1,6 +1,6 @@
 use crate::rv_core::{
     instruction::format::Opivv, 
-    registers::vector::VectorRegisters
+    registers::VectorRegisters
 };
 
 pub fn vv(Opivv { vd, vs1, vs2, vm }: Opivv, v: &mut VectorRegisters) {

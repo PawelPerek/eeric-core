@@ -1,6 +1,6 @@
 use crate::rv_core::{
     instruction::format::U, 
-    registers::integer::IntegerRegisters
+    registers::IntegerRegisters
 };
 
 pub fn lui(U { rd, imm20 }: U, x: &mut IntegerRegisters) {

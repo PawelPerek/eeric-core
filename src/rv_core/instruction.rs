@@ -375,7 +375,7 @@ pub enum Instruction {
 
     Vmxormm(Opmvv),
 
-    Vmournmm(Opmvv),
+    Vmornmm(Opmvv),
 
     Vmnandmm(Opmvv),
 

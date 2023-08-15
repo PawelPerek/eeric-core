@@ -1,6 +1,6 @@
 use crate::rv_core::{
     instruction::format::U, 
-    registers::integer::IntegerRegisters
+    registers::IntegerRegisters
 };
 
 pub fn jal(U { rd, imm20 }: U, x: &IntegerRegisters) {

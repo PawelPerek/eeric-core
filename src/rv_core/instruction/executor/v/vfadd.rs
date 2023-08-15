@@ -4,8 +4,8 @@ use crate::rv_core::{
         Opfvf
     }, 
     registers::{
-        vector::VectorRegisters, 
-        float::FloatRegisters
+        VectorRegisters, 
+        FloatRegisters
     }
 };
 

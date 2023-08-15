@@ -1,7 +1,7 @@
 
 use crate::rv_core::{
     instruction::format::I, 
-    registers::float::FloatRegisters
+    registers::FloatRegisters
 };
                            
 pub fn flw(I { rd, rs1: rs, imm12 }: I, f: &FloatRegisters) {

@@ -1,6 +1,6 @@
 use crate::rv_core::{
     instruction::format::I, 
-    registers::integer::IntegerRegisters
+    registers::IntegerRegisters
 };
 
 pub fn slli(I { rd, rs1: rs, imm12 }: I, x: &mut IntegerRegisters) {

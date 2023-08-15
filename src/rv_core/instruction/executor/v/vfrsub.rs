@@ -1,8 +1,8 @@
 use crate::rv_core::{
     instruction::format::Opfvf, 
     registers::{
-        vector::VectorRegisters, 
-        float::FloatRegisters
+        VectorRegisters, 
+        FloatRegisters
     }
 };
 

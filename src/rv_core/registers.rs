@@ -1,10 +1,10 @@
-pub mod integer;
-pub mod float;
-pub mod vector;
+mod integer;
+mod float;
+mod vector;
 
-use integer::IntegerRegisters;
-use float::FloatRegisters;
-use vector::VectorRegisters;
+pub use integer::IntegerRegisters;
+pub use float::FloatRegisters;
+pub use vector::VectorRegisters;
 
 #[derive(Clone, Default)]
 pub struct Registers {

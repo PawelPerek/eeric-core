@@ -32,7 +32,7 @@ def create_instruction_files(instructions):
                 file.write("""
 use crate::rv_core::{{
     instruction::format::R, 
-    registers::float::FloatRegisters
+    registers::FloatRegisters
 }};
                            
 pub fn {0}(R {{ rd, rs1, rs2 }}: R, f: &FloatRegisters) {{
@@ -55,7 +55,7 @@ pub fn {0}(R {{ rd, rs1, rs2 }}: R, f: &FloatRegisters) {{
                 file.write("""
 use crate::rv_core::{{
     instruction::format::R, 
-    registers::integer::IntegerRegisters
+    registers::IntegerRegisters
 }};
                            
 pub fn {0}(R {{ rd, rs1, rs2 }}: R, x: &IntegerRegisters) {{
