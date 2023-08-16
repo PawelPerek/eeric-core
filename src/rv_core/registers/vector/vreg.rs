@@ -23,20 +23,20 @@ impl Vreg {
         self.len() * self.eew.byte_length()
     }
 
-    pub fn iter_eew(&self) -> VregU64Iterator<'_> {
-        VregU64Iterator { vreg: &self, ptr: 0 }
+    pub fn iter_eew(&mut self) -> VregEEWIterator<'_> {
+        VregEEWIterator { vreg: self, ptr: 0 }
     }
 
-    pub fn iter_u64(&self) -> VregU64Iterator<'_> {
-        VregU64Iterator { vreg: &self, ptr: 0 }
+    pub fn iter_u64(&mut self) -> VregU64Iterator<'_> {
+        VregU64Iterator { vreg: self }
     }
 
-    pub fn iter_f32(&self) -> VregF32Iterator<'_> {
-        VregF32Iterator { vreg: &self, ptr: 0 }
+    pub fn iter_f32(&mut self) -> VregF32Iterator<'_> {
+        VregF32Iterator { vreg: self }
     } 
 
-    pub fn iter_f64(&self) -> VregF64Iterator<'_> {
-        VregF64Iterator { vreg: &self, ptr: 0 }
+    pub fn iter_f64(&mut self) -> VregF64Iterator<'_> {
+        VregF64Iterator { vreg: self }
     } 
 }
 
@@ -59,8 +59,8 @@ impl FromIterator<u8> for Vreg {
     }
 }
 
-struct VregEEWIterator<'a> {
-    vreg: &'a Vreg,
+pub struct VregEEWIterator<'a> {
+    vreg: &'a mut Vreg,
     ptr: usize
 }
 
@@ -83,9 +83,8 @@ impl<'a> Iterator for VregEEWIterator<'a> {
     }
 }
 
-struct VregU64Iterator<'a> {
-    vreg: &'a Vreg,
-    ptr: usize
+pub struct VregU64Iterator<'a> {
+    vreg: &'a mut Vreg
 }
 
 impl<'a> Iterator for VregU64Iterator<'a> {
@@ -96,9 +95,8 @@ impl<'a> Iterator for VregU64Iterator<'a> {
     }
 }
 
-struct VregF32Iterator<'a> {
-    vreg: &'a Vreg,
-    ptr: usize
+pub struct VregF32Iterator<'a> {
+    vreg: &'a mut Vreg
 }
 
 impl<'a> Iterator for VregF32Iterator<'a> {
@@ -109,9 +107,8 @@ impl<'a> Iterator for VregF32Iterator<'a> {
     }
 }
 
-struct VregF64Iterator<'a> {
-    vreg: &'a Vreg,
-    ptr: usize
+pub struct VregF64Iterator<'a> {
+    vreg: &'a mut Vreg
 }
 
 impl<'a> Iterator for VregF64Iterator<'a> {
@@ -121,27 +118,6 @@ impl<'a> Iterator for VregF64Iterator<'a> {
         self.vreg.next_chunk().map(f64::from_le_bytes).ok()
     }
 }
-
-// impl Iterator for Vreg {
-//     type Item = u64;
-
-//     fn next(&mut self) -> Option<Self::Item> {
-//         let byte_step: usize = self.eew.byte_length();
-//         let span = self.ptr .. self.ptr + byte_step;
-        
-//         if span.end <= self.raw.len() {
-//             let mut padded_bytes = [0; 8];
-//             let len = self.raw[span.clone()].len();
-//             padded_bytes[..len].copy_from_slice(&self.raw[span]);
-    
-//             self.ptr += byte_step;
-
-//             Some(u64::from_le_bytes(padded_bytes))
-//         } else {
-//             None
-//         }
-//     }
-// }
 
 impl ExactSizeIterator for Vreg {
     fn len(&self) -> usize {
