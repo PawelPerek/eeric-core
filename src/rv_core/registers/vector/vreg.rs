@@ -6,48 +6,58 @@ pub struct Vreg {
     pub raw: Vec<u8>,
 
     // There are instructions that double SEW independently on SEW value from vector unit
-    pub eew: SEW,
-    ptr: usize
+    pub eew: SEW
 }
 
 impl Vreg {
     pub fn new(raw: Vec<u8>, eew: SEW) -> Vreg {
-        Vreg { raw, eew, ptr: 0 }
+        Vreg { raw, eew }
     } 
 
     pub fn double_sew(self) -> Vreg {
-        Vreg { raw: self.raw, ptr: self.ptr, eew: SEW::new(self.eew.bit_length() * 2).unwrap()}
+        Vreg { raw: self.raw, eew: SEW::new(self.eew.bit_length() * 2).unwrap()}
     }
 
-    pub fn byte_length(&self) -> usize {
-        self.len() * self.eew.byte_length()
+    pub fn masked_map<'a, F>(&'a mut self, mask: &'a mut Vreg, f: F) -> impl Iterator<Item = u64> + 'a 
+    where
+        F: Fn(u64) -> u64,
+        F: 'a
+    {
+        let data_iter = self.iter_eew();
+        let mask_iter = mask.iter_eew();
+        
+        data_iter.zip(mask_iter).map(move |(val, mask_val)| {
+            if mask_val != 0 {
+                f(val as u64)
+            } else {
+                val as u64
+            }
+        })
     }
 
-    pub fn iter_eew(&mut self) -> VregEEWIterator<'_> {
-        VregEEWIterator { vreg: self, ptr: 0 }
+    pub fn iter_byte(&self) -> VregByteIterator<'_> {
+        VregByteIterator { vreg: self, ptr: 0 }
     }
 
-    pub fn iter_u64(&mut self) -> VregU64Iterator<'_> {
-        VregU64Iterator { vreg: self }
+    pub fn iter_eew(&self) -> VregEEWIterator<'_> {
+        VregEEWIterator { byte_iterator: self.iter_byte(), eew: self.eew.clone() }
     }
 
-    pub fn iter_f32(&mut self) -> VregF32Iterator<'_> {
-        VregF32Iterator { vreg: self }
+    pub fn iter_mask(&self) -> VregMaskIterator<'_> {
+        VregMaskIterator { eew_iterator: self.iter_eew() }
+    }
+
+    pub fn iter_u64(&self) -> VregU64Iterator<'_> {
+        VregU64Iterator { byte_iterator: self.iter_byte() }
+    }
+
+    pub fn iter_f32(&self) -> VregF32Iterator<'_> {
+        VregF32Iterator { byte_iterator: self.iter_byte() }
     } 
 
-    pub fn iter_f64(&mut self) -> VregF64Iterator<'_> {
-        VregF64Iterator { vreg: self }
+    pub fn iter_f64(&self) -> VregF64Iterator<'_> {
+        VregF64Iterator { byte_iterator: self.iter_byte() }
     } 
-}
-
-impl Iterator for Vreg {
-    type Item = u8;
-    
-    fn next(&mut self) -> Option<Self::Item> {
-        let element = self.raw.get(self.ptr).copied();
-        self.ptr += 1;
-        element
-    }
 }
 
 impl FromIterator<u8> for Vreg {
@@ -55,73 +65,133 @@ impl FromIterator<u8> for Vreg {
         let mut raw = Vec::new();
         raw.extend(iter);
 
-        Vreg { raw, ptr: 0, eew: SEW::new(8).unwrap() }
+        Vreg { raw, eew: SEW::new(8).unwrap() }
     }
 }
 
-pub struct VregEEWIterator<'a> {
-    vreg: &'a mut Vreg,
+/// Iterators
+
+// byte-by-byte
+
+pub struct VregByteIterator<'a> {
+    vreg: &'a Vreg,
     ptr: usize
+}
+
+impl<'a> Iterator for VregByteIterator<'a> {
+    type Item = u8;
+    
+    fn next(&mut self) -> Option<Self::Item> {
+        let element = self.vreg.raw.get(self.ptr).copied();
+        self.ptr += 1;
+        element
+    }
+}
+
+impl<'a> ExactSizeIterator for VregByteIterator<'a> {
+    fn len(&self) -> usize {
+        self.vreg.raw.len() - self.ptr
+    }
+}
+
+
+// EEW:
+
+// Iterator
+
+pub struct VregEEWIterator<'a> {
+    byte_iterator: VregByteIterator<'a>,
+    eew: SEW
 }
 
 impl<'a> Iterator for VregEEWIterator<'a> {
     type Item = u64;
     
     fn next(&mut self) -> Option<Self::Item> {
-        if self.ptr + self.vreg.eew.byte_length() > self.vreg.raw.len() {
+        if self.byte_iterator.len() <= 0 {
             return None;
         }
         
         let mut bytes = [0x00_u8; 8];
 
-        let chunk_range = self.ptr .. self.ptr + self.vreg.eew.byte_length();
-        let chunk = &self.vreg.raw[chunk_range];
-        
-        bytes[..chunk.len()].copy_from_slice(chunk);
+        for i in 0 .. self.eew.byte_length() {
+            let byte = self.byte_iterator.next().unwrap_or(0x00);
+            bytes[i] = byte;
+        }
 
         Some(u64::from_le_bytes(bytes))
     }
 }
 
+// Collector
+
+pub trait IterEEWCollectorExt {
+    fn collect_vreg(self, eew: SEW) -> Vreg;
+}
+
+impl<I> IterEEWCollectorExt for I
+    where
+        I: Iterator<Item = u64>
+{
+    fn collect_vreg(self, eew: SEW) -> Vreg {
+        Vreg { raw: self.flat_map(u64::to_le_bytes).collect(), eew }
+    }
+}
+
+// mask (1u64 or 0u64)
+
+pub struct VregMaskIterator<'a> {
+    eew_iterator: VregEEWIterator<'a>,
+}
+
+impl<'a> Iterator for VregMaskIterator<'a> {
+    type Item = u64;
+    
+    fn next(&mut self) -> Option<Self::Item> {
+        // mask is encoded as least significant bit of each element
+        self.eew_iterator.next().map(|vel| if vel & 1 == 1 { 1 } else { 0 })
+    }
+}
+
+// u64
+
 pub struct VregU64Iterator<'a> {
-    vreg: &'a mut Vreg
+    byte_iterator: VregByteIterator<'a>,
 }
 
 impl<'a> Iterator for VregU64Iterator<'a> {
     type Item = u64;
     
     fn next(&mut self) -> Option<Self::Item> {
-        self.vreg.next_chunk().map(u64::from_le_bytes).ok()
+        self.byte_iterator.next_chunk().map(u64::from_le_bytes).ok()
     }
 }
 
+// f32
+
 pub struct VregF32Iterator<'a> {
-    vreg: &'a mut Vreg
+    byte_iterator: VregByteIterator<'a>,
 }
 
 impl<'a> Iterator for VregF32Iterator<'a> {
     type Item = f32;
     
     fn next(&mut self) -> Option<Self::Item> {
-        self.vreg.next_chunk().map(f32::from_le_bytes).ok()
+        self.byte_iterator.next_chunk().map(f32::from_le_bytes).ok()
     }
 }
 
+// f64
+
 pub struct VregF64Iterator<'a> {
-    vreg: &'a mut Vreg
+    byte_iterator: VregByteIterator<'a>,
 }
 
 impl<'a> Iterator for VregF64Iterator<'a> {
     type Item = f64;
     
     fn next(&mut self) -> Option<Self::Item> {
-        self.vreg.next_chunk().map(f64::from_le_bytes).ok()
-    }
-}
-
-impl ExactSizeIterator for Vreg {
-    fn len(&self) -> usize {
-        self.raw.len() / self.eew.byte_length()
+        self.byte_iterator.next_chunk().map(f64::from_le_bytes).ok()
     }
 }
 

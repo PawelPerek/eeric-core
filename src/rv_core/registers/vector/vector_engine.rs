@@ -123,8 +123,8 @@ impl VectorEngine {
         self.vlen.0 as usize
     }
 
-    pub fn sew(&self) -> usize {
-        self.sew.0 as usize
+    pub fn sew(&self) -> &SEW {
+        &self.sew
     }
 
     pub fn vlenb(&self) -> usize {
@@ -144,6 +144,6 @@ impl VectorEngine {
     }
 
     pub fn vlmax(&self) -> usize {
-        ((self.vlen() / self.sew()) as f32 * self.lmul() as f32) as usize
+        ((self.vlen() / self.sew.bit_length()) as f32 * self.lmul() as f32) as usize
     }
 }

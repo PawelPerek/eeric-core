@@ -3,7 +3,7 @@ use super::{Vreg, fp::FP};
 /// 1 register
 
 pub struct AcquiredRegister {
-    vs: Vreg,
+    pub vs: Vreg,
 }
 
 impl AcquiredRegister {
@@ -29,8 +29,8 @@ impl AcquiredRegister {
 /// 2 Regsiters
 
 pub struct Acquired2Registers {
-    vs1: Vreg,
-    vs2: Vreg,
+    pub vs1: Vreg,
+    pub vs2: Vreg,
 }
 
 impl Acquired2Registers {
@@ -65,9 +65,9 @@ fn kinda_curry<T>(x: ((T, T), T)) -> (T, T, T) {
 }
 
 pub struct Acquired2RegistersWithMask {
-    vs1: Vreg,
-    vs2: Vreg,
-    vm: Option<Vreg>,
+    pub vs1: Vreg,
+    pub vs2: Vreg,
+    pub vm: Option<Vreg>,
 }
 
 impl Acquired2RegistersWithMask {

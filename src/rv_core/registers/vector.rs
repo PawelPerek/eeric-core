@@ -2,12 +2,13 @@ mod fp;
 mod vector_engine;
 mod vreg;
 mod acquired_registers;
+mod map_macros;
 
 use acquired_registers::{AcquiredRegister, Acquired2Registers, Acquired2RegistersWithMask};
-use vector_engine::VectorEngine;
-use vreg::Vreg;
+use vector_engine::{VectorEngine, SEW};
 
-use self::vector_engine::SEW;
+pub use map_macros::*;
+pub use vreg::{Vreg, IterEEWCollectorExt};
 
 #[derive(Clone)]
 pub struct VectorRegisters {
@@ -75,7 +76,7 @@ impl VectorRegisters {
     pub fn get(&self, nth: usize) -> Vreg {
         Vreg::new(
             self.register_view(nth),
-            SEW::new(self.vec_engine.sew()).unwrap(),
+            self.vec_engine.sew().clone(),
         )
     }
 

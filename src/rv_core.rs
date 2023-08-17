@@ -343,11 +343,11 @@ impl RvCore {
 
             Vslide1downvx(args) => v::vslide1down::vx(args, &mut self.registers.v, &self.registers.x),
             
-            Vmvxs(args) => v::vmv::xs(args, &mut self.registers.v),
+            Vmvxs(args) => v::vmv::xs(args, &self.registers.v, &mut self.registers.x),
             Vcpopm(args) => v::vcpop::m(args, &mut self.registers.v),
             Vfirstm(args) => v::vfirst::m(args, &mut self.registers.v),
 
-            Vmvsx(args) => v::vmv::sx(args, &mut self.registers.v),
+            Vmvsx(args) => v::vmv::sx(args, &mut self.registers.v, &self.registers.x),
             
             Vzextvf8(args) => v::vzext::vf8(args, &mut self.registers.v),
             Vsextvf8(args) => v::vsext::vf8(args, &mut self.registers.v),

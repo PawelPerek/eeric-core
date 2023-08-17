@@ -1,7 +1,7 @@
 mod csr;
 mod float;
 mod integer;
-mod vector;
+pub mod vector;
 
 pub use csr::CsrRegisters;
 pub use float::FloatRegisters;
