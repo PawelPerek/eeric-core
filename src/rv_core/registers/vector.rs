@@ -1,14 +1,11 @@
 mod fp;
-mod vector_engine;
 mod vreg;
 mod acquired_registers;
 mod map_macros;
 
 use acquired_registers::{AcquiredRegister, Acquired2Registers, Acquired2RegistersWithMask};
-use vector_engine::{VectorEngine, SEW};
-
-pub use map_macros::*;
-pub use vreg::{Vreg, IterEEWCollectorExt};
+use crate::rv_core::vector_engine::*;
+pub use vreg::Vreg;
 
 #[derive(Clone)]
 pub struct VectorRegisters {

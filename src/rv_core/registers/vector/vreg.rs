@@ -1,4 +1,4 @@
-use super::vector_engine::SEW;
+use crate::rv_core::vector_engine::SEW;
 
 #[derive(Clone)]
 // A wrapper over vector unit raw data
@@ -120,21 +120,6 @@ impl<'a> Iterator for VregEEWIterator<'a> {
         }
 
         Some(u64::from_le_bytes(bytes))
-    }
-}
-
-// Collector
-
-pub trait IterEEWCollectorExt {
-    fn collect_vreg(self, eew: SEW) -> Vreg;
-}
-
-impl<I> IterEEWCollectorExt for I
-    where
-        I: Iterator<Item = u64>
-{
-    fn collect_vreg(self, eew: SEW) -> Vreg {
-        Vreg { raw: self.flat_map(u64::to_le_bytes).collect(), eew }
     }
 }
 

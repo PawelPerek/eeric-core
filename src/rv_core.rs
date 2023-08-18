@@ -1,10 +1,12 @@
 mod instruction;
 mod memory;
-mod registers;
+pub mod registers;
+pub mod vector_engine;
 
 pub use instruction::Instruction;
 use memory::Memory;
 use registers::Registers;
+
 
 pub struct RvCore {
     pub registers: Registers,

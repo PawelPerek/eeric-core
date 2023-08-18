@@ -1,3 +1,5 @@
+use crate::prelude::*;
+
 use crate::rv_core::{
     instruction::format::Vmunary0, 
     registers::VectorRegisters
@@ -17,8 +19,7 @@ pub fn m(Vmunary0 { dest: vd, vs2, vm, .. }: Vmunary0, v: &mut VectorRegisters) 
             }
             prefix_sum
         })
-        .flat_map(|val| val.to_le_bytes())
-        .collect();
+        .collect_with_eew(v.vec_engine.sew.clone());
 
     v.apply(vd, vreg);
 }

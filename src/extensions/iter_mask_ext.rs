@@ -1,19 +1,24 @@
 pub trait IterMaskExt: Iterator {
+    // An iterator that maps the value of the iterator if the `mask.next()` yields 1 and `destination.next()` otherwise.
+
     fn masked_map<Mask, Destination, Func>(self, mask: Mask, dest: Destination, func: Func) -> 
         MaskedMap<Self, Mask, Destination, Func>
         where
             Self: Sized,
             Mask: Iterator,
             Destination: Iterator,
+            Func: Fn(Self::Item) -> Destination::Item,
         {
             MaskedMap { values: self, mask, dest, func }
         }
 }
 
-struct MaskedMap<I, Mask, Destination, Func>
-    where 
+pub struct MaskedMap<I, Mask, Destination, Func>
+    where
+        I: Iterator,
         Mask: Iterator,
         Destination: Iterator,
+        Func: Fn(I::Item) -> Destination::Item,
 {
     values: I,
     mask: Mask,
@@ -27,7 +32,7 @@ impl <I, Mask, Destination, Func> Iterator for MaskedMap<I, Mask, Destination, F
         Mask: Iterator,
         Mask::Item: PartialEq<u64>,
         Destination: Iterator,
-        Func: Fn(I::Item, Mask::Item) -> Destination::Item,
+        Func: Fn(I::Item) -> Destination::Item,
 {
     type Item = Destination::Item;
 
@@ -37,7 +42,7 @@ impl <I, Mask, Destination, Func> Iterator for MaskedMap<I, Mask, Destination, F
 
         self.mask.next().map(|m| {
             if m == 1 {
-                (&mut self.func)(iter_item.unwrap(), m)
+                (&mut self.func)(iter_item.unwrap())
             } else {
                 dest_item.unwrap()
             }

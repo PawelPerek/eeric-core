@@ -1,3 +1,5 @@
+// TODO: Afaik not longer used since usage of Iterator trait on Vregs is more conveinient, probably safe to remove
+
 use super::{Vreg, fp::FP};
 
 /// 1 register
@@ -79,7 +81,7 @@ impl Acquired2RegistersWithMask {
             .iter_u64()
             .zip(self.vs2.clone().iter_u64())
             .zip(self.vm.clone().unwrap_or(Vreg::new(
-                vec![0x00; self.vs1.byte_length()],
+                vec![0x00; self.vs1.eew.byte_length()],
                 self.vs1.eew.clone(),
             )).iter_u64())
             .map(kinda_curry)

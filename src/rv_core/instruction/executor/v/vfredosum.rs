@@ -1,3 +1,5 @@
+use crate::prelude::*;
+
 use crate::rv_core::{
     instruction::format::Opfvv, 
     registers::VectorRegisters
