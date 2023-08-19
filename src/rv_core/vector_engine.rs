@@ -15,6 +15,20 @@ pub enum LMUL {
     M8,
 }
 
+impl LMUL {
+    pub fn ratio(&self) -> f32 {
+        match self {
+            LMUL::MF8 => 0.125,
+            LMUL::MF4 => 0.25,
+            LMUL::MF2 => 0.5,
+            LMUL::M1 => 1.,
+            LMUL::M2 => 2.,
+            LMUL::M4 => 4.,
+            LMUL::M8 => 8.
+        }
+    }
+}
+
 /// Vector unit size of microarchitecture
 #[derive(Clone)]
 pub struct VLEN(usize);
@@ -27,6 +41,26 @@ impl VLEN {
         } else {
             Err("Length of VLEN must be greater or equal 32 and a power of two")
         }
+    }
+
+    pub fn new_128() -> Self {
+        Self::new(128).unwrap()
+    }
+
+    pub fn new_256() -> Self {
+        Self::new(256).unwrap()
+    }
+
+    pub fn new_512() -> Self {
+        Self::new(512).unwrap()
+    }
+
+    pub fn bit_length(&self) -> usize {
+        self.0
+    }
+
+    pub fn byte_length(&self) -> usize {
+        self.0 / 8
     }
 }
 
@@ -91,8 +125,8 @@ pub enum MaskBehavior {
 
 #[derive(Clone, Default)]
 pub struct VectorEngine {
-    lmul: LMUL,
-    vlen: VLEN,
+    pub lmul: LMUL,
+    pub vlen: VLEN,
     pub sew: SEW,
     tail_elements: MaskBehavior,
     inactive_elements: MaskBehavior,
@@ -119,31 +153,7 @@ impl VectorEngine {
         }
     }
 
-    pub fn vlen(&self) -> usize {
-        self.vlen.0 as usize
-    }
-
-    pub fn sew(&self) -> &SEW {
-        &self.sew
-    }
-
-    pub fn vlenb(&self) -> usize {
-        self.vlen() / 8
-    }
-
-    pub fn lmul(&self) -> f32 {
-        match self.lmul {
-            LMUL::MF8 => 0.125,
-            LMUL::MF4 => 0.25,
-            LMUL::MF2 => 0.5,
-            LMUL::M1 => 1.,
-            LMUL::M2 => 2.,
-            LMUL::M4 => 4.,
-            LMUL::M8 => 8.,
-        }
-    }
-
     pub fn vlmax(&self) -> usize {
-        ((self.vlen() / self.sew.bit_length()) as f32 * self.lmul() as f32) as usize
+        ((self.vlen.bit_length() / self.sew.bit_length()) as f32 * self.lmul.ratio()) as usize
     }
 }

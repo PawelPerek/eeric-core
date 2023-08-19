@@ -18,7 +18,7 @@ pub fn vv(Opivv { vd, vs1, vs2, vm }: Opivv, v: &mut VectorRegisters) {
     let vreg = 
         v.get(vs2).iter_eew()
         .masked_map(
-            v.get(0).iter_mask(),
+            v.default_mask(vm),
             v.get(vd).iter_eew(),
             |vel| vel
         ).collect_with_eew(v.vec_engine.sew.clone());
@@ -30,7 +30,7 @@ pub fn vx(Opivx { vd, rs1, vs2, vm }: Opivx, v: &mut VectorRegisters, x: &Intege
     let vreg = 
         v.get(vd).iter_eew()
         .masked_map(
-            v.get(0).iter_mask(),
+            v.default_mask(vm),
             v.get(vd).iter_eew(),
             |_| x[rs1]
         ).collect_with_eew(v.vec_engine.sew.clone());
@@ -42,7 +42,7 @@ pub fn vi(Opivi { vd, imm5, vs2, vm }: Opivi, v: &mut VectorRegisters) {
     let vreg = 
         v.get(vd).iter_eew()
         .masked_map(
-            v.get(0).iter_mask(),
+            v.default_mask(vm),
             v.get(vd).iter_eew(),
             |_| imm5
         ).collect_with_eew(v.vec_engine.sew.clone());
@@ -65,7 +65,7 @@ pub fn sx(Vrxunary0 { dest, vs1, vm, .. }: Vrxunary0, v: &mut VectorRegisters, x
     // Discard the first value
     vreg_iter.next().unwrap();
 
-    let new_vreg = first_value[..v.vec_engine.sew().byte_length()]
+    let new_vreg = first_value[..v.vec_engine.sew.byte_length()]
         .into_iter()
         .copied()  
         .chain(vreg_iter.collect_with_eew(v.vec_engine.sew.clone()).iter_byte())

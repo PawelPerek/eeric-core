@@ -1,9 +1,9 @@
 mod fp;
 mod vreg;
 mod acquired_registers;
-mod map_macros;
 
 use acquired_registers::{AcquiredRegister, Acquired2Registers, Acquired2RegistersWithMask};
+use itertools::Itertools;
 use crate::rv_core::vector_engine::*;
 pub use vreg::Vreg;
 
@@ -15,114 +15,89 @@ pub struct VectorRegisters {
 }
 
 impl VectorRegisters {
-    fn start_ptr(&self, nth: usize) -> usize {
-        nth * self.vec_engine.vlenb()
+    fn new_zeros(vlen: VLEN, sew: SEW, lmul: LMUL) -> Self {
+        Self {
+            raw: vec![0x00; vlen.byte_length() * 32],
+            vec_engine: VectorEngine::new(
+                lmul,
+                vlen,
+                sew,
+                Default::default(),
+                Default::default(),
+            ).unwrap(),
+        }
     }
 
-    pub fn register_view(&self, nth: usize) -> Vec<u8> {
+    fn start_ptr(&self, nth: usize) -> usize {
+        nth * self.vec_engine.vlen.byte_length()
+    }
+
+    pub fn register_view(&self, nth: usize) -> impl Iterator<Item = u8> + '_ {
         let start = self.start_ptr(nth);
 
         // Note: Since we are working on multiples of two
         // multiplying 2^n (vlenb) by 2^(-n) (lmul) will not create floating point errors
-        let end = start + (self.vec_engine.vlenb() as f32 * self.vec_engine.lmul()) as usize - 1;
+        let end = start + (self.vec_engine.vlen.byte_length() as f32 * self.vec_engine.lmul.ratio()) as usize;
 
-        let range = start..end;
-
-        self.raw[range].to_owned()
-    }
-
-    pub fn acquire(&self, rs1: usize) -> AcquiredRegister {
-        AcquiredRegister {
-            vs: Vreg::new(self.register_view(rs1), self.vec_engine.sew.clone()),
-        }
-    }
-
-    pub fn acquire_i16(&self, rs1: usize) -> AcquiredRegister {
-        AcquiredRegister {
-            vs: Vreg::new(self.register_view(rs1), SEW::new_16()),
-        }
-    }
-
-    pub fn acquire_2(&self, rs1: usize, rs2: usize) -> Acquired2Registers {
-        Acquired2Registers {
-            vs1: Vreg::new(self.register_view(rs1), self.vec_engine.sew.clone()),
-            vs2: Vreg::new(self.register_view(rs2), self.vec_engine.sew.clone()),
-        }
-    }
-
-    pub fn acquire_2_with_mask(
-        &self,
-        rs1: usize,
-        rs2: usize,
-        include_mask: bool,
-    ) -> Acquired2RegistersWithMask {
-        Acquired2RegistersWithMask {
-            vs1: Vreg::new(self.register_view(rs1), self.vec_engine.sew.clone()),
-            vs2: Vreg::new(self.register_view(rs2), self.vec_engine.sew.clone()),
-            vm: if include_mask {
-                Some(Vreg::new(
-                    self.register_view(0),
-                    self.vec_engine.sew.clone(),
-                ))
-            } else {
-                None
-            },
-        }
+        self.raw[start .. end].into_iter().copied()
     }
 
     pub fn get(&self, nth: usize) -> Vreg {
         Vreg::new(
-            self.register_view(nth),
-            self.vec_engine.sew().clone(),
+            self.register_view(nth).collect(),
+            self.vec_engine.sew.clone(),
         )
+    }
+
+    pub fn default_mask(&self, enabled: bool) -> &mut dyn Iterator<Item = u64>{
+        if enabled {
+            &mut self.get(0).iter_mask()
+        }
+        else {
+            &mut std::iter::repeat(1)
+        }
     }
 
     pub fn apply(&mut self, nth: usize, vreg: Vreg) {
         let start = self.start_ptr(nth);
-        self.raw[start..].copy_from_slice(&vreg.raw)
-    }
-}
+        let end = start + (self.vec_engine.vlen.byte_length() as f32 * self.vec_engine.lmul.ratio()) as usize; 
+        let vreg_length = end - start; 
 
-impl VectorRegisters {
-    fn new(vlen: usize) -> Self {
-        Self {
-            raw: vec![0x00; vlen * 32],
-            vec_engine: VectorEngine::new(
-                Default::default(),
-                Default::default(),
-                Default::default(),
-                Default::default(),
-                Default::default(),
-            )
-            .unwrap(),
-        }
+        self.raw[start .. end].clone_from_slice(&vreg.raw[0 .. vreg_length])
     }
 
-    fn new_vlen128() -> Self {
-        Self::new(128)
+    // Useful when vreg holds less elements than VLEN / SEW (see vcompress.vm)
+    pub fn partial_apply(&mut self, nth: usize, vreg: Vreg) {
+        let start = self.start_ptr(nth);
+        let vreg_length = vreg.raw.len(); 
+        let end = start + vreg_length;
+
+        self.raw[start .. end].clone_from_slice(&vreg.raw[0 .. vreg_length])
     }
 }
 
 impl Default for VectorRegisters {
     fn default() -> Self {
-        Self::new_vlen128()
+        Self::new_zeros(VLEN::new_128(), SEW::new_8(), LMUL::M1)
     }
 }
 
 #[cfg(test)]
 mod tests {
+    use crate::prelude::*;
     use super::*;
 
     #[test]
     fn api() {
-        let mut vregs = VectorRegisters {
-            raw: Default::default(),
-            vec_engine: Default::default(),
-        };
+        let mut vregs = VectorRegisters::default();
 
-        let result: Vreg = vregs
-            .acquire_2(0, 8)
-            .map(|(rs1_el, rs2_el)| rs1_el + rs2_el);
-        vregs.apply(0, result);
+        let vreg = izip!(
+            vregs.get(0).iter_eew(),
+            vregs.get(8).iter_eew()
+        )
+        .map(|(rs1_el, rs2_el)| rs1_el + rs2_el)
+        .collect_with_eew(vregs.vec_engine.sew.clone());
+
+        vregs.apply(0, vreg);
     }
 }

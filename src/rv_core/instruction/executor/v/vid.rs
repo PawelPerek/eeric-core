@@ -11,7 +11,7 @@ pub fn v(Vmunary0 { dest: vd, vs2, vm, .. }: Vmunary0, v: &mut VectorRegisters) 
         v.get(vd).iter_eew()
         .enumerate()
         .masked_map(
-            v.get(0).iter_mask(),
+            v.default_mask(vm),
             v.get(vd).iter_eew(),   
             |(i, _)| i as u64
         ).collect_with_eew(v.vec_engine.sew.clone());

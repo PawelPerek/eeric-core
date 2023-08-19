@@ -12,9 +12,25 @@ use crate::rv_core::{
 };
 
 pub fn vx(Opivx { vd, rs1, vs2, vm }: Opivx, v: &mut VectorRegisters, x: &IntegerRegisters) {
-    v.apply(vd, v.acquire(vs2).map(|vel| x[rs1] - vel));
+    let vreg = 
+        v.get(vs2).iter_eew()
+        .masked_map(
+            v.default_mask(vm),
+            v.get(vd).iter_eew(),
+            |vel| x[rs1] - vel
+        ).collect_with_eew(v.vec_engine.sew.clone());
+
+    v.apply(vd, vreg);
 }
 
 pub fn vi(Opivi { vd, imm5, vs2, vm }: Opivi, v: &mut VectorRegisters) {
-    v.apply(vd, v.acquire(vs2).map(|vel| imm5 - vel));
+    let vreg = 
+        v.get(vs2).iter_eew()
+        .masked_map(
+            v.default_mask(vm),
+            v.get(vd).iter_eew(),
+            |vel| imm5 - vel
+        ).collect_with_eew(v.vec_engine.sew.clone());
+
+    v.apply(vd, vreg);
 }

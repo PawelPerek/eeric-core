@@ -13,7 +13,7 @@ impl Vreg {
     pub fn new(raw: Vec<u8>, eew: SEW) -> Vreg {
         Vreg { raw, eew }
     } 
-
+    
     pub fn double_sew(self) -> Vreg {
         Vreg { raw: self.raw, eew: SEW::new(self.eew.bit_length() * 2).unwrap()}
     }
@@ -41,6 +41,10 @@ impl Vreg {
 
     pub fn iter_eew(&self) -> VregEEWIterator<'_> {
         VregEEWIterator { byte_iterator: self.iter_byte(), eew: self.eew.clone() }
+    }
+
+    pub fn iter_eew_e16(&self) -> VregEEWIterator<'_> {
+        VregEEWIterator { byte_iterator: self.iter_byte(), eew: SEW::new_16() }
     }
 
     pub fn iter_mask(&self) -> VregMaskIterator<'_> {
