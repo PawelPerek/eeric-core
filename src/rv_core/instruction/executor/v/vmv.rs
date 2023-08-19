@@ -14,9 +14,9 @@ use crate::rv_core::{
     }
 };
 
-pub fn vv(Opivv { vd, vs1, vs2, vm }: Opivv, v: &mut VectorRegisters) {
+pub fn vv(Opivv { vd, vs1, vs2: _, vm }: Opivv, v: &mut VectorRegisters) {
     let vreg = 
-        v.get(vs2).iter_eew()
+        v.get(vs1).iter_eew()
         .masked_map(
             v.default_mask(vm),
             v.get(vd).iter_eew(),
