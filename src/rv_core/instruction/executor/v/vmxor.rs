@@ -5,7 +5,7 @@ use crate::rv_core::{
     registers::VectorRegisters
 };
 
-pub fn mm(Opmvv { dest: vd, vs1, vs2, vm }: Opmvv, v: &mut VectorRegisters) {
+pub fn mm(Opmvv { dest: vd, vs1, vs2, vm: _ }: Opmvv, v: &mut VectorRegisters) {
     let vreg = izip!(
         v.get(vd).iter_eew(),
         v.get(vs1).iter_mask(),

@@ -6,7 +6,7 @@ use crate::rv_core::{
 };
 
 
-pub fn v(Vmunary0 { dest: vd, vs2, vm, .. }: Vmunary0, v: &mut VectorRegisters) {
+pub fn v(Vmunary0 { dest: vd, vs2: _, vm, .. }: Vmunary0, v: &mut VectorRegisters) {
     let vreg = 
         v.get(vd).iter_eew()
         .enumerate()

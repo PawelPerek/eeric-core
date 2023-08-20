@@ -7,7 +7,7 @@ pub trait IterMaskExt: Iterator {
             Self: Sized,
             Mask: Iterator,
             Destination: Iterator,
-            Func: Fn(Self::Item) -> Destination::Item,
+            Func: FnMut(Self::Item) -> Destination::Item,
         {
             MaskedMap { values: self, mask, dest, func }
         }
@@ -18,7 +18,7 @@ pub struct MaskedMap<I, Mask, Destination, Func>
         I: Iterator,
         Mask: Iterator,
         Destination: Iterator,
-        Func: Fn(I::Item) -> Destination::Item,
+        Func: FnMut(I::Item) -> Destination::Item,
 {
     values: I,
     mask: Mask,
@@ -32,7 +32,7 @@ impl <I, Mask, Destination, Func> Iterator for MaskedMap<I, Mask, Destination, F
         Mask: Iterator,
         Mask::Item: PartialEq<u64>,
         Destination: Iterator,
-        Func: Fn(I::Item) -> Destination::Item,
+        Func: FnMut(I::Item) -> Destination::Item,
 {
     type Item = Destination::Item;
 
