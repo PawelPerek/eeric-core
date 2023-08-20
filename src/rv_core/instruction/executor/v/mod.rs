@@ -149,3 +149,7 @@ pub mod vwsub;
 pub mod vwsubu;
 pub mod vxor;
 pub mod vzext;
+
+fn shamt(value: u64, sew: usize) -> u64 {
+    value & ((1 << sew) - 1)
+}
