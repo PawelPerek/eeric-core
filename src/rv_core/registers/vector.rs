@@ -2,6 +2,8 @@ mod fp;
 mod vreg;
 mod acquired_registers;
 
+use std::collections::VecDeque;
+
 use acquired_registers::{AcquiredRegister, Acquired2Registers, Acquired2RegistersWithMask};
 use itertools::Itertools;
 use crate::rv_core::vector_engine::*;
@@ -49,14 +51,14 @@ impl VectorRegisters {
         )
     }
 
-    pub fn default_mask(&self, enabled: bool) -> &mut dyn Iterator<Item = u64>{
+    pub fn default_mask(&self, enabled: bool) -> MaskIterator {
         if enabled {
-            &mut self.get(0).iter_mask()
-        }
-        else {
-            &mut std::iter::repeat(1)
+            MaskIterator::Exact(self.get(0).iter_mask().collect())
+        } else {
+            MaskIterator::Infinite(std::iter::repeat(1))
         }
     }
+    
 
     pub fn apply(&mut self, nth: usize, vreg: Vreg) {
         let start = self.start_ptr(nth);
@@ -79,6 +81,22 @@ impl VectorRegisters {
 impl Default for VectorRegisters {
     fn default() -> Self {
         Self::new_zeros(VLEN::new_128(), SEW::new_8(), LMUL::M1)
+    }
+}
+
+pub enum MaskIterator {
+    Exact(VecDeque<u64>),
+    Infinite(std::iter::Repeat<u64>),
+}
+
+impl Iterator for MaskIterator {
+    type Item = u64;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        match self {
+            Self::Exact(vec) => vec.pop_front(),
+            Self::Infinite(iter) => iter.next(),
+        }
     }
 }
 

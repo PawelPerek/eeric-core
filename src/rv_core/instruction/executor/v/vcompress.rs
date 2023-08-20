@@ -5,9 +5,7 @@ use crate::rv_core::{
     registers::VectorRegisters
 };
 
-pub fn vm(Opmvv { dest: vd, vs1, vs2, vm }: Opmvv, v: &mut VectorRegisters) {
-    let vlmax = v.vec_engine.vlmax();
-
+pub fn vm(Opmvv { dest: vd, vs1, vs2, vm: _ }: Opmvv, v: &mut VectorRegisters) {
     let vreg = izip!(
         v.get(vs2).iter_eew(),
         v.get(vs1).iter_mask()
