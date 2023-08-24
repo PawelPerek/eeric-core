@@ -1,9 +1,6 @@
 use crate::prelude::*;
 
-use crate::rv_core::{
-    instruction::format::Vfunary0, 
-    registers::VectorRegisters
-};
+use crate::rv_core::{instruction::format::Vfunary0, registers::VectorRegisters};
 
 pub fn xufv(Vfunary0 { dest, vs2, vm, .. }: Vfunary0, v: &mut VectorRegisters) {
     todo!()

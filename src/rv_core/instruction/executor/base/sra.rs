@@ -1,7 +1,4 @@
-use crate::rv_core::{
-    instruction::format::R, 
-    registers::IntegerRegisters
-};
+use crate::rv_core::{instruction::format::R, registers::IntegerRegisters};
 
 pub fn sra(R { rd, rs1, rs2 }: R, x: &mut IntegerRegisters) {
     let rs1 = x[rs1] as i64;

@@ -1,21 +1,23 @@
 use crate::prelude::*;
 
 use crate::rv_core::{
-    instruction::format::{
-        Opivv,
-        Opivx
-    }, 
-    registers::{
-        VectorRegisters, 
-        IntegerRegisters
-    }
+    instruction::format::{Opivv, Opivx},
+    registers::{IntegerRegisters, VectorRegisters},
 };
 
 fn checked_sub_3(x: u64, y: u64, z: u64) -> Option<u64> {
     x.checked_sub(y).and_then(|sum| sum.checked_sub(z))
 }
 
-pub fn vvm(Opivv { vd, vs1, vs2, vm: _ }: Opivv, v: &mut VectorRegisters) {
+pub fn vvm(
+    Opivv {
+        vd,
+        vs1,
+        vs2,
+        vm: _,
+    }: Opivv,
+    v: &mut VectorRegisters,
+) {
     let vreg = izip!(
         v.get(vd).iter_eew(),
         v.get(vs1).iter_eew(),
@@ -23,59 +25,89 @@ pub fn vvm(Opivv { vd, vs1, vs2, vm: _ }: Opivv, v: &mut VectorRegisters) {
         v.default_mask(true)
     )
     .map(|(vd, vs1, vs2, mask)| (vd, checked_sub_3(vs1, vs2, mask)))
-    .map(|(vd, maybe_sum)| vd.with_mask_bit(match maybe_sum {
-        Some(_) => 1,
-        None => 0
-    }))
+    .map(|(vd, maybe_sum)| {
+        vd.with_mask_bit(match maybe_sum {
+            Some(_) => 1,
+            None => 0,
+        })
+    })
     .collect_with_eew(v.vec_engine.sew.clone());
 
     v.apply(vd, vreg);
 }
 
-pub fn vxm(Opivx { vd, rs1, vs2, vm: _ }: Opivx, v: &mut VectorRegisters, x: &IntegerRegisters) {
+pub fn vxm(
+    Opivx {
+        vd,
+        rs1,
+        vs2,
+        vm: _,
+    }: Opivx,
+    v: &mut VectorRegisters,
+    x: &IntegerRegisters,
+) {
     let vreg = izip!(
         v.get(vd).iter_eew(),
         v.get(vs2).iter_eew(),
         v.default_mask(true)
     )
     .map(|(vd, vs2, mask)| (vd, checked_sub_3(x[rs1], vs2, mask)))
-    .map(|(vd, maybe_sum)| vd.with_mask_bit(match maybe_sum {
-        Some(_) => 1,
-        None => 0
-    }))
+    .map(|(vd, maybe_sum)| {
+        vd.with_mask_bit(match maybe_sum {
+            Some(_) => 1,
+            None => 0,
+        })
+    })
     .collect_with_eew(v.vec_engine.sew.clone());
 
     v.apply(vd, vreg);
 }
 
-
-pub fn vv(Opivv { vd, vs1, vs2, vm: _ }: Opivv, v: &mut VectorRegisters) {
+pub fn vv(
+    Opivv {
+        vd,
+        vs1,
+        vs2,
+        vm: _,
+    }: Opivv,
+    v: &mut VectorRegisters,
+) {
     let vreg = izip!(
         v.get(vd).iter_eew(),
         v.get(vs1).iter_eew(),
         v.get(vs2).iter_eew()
     )
     .map(|(vd, vs1, vs2)| (vd, vs1.checked_sub(vs2)))
-    .map(|(vd, maybe_sum)| vd.with_mask_bit(match maybe_sum {
-        Some(_) => 1,
-        None => 0
-    }))
+    .map(|(vd, maybe_sum)| {
+        vd.with_mask_bit(match maybe_sum {
+            Some(_) => 1,
+            None => 0,
+        })
+    })
     .collect_with_eew(v.vec_engine.sew.clone());
 
     v.apply(vd, vreg);
 }
 
-pub fn vx(Opivx { vd, rs1, vs2, vm: _ }: Opivx, v: &mut VectorRegisters, x: &IntegerRegisters) {
-    let vreg = izip!(
-        v.get(vd).iter_eew(),
-        v.get(vs2).iter_eew()
-    )
-    .map(|(vd, vs2)| (vd, x[rs1].checked_sub(vs2)))
-    .map(|(vd, maybe_sum)| vd.with_mask_bit(match maybe_sum {
-        Some(_) => 1,
-        None => 0
-    }))
-    .collect_with_eew(v.vec_engine.sew.clone());
+pub fn vx(
+    Opivx {
+        vd,
+        rs1,
+        vs2,
+        vm: _,
+    }: Opivx,
+    v: &mut VectorRegisters,
+    x: &IntegerRegisters,
+) {
+    let vreg = izip!(v.get(vd).iter_eew(), v.get(vs2).iter_eew())
+        .map(|(vd, vs2)| (vd, x[rs1].checked_sub(vs2)))
+        .map(|(vd, maybe_sum)| {
+            vd.with_mask_bit(match maybe_sum {
+                Some(_) => 1,
+                None => 0,
+            })
+        })
+        .collect_with_eew(v.vec_engine.sew.clone());
 
     v.apply(vd, vreg);
 }

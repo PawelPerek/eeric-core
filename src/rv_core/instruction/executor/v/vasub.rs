@@ -1,14 +1,8 @@
 use crate::prelude::*;
 
 use crate::rv_core::{
-    instruction::format::{
-        Opmvv,
-        Opmvx
-    }, 
-    registers::{
-        VectorRegisters, 
-        IntegerRegisters
-    }
+    instruction::format::{Opmvv, Opmvx},
+    registers::{IntegerRegisters, VectorRegisters},
 };
 
 pub fn vv(Opmvv { dest, vs1, vs2, vm }: Opmvv, v: &mut VectorRegisters) {

@@ -1,11 +1,10 @@
-pub mod format;
 pub mod executor;
+pub mod format;
 
 use format::*;
 
 pub enum Instruction {
     /// Base instructions
-
     // Arithmetic Operations
     Add(R),
     Sub(R),
@@ -55,9 +54,7 @@ pub enum Instruction {
     Jalr(I),
 
     /// Zicsr extension
-    
     // RV32/64Zicsr
-
     Csrrw(Csrr),
     Csrrs(Csrr),
     Csrrc(Csrr),
@@ -66,14 +63,13 @@ pub enum Instruction {
     Csrrci(Csri),
 
     /// M extension
-    
     // RV32M
     Mul(R),
     Mulh(R),
     Mulhsu(R),
     Mulhu(R),
     Div(R),
-    Divu(R),    
+    Divu(R),
     Rem(R),
     Remu(R),
 
@@ -84,9 +80,7 @@ pub enum Instruction {
     Remw(R),
     Remuw(R),
 
-
     /// F extension
-    
     // RV32F
     Flw(I),
     Fsw(S),
@@ -122,7 +116,6 @@ pub enum Instruction {
     Fcvtslu(R),
 
     /// D extension
-
     // RV32D
     Fld(I),
     Fsd(S),
@@ -160,7 +153,6 @@ pub enum Instruction {
     Fmvdx(R),
 
     /// V extension
-
     Vaddvv(Opivv),
     Vaddvx(Opivx),
     Vaddvi(Opivi),
@@ -170,7 +162,7 @@ pub enum Instruction {
 
     Vrsubvx(Opivx),
     Vrsubvi(Opivi),
-    
+
     Vminuvv(Opivv),
     Vminuvx(Opivx),
 
@@ -354,7 +346,7 @@ pub enum Instruction {
     Vasubvx(Opmvx),
 
     Vslide1upvx(Opmvx),
-    
+
     Vslide1downvx(Opmvx),
 
     Vmvxs(Vwxunary0),
@@ -377,7 +369,7 @@ pub enum Instruction {
     Vidv(Vmunary0),
 
     Vcompressvm(Opmvv),
-    
+
     Vmandnmm(Opmvv),
 
     Vmandmm(Opmvv),
@@ -444,7 +436,7 @@ pub enum Instruction {
 
     Vwadduwv(Opmvv),
     Vwadduwx(Opmvx),
-    
+
     Vwaddwv(Opmvv),
     Vwaddwx(Opmvx),
 
@@ -551,7 +543,7 @@ pub enum Instruction {
 
     Vmfltvv(Opfvv),
     Vmfltvf(Opfvf),
-    
+
     Vmfnevv(Opfvv),
     Vmfnevf(Opfvf),
 

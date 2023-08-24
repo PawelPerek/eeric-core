@@ -14,7 +14,7 @@ pub struct Registers {
     pub c: CsrRegisters,
     pub f: FloatRegisters,
     pub v: VectorRegisters,
-    pub pc: u64
+    pub pc: u64,
 }
 
 impl Registers {
@@ -24,7 +24,7 @@ impl Registers {
             c: Default::default(),
             f: Default::default(),
             v: Default::default(),
-            pc: 0
+            pc: 0,
         }
     }
 }

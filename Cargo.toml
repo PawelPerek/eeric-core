@@ -10,3 +10,4 @@ crate-type = ["cdylib"]
 
 [dependencies]
 itertools = "0.11.0"
+num-traits = "0.2.16"

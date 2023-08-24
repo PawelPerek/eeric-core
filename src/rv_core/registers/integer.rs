@@ -7,11 +7,10 @@ impl std::ops::Index<usize> for IntegerRegisters {
     fn index(&self, index: usize) -> &Self::Output {
         match index {
             0 => &0,
-            _ => &self.0[index - 1]
+            _ => &self.0[index - 1],
         }
     }
 }
-
 
 impl std::ops::IndexMut<usize> for IntegerRegisters {
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
@@ -21,7 +20,7 @@ impl std::ops::IndexMut<usize> for IntegerRegisters {
 
         match index {
             0 => unsafe { &mut DISCARD_VALUE },
-            _ => &mut self.0[index - 1]
+            _ => &mut self.0[index - 1],
         }
     }
 }

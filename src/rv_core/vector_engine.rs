@@ -24,8 +24,12 @@ impl LMUL {
             LMUL::M1 => 1.,
             LMUL::M2 => 2.,
             LMUL::M4 => 4.,
-            LMUL::M8 => 8.
+            LMUL::M8 => 8.,
         }
+    }
+
+    pub fn double_ratio(&self) -> f32 {
+        self.ratio() * 2.0
     }
 }
 
@@ -77,8 +81,9 @@ impl Default for VLEN {
 pub struct SEW(usize);
 
 impl SEW {
-    pub fn new(length: usize) -> Result<Self, &'static str> {
-        if length <= 64 && length >= 8 && length.count_ones() == 1 {
+    fn new(length: usize) -> Result<Self, &'static str> {
+        // TODO: SEW=128 is correct for SEW::double() method in widening instructions. Can it be modeled better?
+        if length <= 128 && length >= 8 && length.count_ones() == 1 {
             Ok(Self(length))
         } else {
             Err("Length of SEW must be one of the 8, 16, 32, 64")
@@ -101,13 +106,29 @@ impl SEW {
         Self::new(64).unwrap()
     }
 
+    pub fn double(self) -> Self {
+        Self::new(self.0 * 2).unwrap()
+    }
+
+    pub fn half(self) -> Result<Self, &'static str> {
+        Self::new(self.0 / 2)
+    }
+
+    pub fn fourth(self) -> Result<Self, &'static str> {
+        Self::new(self.0 / 4)
+    }
+
+    pub fn eighth(self) -> Result<Self, &'static str> {
+        Self::new(self.0 / 8)
+    }
+
     pub fn bit_length(&self) -> usize {
         self.0
     }
 
     pub fn byte_length(&self) -> usize {
-        self.0 / 8
-    } 
+        self.bit_length() / 8
+    }
 }
 
 impl Default for SEW {
@@ -146,7 +167,7 @@ impl VectorEngine {
                 vlen,
                 sew,
                 tail_elements,
-                inactive_elements
+                inactive_elements,
             })
         } else {
             Err("SEW can't be longer than VLEN")

@@ -1,23 +1,39 @@
-use crate::rv_core::{
-    vector_engine::SEW,
-    registers::vector::Vreg
-};
+use crate::rv_core::{registers::vector::Vreg, vector_engine::SEW};
 
 pub trait IterEEWCollectorExt {
     fn collect_with_eew(self, eew: SEW) -> Vreg;
 }
 
 impl<I> IterEEWCollectorExt for I
-    where
-        I: Iterator<Item = u64>
+where
+    I: Iterator<Item = u64>,
 {
     fn collect_with_eew(self, eew: SEW) -> Vreg {
-        Vreg { 
+        Vreg {
             raw: self
                 .map(u64::to_le_bytes)
-                .flat_map(|bytes| bytes[0 .. eew.byte_length()].to_owned())
-                .collect(), 
-            eew 
+                .flat_map(|bytes| bytes[0..eew.byte_length()].to_owned())
+                .collect(),
+            eew,
+        }
+    }
+}
+
+pub trait IterEEWWidenCollectorExt {
+    fn collect_with_wide_eew(self, eew: SEW) -> Vreg;
+}
+
+impl<I> IterEEWWidenCollectorExt for I
+where
+    I: Iterator<Item = u128>,
+{
+    fn collect_with_wide_eew(self, eew: SEW) -> Vreg {
+        Vreg {
+            raw: self
+                .map(u128::to_le_bytes)
+                .flat_map(|bytes| bytes[0..eew.byte_length()].to_owned())
+                .collect(),
+            eew: eew.double(),
         }
     }
 }

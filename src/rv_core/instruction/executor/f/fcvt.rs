@@ -1,9 +1,5 @@
+use crate::rv_core::{instruction::format::R, registers::FloatRegisters};
 
-use crate::rv_core::{
-    instruction::format::R, 
-    registers::FloatRegisters
-};
-                           
 pub fn ws(R { rd, rs1, rs2 }: R, f: &FloatRegisters) {
     todo!()
 }
@@ -35,4 +31,3 @@ pub fn sl(R { rd, rs1, rs2 }: R, f: &FloatRegisters) {
 pub fn slu(R { rd, rs1, rs2 }: R, f: &FloatRegisters) {
     todo!()
 }
-
