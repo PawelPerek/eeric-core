@@ -1,4 +1,5 @@
-// TODO: Do I really wanna compromise stable toolchain just for this method?
+#![feature(unboxed_closures)]
+#![feature(fn_traits)]
 #![feature(iter_next_chunk)]
 
 pub mod extensions;

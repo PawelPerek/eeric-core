@@ -1,6 +1,16 @@
 #[derive(Clone)]
 pub struct CsrRegisters([u64; 4096]);
 
+impl CsrRegisters {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn vxrm(&self) -> u64 {
+        self[0x000a]
+    }
+}
+
 impl Default for CsrRegisters {
     fn default() -> Self {
         Self([0; 4096])

@@ -5,7 +5,7 @@ use crate::rv_core::{
     registers::{IntegerRegisters, VectorRegisters},
 };
 
-use super::shamt;
+use super::utils::shamt::shamt;
 
 pub fn vv(Opivv { vd, vs1, vs2, vm }: Opivv, v: &mut VectorRegisters) {
     let vreg = izip!(v.get(vs2).iter_eew(), v.get(vs1).iter_eew())

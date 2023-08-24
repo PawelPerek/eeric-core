@@ -276,8 +276,8 @@ impl RvCore {
             Vsllvx(args) => v::vsll::vx(args, &mut self.registers.v, &self.registers.x),
             Vsllvi(args) => v::vsll::vi(args, &mut self.registers.v),
 
-            Vsmulvv(args) => v::vsmul::vv(args, &mut self.registers.v),
-            Vsmulvx(args) => v::vsmul::vx(args, &mut self.registers.v, &self.registers.x),
+            Vsmulvv(args) => v::vsmul::vv(args, &mut self.registers.v, &mut self.registers.c),
+            Vsmulvx(args) => v::vsmul::vx(args, &mut self.registers.v, &self.registers.x, &mut self.registers.c),
 
             Vmv1rv(args) => v::vmv1r::v(args, &mut self.registers.v),
             Vmv2rv(args) => v::vmv2r::v(args, &mut self.registers.v),
@@ -328,17 +328,17 @@ impl RvCore {
             Vredmaxuvs(args) => v::vredmaxu::vs(args, &mut self.registers.v),
             Vredmaxvs(args) => v::vredmax::vs(args, &mut self.registers.v),
 
-            Vaadduvv(args) => v::vaaddu::vv(args, &mut self.registers.v),
-            Vaadduvx(args) => v::vaaddu::vx(args, &mut self.registers.v, &self.registers.x),
+            Vaadduvv(args) => v::vaaddu::vv(args, &mut self.registers.v, &self.registers.c),
+            Vaadduvx(args) => v::vaaddu::vx(args, &mut self.registers.v, &self.registers.x, &self.registers.c),
 
-            Vaaddvv(args) => v::vaadd::vv(args, &mut self.registers.v),
-            Vaaddvx(args) => v::vaadd::vx(args, &mut self.registers.v, &self.registers.x),
+            Vaaddvv(args) => v::vaadd::vv(args, &mut self.registers.v, &self.registers.c),
+            Vaaddvx(args) => v::vaadd::vx(args, &mut self.registers.v, &self.registers.x, &self.registers.c),
 
-            Vasubuvv(args) => v::vasubu::vv(args, &mut self.registers.v),
-            Vasubuvx(args) => v::vasubu::vx(args, &mut self.registers.v, &self.registers.x),
+            Vasubuvv(args) => v::vasubu::vv(args, &mut self.registers.v, &self.registers.c),
+            Vasubuvx(args) => v::vasubu::vx(args, &mut self.registers.v, &self.registers.x, &self.registers.c),
 
-            Vasubvv(args) => v::vasub::vv(args, &mut self.registers.v),
-            Vasubvx(args) => v::vasub::vx(args, &mut self.registers.v, &self.registers.x),
+            Vasubvv(args) => v::vasub::vv(args, &mut self.registers.v, &self.registers.c),
+            Vasubvx(args) => v::vasub::vx(args, &mut self.registers.v, &self.registers.x, &self.registers.c),
 
             Vslide1upvx(args) => v::vslide1up::vx(args, &mut self.registers.v, &self.registers.x),
 
