@@ -144,7 +144,10 @@ impl<'a> Iterator for VregEEWIterator<'a> {
         let mut bytes = [0x00_u8; std::mem::size_of::<u64>()];
 
         for i in 0..self.eew.byte_length() {
-            let byte = self.byte_iterator.next().expect("VregEEWIterator finished early, EEW is not divisible by VLEN*EMUL?");
+            let byte = self
+                .byte_iterator
+                .next()
+                .expect("VregEEWIterator finished early, EEW is not divisible by VLEN*EMUL?");
             bytes[i] = byte;
         }
 

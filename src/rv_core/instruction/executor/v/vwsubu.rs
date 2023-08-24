@@ -66,15 +66,22 @@ pub fn wv(
     v.apply(vd, vreg);
 }
 
-pub fn wx(Opmvx { dest: vd, rs1, vs2, vm }: Opmvx, v: &mut VectorRegisters, x: &IntegerRegisters) {
+pub fn wx(
+    Opmvx {
+        dest: vd,
+        rs1,
+        vs2,
+        vm,
+    }: Opmvx,
+    v: &mut VectorRegisters,
+    x: &IntegerRegisters,
+) {
     let vreg = v
         .get_wide(vs2)
         .iter_eew()
-        .masked_map(
-            v.default_mask(vm),
-            v.get_wide(vd).iter_eew(),
-            |vs2| vs2 - (x[rs1] as u128),
-        )
+        .masked_map(v.default_mask(vm), v.get_wide(vd).iter_eew(), |vs2| {
+            vs2 - (x[rs1] as u128)
+        })
         .collect_with_wide_eew(v.vec_engine.sew.clone());
 
     v.apply(vd, vreg);

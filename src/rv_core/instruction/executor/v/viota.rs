@@ -8,17 +8,17 @@ pub fn m(
     }: Vmunary0,
     v: &mut VectorRegisters,
 ) {
-    let mask = v.get(vs2);
+    let mut sum = 0u64;
 
-    let mut prefix_sum = 0u64;
-
-    let vreg = mask
+    let vreg = v
+        .get(vs2)
         .iter_eew()
-        .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |val| {
-            if val != 0 {
-                prefix_sum += 1;
+        .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| {
+            let sum_snapshot = sum;
+            if vs2 != 0 {
+                sum += 1;
             }
-            prefix_sum
+            sum_snapshot
         })
         .collect_with_eew(v.vec_engine.sew.clone());
 
