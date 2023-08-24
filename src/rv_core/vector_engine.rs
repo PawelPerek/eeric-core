@@ -82,7 +82,6 @@ pub struct SEW(usize);
 
 impl SEW {
     fn new(length: usize) -> Result<Self, &'static str> {
-        // TODO: SEW=128 is correct for SEW::double() method in widening instructions. Can it be modeled better?
         if length <= 128 && length >= 8 && length.count_ones() == 1 {
             Ok(Self(length))
         } else {
@@ -107,7 +106,7 @@ impl SEW {
     }
 
     pub fn double(self) -> Self {
-        Self::new(self.0 * 2).unwrap()
+        Self(self.0 * 2)
     }
 
     pub fn half(self) -> Result<Self, &'static str> {
