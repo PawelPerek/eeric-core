@@ -151,5 +151,9 @@ pub mod vxor;
 pub mod vzext;
 
 fn shamt(value: u64, sew: usize) -> u64 {
-    value & ((1 << sew) - 1)
+    value & ((1 << sew.ilog2()) - 1)
+}
+
+fn narrow_shamt(value: u64, sew: usize) -> u64 {
+    shamt(value, sew * 2)
 }

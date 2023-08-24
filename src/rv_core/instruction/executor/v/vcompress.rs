@@ -12,9 +12,9 @@ pub fn vm(
     v: &mut VectorRegisters,
 ) {
     let vreg = izip!(v.get(vs2).iter_eew(), v.get(vs1).iter_mask())
-        .filter_map(|(vel, mask)| match mask {
+        .filter_map(|(vs2, vs1)| match vs1 {
             0 => None,
-            _ => Some(vel),
+            _ => Some(vs2),
         })
         .collect_with_eew(v.vec_engine.sew.clone());
 

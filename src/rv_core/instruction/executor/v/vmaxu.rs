@@ -6,12 +6,12 @@ use crate::rv_core::{
 };
 
 pub fn vv(Opivv { vd, vs1, vs2, vm }: Opivv, v: &mut VectorRegisters) {
-    let vreg = izip!(v.get(vs1).iter_eew(), v.get(vs2).iter_eew())
-        .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vel| {
-            if vel.0 > vel.1 {
-                vel.0
+    let vreg = izip!(v.get(vs2).iter_eew(), v.get(vs1).iter_eew())
+        .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |(vs2, vs1)| {
+            if vs2 > vs1 {
+                vs2
             } else {
-                vel.1
+                vs1
             }
         })
         .collect_with_eew(v.vec_engine.sew.clone());
@@ -23,9 +23,9 @@ pub fn vx(Opivx { vd, rs1, vs2, vm }: Opivx, v: &mut VectorRegisters, x: &Intege
     let vreg = v
         .get(vs2)
         .iter_eew()
-        .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vel| {
-            if vel > x[rs1] {
-                vel
+        .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| {
+            if vs2 > x[rs1] {
+                vs2
             } else {
                 x[rs1]
             }

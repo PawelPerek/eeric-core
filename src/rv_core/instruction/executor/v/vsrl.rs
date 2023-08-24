@@ -9,7 +9,7 @@ use super::shamt;
 
 pub fn vv(Opivv { vd, vs1, vs2, vm }: Opivv, v: &mut VectorRegisters) {
     let vreg = izip!(v.get(vs2).iter_eew(), v.get(vs1).iter_eew())
-        .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |(vs1, vs2)| {
+        .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |(vs2, vs1)| {
             vs2 >> shamt(vs1, v.vec_engine.sew.byte_length())
         })
         .collect_with_eew(v.vec_engine.sew.clone());

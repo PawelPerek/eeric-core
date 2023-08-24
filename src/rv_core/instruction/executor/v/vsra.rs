@@ -9,8 +9,8 @@ use super::shamt;
 
 pub fn vv(Opivv { vd, vs1, vs2, vm }: Opivv, v: &mut VectorRegisters) {
     let vreg = izip!(v.get(vs2).iter_eew(), v.get(vs1).iter_eew())
-        .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |(vs1, vs2)| {
-            ((vs2 as i64) >> (shamt(vs1, v.vec_engine.sew.byte_length()) as i64)) as u64
+        .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |(vs2, vs1)| {
+            (vs2 as i64 >> shamt(vs1, v.vec_engine.sew.byte_length())) as u64
         })
         .collect_with_eew(v.vec_engine.sew.clone());
 
@@ -22,7 +22,7 @@ pub fn vx(Opivx { vd, rs1, vs2, vm }: Opivx, v: &mut VectorRegisters, x: &Intege
         .get(vs2)
         .iter_eew()
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| {
-            ((vs2 as i64) >> (shamt(x[rs1], v.vec_engine.sew.byte_length()) as i64)) as u64
+            (vs2 as i64 >> shamt(x[rs1], v.vec_engine.sew.byte_length())) as u64
         })
         .collect_with_eew(v.vec_engine.sew.clone());
 
@@ -34,7 +34,7 @@ pub fn vi(Opivi { vd, imm5, vs2, vm }: Opivi, v: &mut VectorRegisters) {
         .get(vs2)
         .iter_eew()
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| {
-            ((vs2 as i64) >> (shamt(imm5, v.vec_engine.sew.byte_length()) as i64)) as u64
+            (vs2 as i64 >> shamt(imm5, v.vec_engine.sew.byte_length())) as u64
         })
         .collect_with_eew(v.vec_engine.sew.clone());
 

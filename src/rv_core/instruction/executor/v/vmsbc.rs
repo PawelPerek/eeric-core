@@ -77,7 +77,7 @@ pub fn vv(
         v.get(vs1).iter_eew(),
         v.get(vs2).iter_eew()
     )
-    .map(|(vd, vs1, vs2)| (vd, vs1.checked_sub(vs2)))
+    .map(|(vd, vs2, vs1)| (vd, vs1.checked_sub(vs2)))
     .map(|(vd, maybe_sum)| {
         vd.with_mask_bit(match maybe_sum {
             Some(_) => 1,

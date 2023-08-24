@@ -13,10 +13,10 @@ pub fn mm(
 ) {
     let vreg = izip!(
         v.get(vd).iter_eew(),
-        v.get(vs1).iter_mask(),
         v.get(vs2).iter_mask(),
+        v.get(vs1).iter_mask(),
     )
-    .map(|(vel, m1, m2)| vel.with_mask_bit(m1 ^ m2))
+    .map(|(vd, vs2, vs1)| vd.with_mask_bit(vs2 ^ vs1))
     .collect_with_eew(v.vec_engine.sew.clone());
 
     v.apply(vd, vreg);

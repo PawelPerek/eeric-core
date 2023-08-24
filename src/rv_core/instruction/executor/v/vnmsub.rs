@@ -22,7 +22,7 @@ pub fn vv(
     .masked_map(
         v.default_mask(vm),
         v.get(vd).iter_eew(),
-        |(vd, vs1, vs2)| vs2 - (vs1 * vd),
+        |(vd, vs2, vs1)| vs2 - (vs1 * vd),
     )
     .collect_with_eew(v.vec_engine.sew.clone());
 
