@@ -308,13 +308,13 @@ impl RvCore {
             Vnsrawx(args) => v::vnsra::wx(args, &mut self.registers.v, &self.registers.x),
             Vnsrawi(args) => v::vnsra::wi(args, &mut self.registers.v),
 
-            Vnclipuwv(args) => v::vnclipu::wv(args, &mut self.registers.v),
-            Vnclipuwx(args) => v::vnclipu::wx(args, &mut self.registers.v, &self.registers.x),
-            Vnclipuwi(args) => v::vnclipu::wi(args, &mut self.registers.v),
+            Vnclipuwv(args) => v::vnclipu::wv(args, &mut self.registers.v, &mut self.registers.c),
+            Vnclipuwx(args) => v::vnclipu::wx(args, &mut self.registers.v, &self.registers.x, &mut self.registers.c),
+            Vnclipuwi(args) => v::vnclipu::wi(args, &mut self.registers.v, &mut self.registers.c),
 
-            Vnclipwv(args) => v::vnclip::wv(args, &mut self.registers.v),
-            Vnclipwx(args) => v::vnclip::wx(args, &mut self.registers.v, &self.registers.x),
-            Vnclipwi(args) => v::vnclip::wi(args, &mut self.registers.v),
+            Vnclipwv(args) => v::vnclip::wv(args, &mut self.registers.v, &mut self.registers.c),
+            Vnclipwx(args) => v::vnclip::wx(args, &mut self.registers.v, &self.registers.x, &mut self.registers.c),
+            Vnclipwi(args) => v::vnclip::wi(args, &mut self.registers.v, &mut self.registers.c),
 
             Vwredsumuvs(args) => v::vwredsumu::vs(args, &mut self.registers.v),
             Vwredsumvs(args) => v::vwredsum::vs(args, &mut self.registers.v),
@@ -344,7 +344,7 @@ impl RvCore {
 
             Vslide1downvx(args) => {
                 v::vslide1down::vx(args, &mut self.registers.v, &self.registers.x)
-            }
+            },
 
             Vmvxs(args) => v::vmv::xs(args, &self.registers.v, &mut self.registers.x),
             Vcpopm(args) => v::vcpop::m(args, &self.registers.v, &mut self.registers.x),
