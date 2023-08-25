@@ -20,7 +20,7 @@ impl RvCore {
         }
     }
 
-    fn new(registers: Registers, memory: Memory) -> Self {
+    pub fn new(registers: Registers, memory: Memory) -> Self {
         Self { registers, memory }
     }
 
@@ -70,12 +70,12 @@ impl RvCore {
             Jal(args) => base::jal(args, &self.registers.x),
             Jalr(args) => base::jalr(args, &self.registers.x),
 
-            Csrrw(args) => zicsr::csrrw(args, &mut self.registers.c),
-            Csrrs(args) => zicsr::csrrs(args, &mut self.registers.c),
-            Csrrc(args) => zicsr::csrrc(args, &mut self.registers.c),
-            Csrrwi(args) => zicsr::csrrwi(args, &mut self.registers.c),
-            Csrrsi(args) => zicsr::csrrsi(args, &mut self.registers.c),
-            Csrrci(args) => zicsr::csrrci(args, &mut self.registers.c),
+            Csrrw(args) => zicsr::csrrw(args, &mut self.registers.x, &mut self.registers.c),
+            Csrrs(args) => zicsr::csrrs(args, &mut self.registers.x, &mut self.registers.c),
+            Csrrc(args) => zicsr::csrrc(args, &mut self.registers.x, &mut self.registers.c),
+            Csrrwi(args) => zicsr::csrrwi(args, &mut self.registers.x, &mut self.registers.c),
+            Csrrsi(args) => zicsr::csrrsi(args, &mut self.registers.x, &mut self.registers.c),
+            Csrrci(args) => zicsr::csrrci(args, &mut self.registers.x, &mut self.registers.c),
 
             Mul(args) => m::mul(args, &self.registers.x),
             Mulh(args) => m::mulh(args, &self.registers.x),

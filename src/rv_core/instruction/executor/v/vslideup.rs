@@ -6,9 +6,43 @@ use crate::rv_core::{
 };
 
 pub fn vx(Opivx { vd, rs1, vs2, vm }: Opivx, v: &mut VectorRegisters, x: &IntegerRegisters) {
-    todo!()
+    let offset = x[rs1] as usize;
+
+    let vs2_snapshot = v.get(vs2).iter_eew().collect_vec();
+
+    let vreg = v
+        .get(vd)
+        .iter_eew()
+        .enumerate()
+        .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |(index, vd)| {
+            if index < offset {
+                vd
+            } else {
+                vs2_snapshot[index - offset]
+            }
+        })
+        .collect_with_eew(v.vec_engine.sew.clone());
+
+    v.apply(vd, vreg);
 }
 
 pub fn vi(Opivi { vd, imm5, vs2, vm }: Opivi, v: &mut VectorRegisters) {
-    todo!()
+    let offset = imm5 as usize;
+
+    let vs2_snapshot = v.get(vs2).iter_eew().collect_vec();
+
+    let vreg = v
+        .get(vd)
+        .iter_eew()
+        .enumerate()
+        .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |(index, vd)| {
+            if index < offset {
+                vd
+            } else {
+                vs2_snapshot[index - offset]
+            }
+        })
+        .collect_with_eew(v.vec_engine.sew.clone());
+
+    v.apply(vd, vreg);
 }
