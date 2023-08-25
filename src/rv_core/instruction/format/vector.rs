@@ -1,21 +1,21 @@
 /// Configuration formats
 
 pub struct Vsetvli {
-    rd: usize,
-    rs1: usize,
-    vtypei: u32,
+    pub rd: usize,
+    pub rs1: usize,
+    pub vtypei: u32,
 }
 
 pub struct Vsetivli {
-    rd: usize,
-    uimm: u32,
-    vtypei: u32,
+    pub rd: usize,
+    pub uimm: u32,
+    pub vtypei: u32,
 }
 
 pub struct Vsetvl {
-    rd: usize,
-    rs1: usize,
-    rs2: usize,
+    pub rd: usize,
+    pub rs1: usize,
+    pub rs2: usize,
 }
 
 /// OPI - Integer instructions

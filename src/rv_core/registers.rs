@@ -17,15 +17,3 @@ pub struct Registers {
     pub v: VectorRegisters,
     pub pc: u64,
 }
-
-impl Registers {
-    fn new_zeros() -> Registers {
-        Registers {
-            x: Default::default(),
-            c: Default::default(),
-            f: Default::default(),
-            v: Default::default(),
-            pc: 0,
-        }
-    }
-}

@@ -1,3 +1,4 @@
+
 /// Vector length multiplier
 #[derive(Default, Clone)]
 pub enum LMUL {
@@ -136,6 +137,9 @@ impl Default for SEW {
     }
 }
 
+// TODO: According to RVV spec undisturbed behaviour is correct in context of both undisturbed and agnostic.
+// It will be nice QOL to implement one'ing unused mask and tail elements in the future.
+
 #[derive(Clone, Default)]
 pub enum MaskBehavior {
     #[default]
@@ -148,7 +152,9 @@ pub struct VectorEngine {
     pub lmul: LMUL,
     pub vlen: VLEN,
     pub sew: SEW,
+    #[allow(dead_code)]
     tail_elements: MaskBehavior,
+    #[allow(dead_code)]
     inactive_elements: MaskBehavior,
 }
 
