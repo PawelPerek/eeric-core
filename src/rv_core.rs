@@ -131,8 +131,8 @@ impl RvCore {
             Fcvtsl(args) => f::fcvt::sl(args, &self.registers.x, &mut self.registers.f),
             Fcvtslu(args) => f::fcvt::slu(args, &self.registers.x, &mut self.registers.f),
 
-            Fld(args) => d::fld(args, &self.registers.f),
-            Fsd(args) => d::fsd(args, &self.registers.f),
+            Fld(args) => d::fld(args, &self.registers.x, &mut self.registers.f, &self.memory),
+            Fsd(args) => d::fsd(args, &self.registers.x, &self.registers.f, &mut self.memory),
             Fmaddd(args) => d::fmadd::d(args, &mut self.registers.f),
             Fmsubd(args) => d::fmsub::d(args, &mut self.registers.f),
             Fnmsubd(args) => d::fnmsub::d(args, &mut self.registers.f),
