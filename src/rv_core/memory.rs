@@ -1,5 +1,5 @@
 #[derive(Clone)]
-pub struct Memory(pub Vec<u8>);
+pub struct Memory(Vec<u8>);
 
 
 // TODO: Experimental api, maybe there is better way to do this

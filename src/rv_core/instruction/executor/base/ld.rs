@@ -1,7 +1,8 @@
 use crate::rv_core::{instruction::format::I, memory::Memory, registers::IntegerRegisters};
 
-pub fn ld(I { rd, rs1: rs, imm12 }: I, x: &mut IntegerRegisters, memory: &Memory) {
-    let address = (x[rs] + imm12) as usize;
-    let value = u64::from_le_bytes(memory.0[address..address + 8].try_into().unwrap());
-    x[rd] = value;
+pub fn ld(I { rd, rs1, imm12 }: I, x: &mut IntegerRegisters, mem: &Memory) {
+    let addr = x[rs1] + imm12;
+    let int = u64::from_le_bytes(mem.get(addr as usize));
+
+    x[rd] = int as u64;
 }
