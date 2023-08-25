@@ -1,7 +1,5 @@
-use crate::extensions::iter_collectors_ext::IterFPCollectorExt;
 use crate::prelude::*;
 
-use crate::rv_core::registers::ArbitraryFloat;
 use crate::rv_core::{
     instruction::format::{Opfvf, Opfvv},
     registers::{FloatRegisters, VectorRegisters},
