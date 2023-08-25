@@ -6,382 +6,614 @@ use core::{
 
 use num_traits::{Float, Num, NumCast, One, ToPrimitive, Zero};
 
-#[derive(Clone, Copy)]
-pub struct ArbitraryFloat<F: Float>(F);
+// Note: RVV 1.1 spec defines a f16 type, maybe in the future :)
 
-impl<F: Float> ArbitraryFloat<F> {
-    pub fn new(value: F) -> Self {
-        Self(value)
+#[derive(Clone, Copy)]
+pub enum ArbitraryFloat {
+    F32(f32),
+    F64(f64),
+}
+
+impl ArbitraryFloat {
+    pub fn new_f32(fp: f32) -> Self {
+        Self::F32(fp)
     }
 
-    pub fn value(&self) -> F {
-        self.0
+    pub fn new_f64(fp: f64) -> Self {
+        Self::F64(fp)
     }
 }
 
-impl<F: Float> Neg for ArbitraryFloat<F> {
+impl Neg for ArbitraryFloat {
     type Output = Self;
 
     fn neg(self) -> Self::Output {
-        Self(-self.0)
+        match self {
+            Self::F32(fp) => Self::F32(-fp),
+            Self::F64(fp) => Self::F64(-fp),
+        }
     }
 }
 
-impl<F: Float> PartialEq for ArbitraryFloat<F> {
+impl PartialEq for ArbitraryFloat {
     fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
+        match (self, other) {
+            (Self::F32(fp1), Self::F32(fp2)) => fp1.eq(fp2),
+            (Self::F64(fp1), Self::F64(fp2)) => fp1.eq(fp2),
+            (_, _) => false,
+        }
     }
 }
 
-impl<F: Float> PartialOrd for ArbitraryFloat<F> {
+impl PartialOrd for ArbitraryFloat {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        self.0.partial_cmp(&other.0)
+        match (self, other) {
+            (Self::F32(fp1), Self::F32(fp2)) => fp1.partial_cmp(fp2),
+            (Self::F64(fp1), Self::F64(fp2)) => fp1.partial_cmp(fp2),
+            (_, _) => None,
+        }
     }
 }
 
-impl<F: Float> ToPrimitive for ArbitraryFloat<F> {
+impl ToPrimitive for ArbitraryFloat {
     fn to_i64(&self) -> Option<i64> {
-        self.0.to_i64()
+        match self {
+            Self::F32(fp) => fp.to_i64(),
+            Self::F64(fp) => fp.to_i64(),
+        }
     }
 
     fn to_u64(&self) -> Option<u64> {
-        self.0.to_u64()
+        match self {
+            Self::F32(fp) => fp.to_u64(),
+            Self::F64(fp) => fp.to_u64(),
+        }
     }
 
     fn to_isize(&self) -> Option<isize> {
-        self.0.to_isize()
+        match self {
+            Self::F32(fp) => fp.to_isize(),
+            Self::F64(fp) => fp.to_isize(),
+        }
     }
 
     fn to_i8(&self) -> Option<i8> {
-        self.0.to_i8()
+        match self {
+            Self::F32(fp) => fp.to_i8(),
+            Self::F64(fp) => fp.to_i8(),
+        }
     }
 
     fn to_i16(&self) -> Option<i16> {
-        self.0.to_i16()
+        match self {
+            Self::F32(fp) => fp.to_i16(),
+            Self::F64(fp) => fp.to_i16(),
+        }
     }
 
     fn to_i32(&self) -> Option<i32> {
-        self.0.to_i32()
+        match self {
+            Self::F32(fp) => fp.to_i32(),
+            Self::F64(fp) => fp.to_i32(),
+        }
     }
 
     fn to_usize(&self) -> Option<usize> {
-        self.0.to_usize()
+        match self {
+            Self::F32(fp) => fp.to_usize(),
+            Self::F64(fp) => fp.to_usize(),
+        }
     }
 
     fn to_u8(&self) -> Option<u8> {
-        self.0.to_u8()
+        match self {
+            Self::F32(fp) => fp.to_u8(),
+            Self::F64(fp) => fp.to_u8(),
+        }
     }
 
     fn to_u16(&self) -> Option<u16> {
-        self.0.to_u16()
+        match self {
+            Self::F32(fp) => fp.to_u16(),
+            Self::F64(fp) => fp.to_u16(),
+        }
     }
 
     fn to_u32(&self) -> Option<u32> {
-        self.0.to_u32()
+        match self {
+            Self::F32(fp) => fp.to_u32(),
+            Self::F64(fp) => fp.to_u32(),
+        }
     }
 
     fn to_f32(&self) -> Option<f32> {
-        self.0.to_f32()
+        match self {
+            Self::F32(fp) => Some(*fp),
+            Self::F64(fp) => fp.to_f32(),
+        }
     }
 
     fn to_f64(&self) -> Option<f64> {
-        self.0.to_f64()
+        match self {
+            Self::F32(fp) => fp.to_f64(),
+            Self::F64(fp) => Some(*fp),
+        }
     }
 }
 
-impl<F: Float> NumCast for ArbitraryFloat<F> {
+impl NumCast for ArbitraryFloat {
     fn from<T: ToPrimitive>(n: T) -> Option<Self> {
-        F::from(n).map(Self)
+        match n.to_f64() {
+            Some(fp) => Some(Self::F64(fp)),
+            None => None,
+        }
     }
 }
 
-impl<F: Float> Add for ArbitraryFloat<F> {
+impl Add for ArbitraryFloat {
     type Output = Self;
 
     fn add(self, other: Self) -> Self::Output {
-        Self(self.0 + other.0)
+        match (self, other) {
+            (Self::F32(fp1), Self::F32(fp2)) => Self::F32(fp1 + fp2),
+            (Self::F32(fp1), Self::F64(fp2)) => Self::F32(fp1 + fp2 as f32),
+            (Self::F64(fp1), Self::F32(fp2)) => Self::F64(fp1 + fp2 as f64),
+            (Self::F64(fp1), Self::F64(fp2)) => Self::F64(fp1 + fp2),
+        }
     }
 }
 
-impl<F: Float> Sub for ArbitraryFloat<F> {
+impl Sub for ArbitraryFloat {
     type Output = Self;
 
     fn sub(self, other: Self) -> Self::Output {
-        Self(self.0 - other.0)
+        match (self, other) {
+            (Self::F32(fp1), Self::F32(fp2)) => Self::F32(fp1 - fp2),
+            (Self::F32(fp1), Self::F64(fp2)) => Self::F32(fp1 - fp2 as f32),
+            (Self::F64(fp1), Self::F32(fp2)) => Self::F64(fp1 - fp2 as f64),
+            (Self::F64(fp1), Self::F64(fp2)) => Self::F64(fp1 - fp2),
+        }
     }
 }
 
-impl<F: Float> Mul for ArbitraryFloat<F> {
+impl Mul for ArbitraryFloat {
     type Output = Self;
 
     fn mul(self, other: Self) -> Self::Output {
-        Self(self.0 * other.0)
+        match (self, other) {
+            (Self::F32(fp1), Self::F32(fp2)) => Self::F32(fp1 * fp2),
+            (Self::F32(fp1), Self::F64(fp2)) => Self::F32(fp1 * fp2 as f32),
+            (Self::F64(fp1), Self::F32(fp2)) => Self::F64(fp1 * fp2 as f64),
+            (Self::F64(fp1), Self::F64(fp2)) => Self::F64(fp1 * fp2),
+        }
     }
 }
 
-impl<F: Float> Div for ArbitraryFloat<F> {
+impl Div for ArbitraryFloat {
     type Output = Self;
 
     fn div(self, other: Self) -> Self::Output {
-        Self(self.0 / other.0)
+        match (self, other) {
+            (Self::F32(fp1), Self::F32(fp2)) => Self::F32(fp1 / fp2),
+            (Self::F32(fp1), Self::F64(fp2)) => Self::F32(fp1 / fp2 as f32),
+            (Self::F64(fp1), Self::F32(fp2)) => Self::F64(fp1 / fp2 as f64),
+            (Self::F64(fp1), Self::F64(fp2)) => Self::F64(fp1 / fp2),
+        }
     }
 }
 
-impl<F: Float> Rem for ArbitraryFloat<F> {
+impl Rem for ArbitraryFloat {
     type Output = Self;
 
     fn rem(self, other: Self) -> Self::Output {
-        Self(self.0 % other.0)
+        match (self, other) {
+            (Self::F32(fp1), Self::F32(fp2)) => Self::F32(fp1 % fp2),
+            (Self::F32(fp1), Self::F64(fp2)) => Self::F32(fp1 % fp2 as f32),
+            (Self::F64(fp1), Self::F32(fp2)) => Self::F64(fp1 % fp2 as f64),
+            (Self::F64(fp1), Self::F64(fp2)) => Self::F64(fp1 % fp2),
+        }
     }
 }
 
-impl<F: Float> Zero for ArbitraryFloat<F> {
+impl Zero for ArbitraryFloat {
     fn zero() -> Self {
-        Self(F::zero())
+        Self::F64(0.0)
     }
 
     fn is_zero(&self) -> bool {
-        self.0.is_zero()
+        match self {
+            Self::F32(fp) => fp.is_zero(),
+            Self::F64(fp) => fp.is_zero(),
+        }
     }
 }
 
-impl<F: Float> One for ArbitraryFloat<F> {
+impl One for ArbitraryFloat {
     fn one() -> Self {
-        Self(F::one())
+        Self::F64(1.0)
     }
 }
 
-impl<F: Float> Num for ArbitraryFloat<F> {
-    type FromStrRadixErr = F::FromStrRadixErr;
+impl Num for ArbitraryFloat {
+    type FromStrRadixErr = <f64 as Num>::FromStrRadixErr;
 
     fn from_str_radix(str: &str, radix: u32) -> Result<Self, Self::FromStrRadixErr> {
-        F::from_str_radix(str, radix).map(Self)
+        match f64::from_str_radix(str, radix) {
+            Ok(fp) => Ok(Self::F64(fp)),
+            Err(err) => Err(err),
+        }
     }
 }
 
-impl<F: Float> Float for ArbitraryFloat<F> {
+impl Float for ArbitraryFloat {
     fn nan() -> Self {
-        Self(F::nan())
+        Self::F64(f64::nan())
     }
 
     fn infinity() -> Self {
-        Self(F::infinity())
+        Self::F64(f64::infinity())
     }
 
     fn neg_infinity() -> Self {
-        Self(F::neg_infinity())
+        Self::F64(f64::neg_infinity())
     }
 
     fn neg_zero() -> Self {
-        Self(F::neg_zero())
+        Self::F64(f64::neg_zero())
     }
 
     fn min_value() -> Self {
-        Self(F::min_value())
+        Self::F64(f64::min_value())
     }
 
     fn min_positive_value() -> Self {
-        Self(F::min_positive_value())
+        Self::F64(f64::min_positive_value())
     }
 
     fn max_value() -> Self {
-        Self(F::max_value())
+        Self::F64(f64::max_value())
     }
 
     fn is_nan(self) -> bool {
-        self.0.is_nan()
+        match self {
+            Self::F32(fp) => fp.is_nan(),
+            Self::F64(fp) => fp.is_nan(),
+        }
     }
 
     fn is_infinite(self) -> bool {
-        self.0.is_infinite()
+        match self {
+            Self::F32(fp) => fp.is_infinite(),
+            Self::F64(fp) => fp.is_infinite(),
+        }
     }
 
     fn is_finite(self) -> bool {
-        self.0.is_finite()
+        match self {
+            Self::F32(fp) => fp.is_finite(),
+            Self::F64(fp) => fp.is_finite(),
+        }
     }
 
     fn is_normal(self) -> bool {
-        self.0.is_normal()
+        match self {
+            Self::F32(fp) => fp.is_normal(),
+            Self::F64(fp) => fp.is_normal(),
+        }
     }
 
     fn classify(self) -> FpCategory {
-        self.0.classify()
+        match self {
+            Self::F32(fp) => fp.classify(),
+            Self::F64(fp) => fp.classify(),
+        }
     }
 
     fn floor(self) -> Self {
-        Self(self.0.floor())
+        match self {
+            Self::F32(fp) => Self::F32(fp.floor()),
+            Self::F64(fp) => Self::F64(fp.floor()),
+        }
     }
 
     fn ceil(self) -> Self {
-        Self(self.0.ceil())
+        match self {
+            Self::F32(fp) => Self::F32(fp.ceil()),
+            Self::F64(fp) => Self::F64(fp.ceil()),
+        }
     }
 
     fn round(self) -> Self {
-        Self(self.0.round())
+        match self {
+            Self::F32(fp) => Self::F32(fp.round()),
+            Self::F64(fp) => Self::F64(fp.round()),
+        }
     }
 
     fn trunc(self) -> Self {
-        Self(self.0.trunc())
+        match self {
+            Self::F32(fp) => Self::F32(fp.trunc()),
+            Self::F64(fp) => Self::F64(fp.trunc()),
+        }
     }
 
     fn fract(self) -> Self {
-        Self(self.0.fract())
+        match self {
+            Self::F32(fp) => Self::F32(fp.fract()),
+            Self::F64(fp) => Self::F64(fp.fract()),
+        }
     }
 
     fn abs(self) -> Self {
-        Self(self.0.abs())
+        match self {
+            Self::F32(fp) => Self::F32(fp.abs()),
+            Self::F64(fp) => Self::F64(fp.abs()),
+        }
     }
 
     fn signum(self) -> Self {
-        Self(self.0.signum())
+        match self {
+            Self::F32(fp) => Self::F32(fp.signum()),
+            Self::F64(fp) => Self::F64(fp.signum()),
+        }
     }
 
     fn is_sign_positive(self) -> bool {
-        self.0.is_sign_positive()
+        match self {
+            Self::F32(fp) => fp.is_sign_positive(),
+            Self::F64(fp) => fp.is_sign_positive(),
+        }
     }
 
     fn is_sign_negative(self) -> bool {
-        self.0.is_sign_negative()
+        match self {
+            Self::F32(fp) => fp.is_sign_negative(),
+            Self::F64(fp) => fp.is_sign_negative(),
+        }
     }
 
     fn mul_add(self, a: Self, b: Self) -> Self {
-        Self(self.0.mul_add(a.0, b.0))
+        match self {
+            Self::F32(fp) => Self::F32(fp.mul_add(a.to_f32().unwrap(), b.to_f32().unwrap())),
+            Self::F64(fp) => Self::F64(fp.mul_add(a.to_f64().unwrap(), b.to_f64().unwrap())),
+        }
     }
 
     fn recip(self) -> Self {
-        Self(self.0.recip())
+        match self {
+            Self::F32(fp) => Self::F32(fp.recip()),
+            Self::F64(fp) => Self::F64(fp.recip()),
+        }
     }
 
     fn powi(self, n: i32) -> Self {
-        Self(self.0.powi(n))
+        match self {
+            Self::F32(fp) => Self::F32(fp.powi(n)),
+            Self::F64(fp) => Self::F64(fp.powi(n)),
+        }
     }
 
     fn powf(self, n: Self) -> Self {
-        Self(self.0.powf(n.0))
+        match self {
+            Self::F32(fp) => Self::F32(fp.powf(n.to_f32().unwrap())),
+            Self::F64(fp) => Self::F64(fp.powf(n.to_f64().unwrap())),
+        }
     }
 
     fn sqrt(self) -> Self {
-        Self(self.0.sqrt())
+        match self {
+            Self::F32(fp) => Self::F32(fp.sqrt()),
+            Self::F64(fp) => Self::F64(fp.sqrt()),
+        }
     }
 
     fn exp(self) -> Self {
-        Self(self.0.exp())
+        match self {
+            Self::F32(fp) => Self::F32(fp.exp()),
+            Self::F64(fp) => Self::F64(fp.exp()),
+        }
     }
 
     fn exp2(self) -> Self {
-        Self(self.0.exp2())
+        match self {
+            Self::F32(fp) => Self::F32(fp.exp2()),
+            Self::F64(fp) => Self::F64(fp.exp2()),
+        }
     }
 
     fn ln(self) -> Self {
-        Self(self.0.ln())
+        match self {
+            Self::F32(fp) => Self::F32(fp.ln()),
+            Self::F64(fp) => Self::F64(fp.ln()),
+        }
     }
 
     fn log(self, base: Self) -> Self {
-        Self(self.0.log(base.0))
+        match self {
+            Self::F32(fp) => Self::F32(fp.log(base.to_f32().unwrap())),
+            Self::F64(fp) => Self::F64(fp.log(base.to_f64().unwrap())),
+        }
     }
 
     fn log2(self) -> Self {
-        Self(self.0.log2())
+        match self {
+            Self::F32(fp) => Self::F32(fp.log2()),
+            Self::F64(fp) => Self::F64(fp.log2()),
+        }
     }
 
     fn log10(self) -> Self {
-        Self(self.0.log10())
+        match self {
+            Self::F32(fp) => Self::F32(fp.log10()),
+            Self::F64(fp) => Self::F64(fp.log10()),
+        }
     }
 
     fn max(self, other: Self) -> Self {
-        Self(self.0.max(other.0))
+        match self {
+            Self::F32(fp) => Self::F32(fp.max(other.to_f32().unwrap())),
+            Self::F64(fp) => Self::F64(fp.max(other.to_f64().unwrap())),
+        }
     }
 
     fn min(self, other: Self) -> Self {
-        Self(self.0.min(other.0))
+        match self {
+            Self::F32(fp) => Self::F32(fp.min(other.to_f32().unwrap())),
+            Self::F64(fp) => Self::F64(fp.min(other.to_f64().unwrap())),
+        }
     }
 
     fn abs_sub(self, other: Self) -> Self {
-        Self(self.0.abs_sub(other.0))
+        (self - other).abs()
     }
 
     fn cbrt(self) -> Self {
-        Self(self.0.cbrt())
+        match self {
+            Self::F32(fp) => Self::F32(fp.cbrt()),
+            Self::F64(fp) => Self::F64(fp.cbrt()),
+        }
     }
 
     fn hypot(self, other: Self) -> Self {
-        Self(self.0.hypot(other.0))
+        match self {
+            Self::F32(fp) => Self::F32(fp.hypot(other.to_f32().unwrap())),
+            Self::F64(fp) => Self::F64(fp.hypot(other.to_f64().unwrap())),
+        }
     }
 
     fn sin(self) -> Self {
-        Self(self.0.sin())
+        match self {
+            Self::F32(fp) => Self::F32(fp.sin()),
+            Self::F64(fp) => Self::F64(fp.sin()),
+        }
     }
 
     fn cos(self) -> Self {
-        Self(self.0.cos())
+        match self {
+            Self::F32(fp) => Self::F32(fp.cos()),
+            Self::F64(fp) => Self::F64(fp.cos()),
+        }
     }
 
     fn tan(self) -> Self {
-        Self(self.0.tan())
+        match self {
+            Self::F32(fp) => Self::F32(fp.tan()),
+            Self::F64(fp) => Self::F64(fp.tan()),
+        }
     }
 
     fn asin(self) -> Self {
-        Self(self.0.asin())
+        match self {
+            Self::F32(fp) => Self::F32(fp.asin()),
+            Self::F64(fp) => Self::F64(fp.asin()),
+        }
     }
 
     fn acos(self) -> Self {
-        Self(self.0.acos())
+        match self {
+            Self::F32(fp) => Self::F32(fp.acos()),
+            Self::F64(fp) => Self::F64(fp.acos()),
+        }
     }
 
     fn atan(self) -> Self {
-        Self(self.0.atan())
+        match self {
+            Self::F32(fp) => Self::F32(fp.atan()),
+            Self::F64(fp) => Self::F64(fp.atan()),
+        }
     }
 
     fn atan2(self, other: Self) -> Self {
-        Self(self.0.atan2(other.0))
+        match self {
+            Self::F32(fp) => Self::F32(fp.atan2(other.to_f32().unwrap())),
+            Self::F64(fp) => Self::F64(fp.atan2(other.to_f64().unwrap())),
+        }
     }
 
     fn sin_cos(self) -> (Self, Self) {
-        let (sin, cos) = self.0.sin_cos();
-        (Self(sin), Self(cos))
+        match self {
+            Self::F32(fp) => {
+                let (sin, cos) = fp.sin_cos();
+                (Self::F32(sin), Self::F32(cos))
+            }
+            Self::F64(fp) => {
+                let (sin, cos) = fp.sin_cos();
+                (Self::F64(sin), Self::F64(cos))
+            }
+        }
     }
 
     fn exp_m1(self) -> Self {
-        Self(self.0.exp_m1())
+        match self {
+            Self::F32(fp) => Self::F32(fp.exp_m1()),
+            Self::F64(fp) => Self::F64(fp.exp_m1()),
+        }
     }
 
     fn ln_1p(self) -> Self {
-        Self(self.0.ln_1p())
+        match self {
+            Self::F32(fp) => Self::F32(fp.ln_1p()),
+            Self::F64(fp) => Self::F64(fp.ln_1p()),
+        }
     }
 
     fn sinh(self) -> Self {
-        Self(self.0.sinh())
+        match self {
+            Self::F32(fp) => Self::F32(fp.sinh()),
+            Self::F64(fp) => Self::F64(fp.sinh()),
+        }
     }
 
     fn cosh(self) -> Self {
-        Self(self.0.cosh())
+        match self {
+            Self::F32(fp) => Self::F32(fp.cosh()),
+            Self::F64(fp) => Self::F64(fp.cosh()),
+        }
     }
 
     fn tanh(self) -> Self {
-        Self(self.0.tanh())
+        match self {
+            Self::F32(fp) => Self::F32(fp.tanh()),
+            Self::F64(fp) => Self::F64(fp.tanh()),
+        }
     }
 
     fn asinh(self) -> Self {
-        Self(self.0.asinh())
+        match self {
+            Self::F32(fp) => Self::F32(fp.asinh()),
+            Self::F64(fp) => Self::F64(fp.asinh()),
+        }
     }
 
     fn acosh(self) -> Self {
-        Self(self.0.acosh())
+        match self {
+            Self::F32(fp) => Self::F32(fp.acosh()),
+            Self::F64(fp) => Self::F64(fp.acosh()),
+        }
     }
 
     fn atanh(self) -> Self {
-        Self(self.0.atanh())
+        match self {
+            Self::F32(fp) => Self::F32(fp.atanh()),
+            Self::F64(fp) => Self::F64(fp.atanh()),
+        }
     }
 
     fn integer_decode(self) -> (u64, i16, i8) {
-        self.0.integer_decode()
+        match self {
+            Self::F32(fp) => fp.integer_decode(),
+            Self::F64(fp) => fp.integer_decode(),
+        }
     }
 
     fn epsilon() -> Self {
-        Self(F::epsilon())
+        Self::F64(f64::epsilon())
     }
 
     fn is_subnormal(self) -> bool {
-        self.0.is_subnormal()
+        match self {
+            Self::F32(fp) => fp.is_subnormal(),
+            Self::F64(fp) => fp.is_subnormal(),
+        }
     }
 }

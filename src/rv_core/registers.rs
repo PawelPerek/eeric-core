@@ -8,6 +8,7 @@ pub use csr::CsrRegisters;
 pub use float::FloatRegisters;
 pub use integer::IntegerRegisters;
 pub use vector::VectorRegisters;
+pub use vector::ArbitraryFloat;
 
 #[derive(Clone, Default)]
 pub struct Registers {

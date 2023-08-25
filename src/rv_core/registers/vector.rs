@@ -7,6 +7,7 @@ use std::collections::VecDeque;
 use crate::rv_core::vector_engine::*;
 pub use vreg::Vreg;
 pub use wide_vreg::WideVreg;
+pub use arbitrary_float::ArbitraryFloat;
 
 #[derive(Clone)]
 pub struct VectorRegisters {

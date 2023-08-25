@@ -1,5 +1,7 @@
 use crate::rv_core::vector_engine::SEW;
 
+use super::arbitrary_float::ArbitraryFloat;
+
 #[derive(Clone)]
 // A wrapper over vector unit raw data
 pub struct Vreg {
@@ -22,15 +24,6 @@ impl Vreg {
         VregEEWIterator {
             byte_iterator: self.iter_byte(),
             eew: self.eew.clone(),
-        }
-    }
-
-    // TODO: Needed?
-
-    pub fn iter_eew_mul_2(&self) -> VregEEWIterator<'_> {
-        VregEEWIterator {
-            byte_iterator: self.iter_byte(),
-            eew: self.eew.clone().double(),
         }
     }
 
@@ -68,21 +61,10 @@ impl Vreg {
         }
     }
 
-    pub fn iter_u64(&self) -> VregU64Iterator<'_> {
-        VregU64Iterator {
+    pub fn iter_fp(&self) -> VregFPIterator<'_> {
+        VregFPIterator {
             byte_iterator: self.iter_byte(),
-        }
-    }
-
-    pub fn iter_f32(&self) -> VregF32Iterator<'_> {
-        VregF32Iterator {
-            byte_iterator: self.iter_byte(),
-        }
-    }
-
-    pub fn iter_f64(&self) -> VregF64Iterator<'_> {
-        VregF64Iterator {
-            byte_iterator: self.iter_byte(),
+            eew: self.eew.clone(),
         }
     }
 }
@@ -124,9 +106,7 @@ impl<'a> ExactSizeIterator for VregByteIterator<'a> {
     }
 }
 
-// EEW:
-
-// Iterator
+// Integer EEW
 
 pub struct VregEEWIterator<'a> {
     byte_iterator: VregByteIterator<'a>,
@@ -172,45 +152,22 @@ impl<'a> Iterator for VregMaskIterator<'a> {
     }
 }
 
-// u64
+// Float EEW
 
-pub struct VregU64Iterator<'a> {
+pub struct VregFPIterator<'a> {
     byte_iterator: VregByteIterator<'a>,
+    eew: SEW,
 }
 
-impl<'a> Iterator for VregU64Iterator<'a> {
-    type Item = u64;
+impl<'a> Iterator for VregFPIterator<'a> {
+    type Item = ArbitraryFloat;
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.byte_iterator.next_chunk().map(u64::from_le_bytes).ok()
-    }
-}
-
-// f32
-
-pub struct VregF32Iterator<'a> {
-    byte_iterator: VregByteIterator<'a>,
-}
-
-impl<'a> Iterator for VregF32Iterator<'a> {
-    type Item = f32;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.byte_iterator.next_chunk().map(f32::from_le_bytes).ok()
-    }
-}
-
-// f64
-
-pub struct VregF64Iterator<'a> {
-    byte_iterator: VregByteIterator<'a>,
-}
-
-impl<'a> Iterator for VregF64Iterator<'a> {
-    type Item = f64;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.byte_iterator.next_chunk().map(f64::from_le_bytes).ok()
+        match self.eew.byte_length() {
+            4 => self.byte_iterator.next_chunk().map(f32::from_le_bytes).map(ArbitraryFloat::F32).ok(),
+            8 => self.byte_iterator.next_chunk().map(f64::from_le_bytes).map(ArbitraryFloat::F64).ok(),
+            _ => panic!("Invalid SEW for floating point"),
+        }
     }
 }
 
