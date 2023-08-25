@@ -1,7 +1,7 @@
 use crate::rv_core::{instruction::format::I, registers::IntegerRegisters};
 
-pub fn srai(I { rd, rs1: rs, imm12 }: I, x: &mut IntegerRegisters) {
-    let rs = x[rs] as i64;
+pub fn srai(I { rd, rs1, imm12 }: I, x: &mut IntegerRegisters) {
+    let rs1 = x[rs1] as i64;
     let shamt = imm12 & 0b11111;
-    x[rd] = (rs >> shamt) as u64;
+    x[rd] = (rs1 >> shamt) as u64;
 }
