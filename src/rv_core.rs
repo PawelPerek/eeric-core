@@ -159,10 +159,10 @@ impl RvCore {
             Fcvtdwu(args) => d::fcvt::dwu(args, &self.registers.f),
             Fcvtld(args) => d::fcvt::ld(args, &self.registers.f),
             Fcvtlud(args) => d::fcvt::lud(args, &self.registers.f),
-            Fmvxd(args) => d::fmv::xd(args, &self.registers.f),
+            Fmvxd(args) => d::fmv::xd(args,  &mut self.registers.x, &self.registers.f),
             Fcvtdl(args) => d::fcvt::dl(args, &self.registers.f),
             Fcvtdlu(args) => d::fcvt::dlu(args, &self.registers.f),
-            Fmvdx(args) => d::fmv::dx(args, &self.registers.f),
+            Fmvdx(args) => d::fmv::dx(args, &self.registers.x, &mut self.registers.f),
 
             Vaddvv(args) => v::vadd::vv(args, &mut self.registers.v),
             Vaddvx(args) => v::vadd::vx(args, &mut self.registers.v, &self.registers.x),
