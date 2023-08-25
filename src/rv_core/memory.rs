@@ -1,13 +1,23 @@
 #[derive(Clone)]
 pub struct Memory(pub Vec<u8>);
 
+
+// TODO: Experimental api, maybe there is better way to do this
 impl Memory {
-    fn get(&self, address: usize) -> u8 {
-        self.0[address]
+    pub fn get<const BYTES: usize>(&self, address: usize) -> [u8; BYTES] {
+        let mut bytes = [0; BYTES];
+        
+        for offset in 0 .. BYTES {
+            bytes[offset] = self.0[address + offset];
+        } 
+
+        bytes
     }
 
-    fn set(&mut self, address: usize, value: u8) {
-        self.0[address] = value;
+    pub fn set<const BYTES: usize>(&mut self, address: usize, value: [u8; BYTES]) {
+        for offset in 0 .. BYTES {
+            self.0[address + offset] = value[offset];
+        }
     }
 }
 
