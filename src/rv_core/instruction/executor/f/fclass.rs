@@ -20,7 +20,7 @@ pub fn s(R { rd, rs1, rs2: _ }: R, x: &mut IntegerRegisters, f: &FloatRegisters)
         FpCategory::Subnormal if fs1 > 0.0 => 1 << 5,
         FpCategory::Normal if fs1 > 0.0 => 1 << 6,
         FpCategory::Infinite if fs1 > 0.0 => 1 << 7,
-        FpCategory::Nan => 1 << 8,
+        FpCategory::Nan => 1 << 9,
         _ => 0,
     };
 }
