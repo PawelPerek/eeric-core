@@ -1,7 +1,10 @@
-use crate::rv_core::{instruction::format::R, registers::FloatRegisters};
+use crate::rv_core::{instruction::format::R, registers::{FloatRegisters, IntegerRegisters}};
 
-use super::utils::convert::{compose, decompose};
+use super::utils::convert::decompose;
 
-pub fn s(R { rd, rs1, rs2 }: R, f: &FloatRegisters) {
-    todo!()
+pub fn s(R { rd, rs1, rs2 }: R, x: &mut IntegerRegisters, f: &FloatRegisters) {
+    let (fs1, _) = decompose(f[rs1]);
+    let (fs2, _) = decompose(f[rs2]);
+
+    x[rd] = if fs1 == fs2 { 1 } else { 0 };
 }
