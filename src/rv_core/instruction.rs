@@ -7,8 +7,11 @@ pub enum Instruction {
     /// Base instructions
     // Arithmetic Operations
     Add(R),
+    Addw(R),
     Sub(R),
+    Subw(R),
     Addi(I),
+    Addiw(I),
     Slt(R),
     Slti(I),
     Sltu(R),
@@ -24,11 +27,17 @@ pub enum Instruction {
     Ori(I),
     Xori(I),
     Sll(R),
+    Sllw(R),
     Srl(R),
+    Srlw(R),
     Sra(R),
+    Sraw(R),
     Slli(I),
+    Slliw(I),
     Srli(I),
+    Srliw(I),
     Srai(I),
+    Sraiw(I),
 
     // Load/store operations
     Ld(I),

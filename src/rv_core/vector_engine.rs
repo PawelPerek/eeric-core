@@ -82,7 +82,7 @@ pub struct SEW(usize);
 
 impl SEW {
     fn new(length: usize) -> Result<Self, &'static str> {
-        if length <= 128 && length >= 8 && length.count_ones() == 1 {
+        if length <= 64 && length >= 8 && length.count_ones() == 1 {
             Ok(Self(length))
         } else {
             Err("Length of SEW must be one of the 8, 16, 32, 64")
