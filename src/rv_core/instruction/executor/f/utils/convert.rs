@@ -1,4 +1,20 @@
 
+// TODO: It compiles into too much WASM for my liking, 
+// probably can be done better with simple bit shifting
+
+// pub fn decompose_opti(f: f64) -> (f32, u32) {
+//     let bits = f.to_bits();
+
+//     let low_bits = bits as u32;
+//     let high_bits = (bits >> 32) as u32; 
+    
+//     (
+//         f32::from_bits(low_bits),
+//         high_bits
+//     )
+// } 
+// ??
+
 // Single precision and rest decomposition
 pub fn decompose(f: f64) -> (f32, u32) {
     let bytes = f.to_le_bytes();
