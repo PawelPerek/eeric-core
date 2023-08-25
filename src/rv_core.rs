@@ -1,4 +1,4 @@
-mod instruction;
+pub mod instruction;
 mod memory;
 pub mod registers;
 pub mod vector_engine;
@@ -6,13 +6,16 @@ pub mod vector_engine;
 pub use instruction::Instruction;
 use memory::Memory;
 use registers::Registers;
+pub use registers::aliases;
 
 pub struct RvCore {
     pub registers: Registers,
+    
     memory: Memory,
 }
 
 impl RvCore {
+    #[no_mangle]
     pub fn new_zeroed() -> Self {
         RvCore {
             registers: Default::default(),
@@ -24,6 +27,11 @@ impl RvCore {
         Self { registers, memory }
     }
 
+    pub fn step(&mut self) {
+
+    }
+
+    #[no_mangle]
     pub fn execute(&mut self, input: Instruction) {
         use instruction::executor::*;
         use Instruction::*;
