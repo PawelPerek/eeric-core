@@ -47,6 +47,13 @@ impl ArbitraryFloat {
             Self::F64(_) => Self::F64(value),
         }
     }
+
+    pub fn double_precision(self) -> Self {
+        match self {
+            Self::F32(fp) => Self::F64(fp as f64),
+            Self::F64(_) => unimplemented!("No f128 support"),
+        }
+    }
 }
 
 impl Neg for ArbitraryFloat {

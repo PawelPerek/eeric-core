@@ -1,4 +1,4 @@
-use crate::rv_core::vector_engine::SEW;
+use crate::rv_core::{vector_engine::SEW, ArbitraryFloat};
 
 #[derive(Clone)]
 pub struct WideVreg {
@@ -20,6 +20,13 @@ impl WideVreg {
 
     pub fn iter_eew(&self) -> WideVregEEWIterator<'_> {
         WideVregEEWIterator {
+            byte_iterator: self.iter_byte(),
+            eew: self.eew.clone(),
+        }
+    }
+
+    pub fn iter_fp(&self) -> WideVregFPIterator<'_> {
+        WideVregFPIterator {
             byte_iterator: self.iter_byte(),
             eew: self.eew.clone(),
         }
@@ -63,7 +70,7 @@ impl<'a> ExactSizeIterator for WideVregByteIterator<'a> {
     }
 }
 
-// EEW:
+// EEW
 
 pub struct WideVregEEWIterator<'a> {
     byte_iterator: WideVregByteIterator<'a>,
@@ -89,5 +96,30 @@ impl<'a> Iterator for WideVregEEWIterator<'a> {
         }
 
         Some(u128::from_le_bytes(bytes))
+    }
+}
+
+// Float EEW
+
+pub struct WideVregFPIterator<'a> {
+    byte_iterator: WideVregByteIterator<'a>,
+    eew: SEW,
+}
+
+// Note: yeah, 32b SEW is only supported byte length for wide vreg in RVV 1.0 :/
+
+impl<'a> Iterator for WideVregFPIterator<'a> {
+    type Item = ArbitraryFloat;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        match self.eew.byte_length() {
+            4 => self
+                .byte_iterator
+                .next_chunk()
+                .map(f64::from_le_bytes)
+                .map(ArbitraryFloat::F64)
+                .ok(),
+            _ => panic!("Invalid SEW for wide floating point"),
+        }
     }
 }

@@ -648,17 +648,17 @@ impl RvCore {
             Vfwmulvv(args) => v::vfmul::vv(args, &mut self.registers.v),
             Vfwmulvf(args) => v::vfmul::vf(args, &mut self.registers.v, &self.registers.f),
 
-            Vfwmaccvv(args) => v::vfmacc::vv(args, &mut self.registers.v),
-            Vfwmaccvf(args) => v::vfmacc::vf(args, &mut self.registers.v, &self.registers.f),
+            Vfwmaccvv(args) => v::vfwmacc::vv(args, &mut self.registers.v),
+            Vfwmaccvf(args) => v::vfwmacc::vf(args, &mut self.registers.v, &self.registers.f),
 
-            Vfwnmaccvv(args) => v::vfnmacc::vv(args, &mut self.registers.v),
-            Vfwnmaccvf(args) => v::vfnmacc::vf(args, &mut self.registers.v, &self.registers.f),
+            Vfwnmaccvv(args) => v::vfwnmacc::vv(args, &mut self.registers.v),
+            Vfwnmaccvf(args) => v::vfwnmacc::vf(args, &mut self.registers.v, &self.registers.f),
 
-            Vfwmsacvv(args) => v::vfmsac::vv(args, &mut self.registers.v),
-            Vfwmsacvf(args) => v::vfmsac::vf(args, &mut self.registers.v, &self.registers.f),
+            Vfwmsacvv(args) => v::vfwmsac::vv(args, &mut self.registers.v),
+            Vfwmsacvf(args) => v::vfwmsac::vf(args, &mut self.registers.v, &self.registers.f),
 
-            Vfwnmsacvv(args) => v::vfnmsac::vv(args, &mut self.registers.v),
-            Vfwnmsacvf(args) => v::vfnmsac::vf(args, &mut self.registers.v, &self.registers.f),
+            Vfwnmsacvv(args) => v::vfwnmsac::vv(args, &mut self.registers.v),
+            Vfwnmsacvf(args) => v::vfwnmsac::vf(args, &mut self.registers.v, &self.registers.f),
         }
     }
 }
