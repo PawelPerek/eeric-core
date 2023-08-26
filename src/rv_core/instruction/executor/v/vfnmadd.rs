@@ -18,7 +18,7 @@ pub fn vv(Opfvv { dest: vd, vs1, vs2, vm }: Opfvv, v: &mut VectorRegisters) {
 pub fn vf(Opfvf { vd, rs1, vs2, vm }: Opfvf, v: &mut VectorRegisters, f: &FloatRegisters) {
     let vreg = izip!(v.get(vs2).iter_fp(), v.get(vd).iter_fp())
         .masked_map(v.default_mask(vm), v.get(vd).iter_fp(), |(vs2, vd)| {
-            -(vd * ArbitraryFloat::F64(f[rs1])) - vs2
+            -(vd * ArbitraryFloat::copy_type(&vs2, f[rs1])) - vs2
         })
         .collect_fp();
 

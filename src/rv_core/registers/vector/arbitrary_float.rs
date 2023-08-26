@@ -15,12 +15,11 @@ pub enum ArbitraryFloat {
 }
 
 impl ArbitraryFloat {
-    pub fn new_f32(fp: f32) -> Self {
-        Self::F32(fp)
-    }
-
-    pub fn new_f64(fp: f64) -> Self {
-        Self::F64(fp)
+    pub fn copy_type(other: &Self, value: f64) -> Self {
+        match other {
+            Self::F32(_) => Self::F32(value as f32),
+            Self::F64(_) => Self::F64(value),
+        }
     }
 }
 

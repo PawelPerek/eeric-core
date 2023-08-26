@@ -12,7 +12,7 @@ where
         let mut eew = SEW::new_8();
 
         let raw = self
-            .map(|fp| match fp {
+            .flat_map(|fp| match fp {
                 ArbitraryFloat::F32(f) => {
                     eew = SEW::new_32();
                     f.to_le_bytes().to_vec()
@@ -22,7 +22,6 @@ where
                     f.to_le_bytes().to_vec()
                 },
             })
-            .flatten()
             .collect();
 
         Vreg {
