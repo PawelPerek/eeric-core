@@ -64,8 +64,9 @@ impl PartialEq for ArbitraryFloat {
     fn eq(&self, other: &Self) -> bool {
         match (self, other) {
             (Self::F32(fp1), Self::F32(fp2)) => fp1.eq(fp2),
+            (Self::F32(fp1), Self::F64(fp2)) => fp1.eq(&(*fp2 as f32)),
+            (Self::F64(fp1), Self::F32(fp2)) => fp1.eq(&(*fp2 as f64)),
             (Self::F64(fp1), Self::F64(fp2)) => fp1.eq(fp2),
-            (_, _) => false,
         }
     }
 }
@@ -74,8 +75,9 @@ impl PartialOrd for ArbitraryFloat {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         match (self, other) {
             (Self::F32(fp1), Self::F32(fp2)) => fp1.partial_cmp(fp2),
+            (Self::F32(fp1), Self::F64(fp2)) => fp1.partial_cmp(&(*fp2 as f32)),
+            (Self::F64(fp1), Self::F32(fp2)) => fp1.partial_cmp(&(*fp2 as f64)),
             (Self::F64(fp1), Self::F64(fp2)) => fp1.partial_cmp(fp2),
-            (_, _) => None,
         }
     }
 }
