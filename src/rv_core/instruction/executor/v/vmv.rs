@@ -62,32 +62,31 @@ pub fn vi(
 
 pub fn xs(
     Vwxunary0 {
-        dest, vs2, vm: _, ..
+        dest: rd, vs2, vm: _, ..
     }: Vwxunary0,
     v: &VectorRegisters,
     x: &mut IntegerRegisters,
 ) {
     let first_value = v.get(vs2).iter_eew().next().unwrap();
 
-    x[dest] = first_value;
+    x[rd] = first_value;
 }
 
 pub fn sx(
     Vrxunary0 {
-        dest, vs1, vm: _, ..
+        dest: vd, rs1, vm: _, ..
     }: Vrxunary0,
     v: &mut VectorRegisters,
     x: &IntegerRegisters,
 ) {
-    let first_value = u64::to_le_bytes(x[dest]);
+    let first_value = u64::to_le_bytes(x[rs1]);
 
-    let vreg = v.get(vs1);
+    let vreg = v.get(vd);
     let mut vreg_data = vreg.iter_byte().collect_vec();
+
     for i in 0..v.vec_engine.sew.byte_length() {
         vreg_data[i] = first_value[i];
     }
 
-    let new_vreg = vreg_data.into_iter().collect();
-
-    v.apply(vs1, new_vreg);
+    v.apply(vd, vreg_data.into_iter().collect());
 }

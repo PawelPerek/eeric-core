@@ -510,7 +510,7 @@ impl RvCore {
                 v::vfslide1down::vf(args, &mut self.registers.v, &self.registers.f)
             }
 
-            Vfmvfs(args) => v::vfmv::fs(args, &mut self.registers.v, &self.registers.f),
+            Vfmvfs(args) => v::vfmv::fs(args, &self.registers.v, &mut self.registers.f),
 
             Vfmvsf(args) => v::vfmv::sf(args, &mut self.registers.v, &self.registers.f),
 
