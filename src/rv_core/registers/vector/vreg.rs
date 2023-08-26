@@ -1,4 +1,4 @@
-use crate::rv_core::{vector_engine::SEW, arbitrary_float::ArbitraryFloat};
+use crate::rv_core::{arbitrary_float::ArbitraryFloat, vector_engine::SEW};
 
 #[derive(Clone)]
 // A wrapper over vector unit raw data
@@ -162,8 +162,18 @@ impl<'a> Iterator for VregFPIterator<'a> {
 
     fn next(&mut self) -> Option<Self::Item> {
         match self.eew.byte_length() {
-            4 => self.byte_iterator.next_chunk().map(f32::from_le_bytes).map(ArbitraryFloat::F32).ok(),
-            8 => self.byte_iterator.next_chunk().map(f64::from_le_bytes).map(ArbitraryFloat::F64).ok(),
+            4 => self
+                .byte_iterator
+                .next_chunk()
+                .map(f32::from_le_bytes)
+                .map(ArbitraryFloat::F32)
+                .ok(),
+            8 => self
+                .byte_iterator
+                .next_chunk()
+                .map(f64::from_le_bytes)
+                .map(ArbitraryFloat::F64)
+                .ok(),
             _ => panic!("Invalid SEW for floating point"),
         }
     }

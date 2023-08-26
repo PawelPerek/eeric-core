@@ -6,4 +6,3 @@ pub fn sw(S { rs1, rs2, imm12 }: S, x: &IntegerRegisters, mem: &mut Memory) {
 
     mem.set(addr as usize, bytes);
 }
-

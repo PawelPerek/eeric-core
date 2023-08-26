@@ -7,14 +7,22 @@ use crate::rv_core::{
     registers::{FloatRegisters, VectorRegisters},
 };
 
-pub fn vv(Opfvv { dest: vd, vs1, vs2, vm }: Opfvv, v: &mut VectorRegisters) {
+pub fn vv(
+    Opfvv {
+        dest: vd,
+        vs1,
+        vs2,
+        vm,
+    }: Opfvv,
+    v: &mut VectorRegisters,
+) {
     let vreg = izip!(v.get(vs2).iter_fp(), v.get(vs1).iter_fp())
         .masked_map(v.default_mask(vm), v.get(vd).iter_fp(), |(vs2, vs1)| {
             match (vs2.is_sign_positive(), vs1.is_sign_positive()) {
-                (true, true) => vs2,        // +x, +y => +x
-                (true, false) => -vs2,      // +x, -y => -x
-                (false, true) => -vs2,      // -x, +y => -x
-                (false, false) => vs2,      // -x, -y => +x
+                (true, true) => vs2,   // +x, +y => +x
+                (true, false) => -vs2, // +x, -y => -x
+                (false, true) => -vs2, // -x, +y => -x
+                (false, false) => vs2, // -x, -y => +x
             }
         })
         .collect_fp();
@@ -23,13 +31,15 @@ pub fn vv(Opfvv { dest: vd, vs1, vs2, vm }: Opfvv, v: &mut VectorRegisters) {
 }
 
 pub fn vf(Opfvf { vd, rs1, vs2, vm }: Opfvf, v: &mut VectorRegisters, f: &FloatRegisters) {
-    let vreg = v.get(vs2).iter_fp()
+    let vreg = v
+        .get(vs2)
+        .iter_fp()
         .masked_map(v.default_mask(vm), v.get(vd).iter_fp(), |vs2| {
             match (vs2.is_sign_positive(), f[rs1].is_sign_positive()) {
-                (true, true) => vs2,        // +x, +y => +x
-                (true, false) => -vs2,      // +x, -y => -x
-                (false, true) => -vs2,      // -x, +y => -x
-                (false, false) => vs2,      // -x, -y => +x
+                (true, true) => vs2,   // +x, +y => +x
+                (true, false) => -vs2, // +x, -y => -x
+                (false, true) => -vs2, // -x, +y => -x
+                (false, false) => vs2, // -x, -y => +x
             }
         })
         .collect_fp();

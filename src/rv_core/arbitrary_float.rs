@@ -12,13 +12,13 @@ use num_traits::{Float, Num, NumCast, One, ToPrimitive, Zero};
 pub fn decompose(f: f64) -> (f32, u32) {
     let bytes = f.to_le_bytes();
     let (low_bytes, high_bytes) = (
-        bytes[0 .. 3].try_into().unwrap(), 
-        bytes[4 .. 7].try_into().unwrap()
+        bytes[0..3].try_into().unwrap(),
+        bytes[4..7].try_into().unwrap(),
     );
-    
+
     (
         f32::from_le_bytes(low_bytes),
-        u32::from_le_bytes(high_bytes)
+        u32::from_le_bytes(high_bytes),
     )
 }
 
@@ -29,7 +29,7 @@ pub fn compose(float: f32, int: u32) -> f64 {
 
     let mut bytes = [0; 8];
 
-    bytes[0 .. 7].copy_from_slice([&low_bytes[..], &high_bytes[..]].concat().as_slice());
+    bytes[0..7].copy_from_slice([&low_bytes[..], &high_bytes[..]].concat().as_slice());
 
     f64::from_le_bytes(bytes)
 }

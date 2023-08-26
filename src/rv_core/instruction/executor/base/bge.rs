@@ -5,4 +5,3 @@ pub fn bge(S { rs1, rs2, imm12 }: S, x: &IntegerRegisters, pc: &mut u64) {
         *pc = pc.wrapping_add(imm12);
     }
 }
-

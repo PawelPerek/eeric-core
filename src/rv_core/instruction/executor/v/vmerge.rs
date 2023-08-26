@@ -25,7 +25,16 @@ pub fn vvm(
     v.apply(vd, vreg);
 }
 
-pub fn vxm(Opivx { vd, rs1, vs2, vm: _ }: Opivx, v: &mut VectorRegisters, x: &IntegerRegisters) {
+pub fn vxm(
+    Opivx {
+        vd,
+        rs1,
+        vs2,
+        vm: _,
+    }: Opivx,
+    v: &mut VectorRegisters,
+    x: &IntegerRegisters,
+) {
     let vreg = izip!(v.default_mask(true), v.get(vs2).iter_eew(),)
         .map(|(mask, vs2)| if mask == 1 { x[rs1] } else { vs2 })
         .collect_with_eew(v.vec_engine.sew.clone());
@@ -33,7 +42,15 @@ pub fn vxm(Opivx { vd, rs1, vs2, vm: _ }: Opivx, v: &mut VectorRegisters, x: &In
     v.apply(vd, vreg);
 }
 
-pub fn vim(Opivi { vd, imm5, vs2, vm: _ }: Opivi, v: &mut VectorRegisters) {
+pub fn vim(
+    Opivi {
+        vd,
+        imm5,
+        vs2,
+        vm: _,
+    }: Opivi,
+    v: &mut VectorRegisters,
+) {
     let vreg = izip!(v.default_mask(true), v.get(vs2).iter_eew(),)
         .map(|(mask, vs2)| if mask == 1 { imm5 } else { vs2 })
         .collect_with_eew(v.vec_engine.sew.clone());

@@ -18,7 +18,9 @@ pub fn wv(Opivv { vd, vs1, vs2, vm }: Opivv, v: &mut VectorRegisters) {
 }
 
 pub fn wx(Opivx { vd, rs1, vs2, vm }: Opivx, v: &mut VectorRegisters, x: &IntegerRegisters) {
-    let vreg = v.get_wide(vs2).iter_eew()
+    let vreg = v
+        .get_wide(vs2)
+        .iter_eew()
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| {
             (vs2 as i128 >> narrow_shamt(x[rs1], v.vec_engine.sew.byte_length())) as u64
         })
@@ -28,7 +30,9 @@ pub fn wx(Opivx { vd, rs1, vs2, vm }: Opivx, v: &mut VectorRegisters, x: &Intege
 }
 
 pub fn wi(Opivi { vd, imm5, vs2, vm }: Opivi, v: &mut VectorRegisters) {
-    let vreg = v.get_wide(vs2).iter_eew()
+    let vreg = v
+        .get_wide(vs2)
+        .iter_eew()
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| {
             (vs2 as i128 >> narrow_shamt(imm5, v.vec_engine.sew.byte_length())) as u64
         })

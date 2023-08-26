@@ -1,4 +1,3 @@
-
 /// Vector length multiplier
 #[derive(Default, Clone)]
 pub enum LMUL {

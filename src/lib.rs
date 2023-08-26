@@ -6,6 +6,6 @@ mod extensions;
 mod prelude;
 mod rv_core;
 
-pub use rv_core::RvCore;
 pub use rv_core::instruction::{format::*, Instruction};
 pub use rv_core::registers::aliases::*;
+pub use rv_core::RvCore;

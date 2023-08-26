@@ -62,7 +62,10 @@ pub fn vi(
 
 pub fn xs(
     Vwxunary0 {
-        dest: rd, vs2, vm: _, ..
+        dest: rd,
+        vs2,
+        vm: _,
+        ..
     }: Vwxunary0,
     v: &VectorRegisters,
     x: &mut IntegerRegisters,
@@ -74,7 +77,10 @@ pub fn xs(
 
 pub fn sx(
     Vrxunary0 {
-        dest: vd, rs1, vm: _, ..
+        dest: vd,
+        rs1,
+        vm: _,
+        ..
     }: Vrxunary0,
     v: &mut VectorRegisters,
     x: &IntegerRegisters,

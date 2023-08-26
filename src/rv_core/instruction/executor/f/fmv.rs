@@ -1,7 +1,9 @@
 use crate::prelude::*;
 
-use crate::rv_core::{instruction::format::R, registers::{FloatRegisters, IntegerRegisters}};
-
+use crate::rv_core::{
+    instruction::format::R,
+    registers::{FloatRegisters, IntegerRegisters},
+};
 
 pub fn xw(R { rd, rs1, rs2: _ }: R, x: &mut IntegerRegisters, f: &FloatRegisters) {
     let (fs1, _) = decompose(f[rs1]);
@@ -11,6 +13,6 @@ pub fn xw(R { rd, rs1, rs2: _ }: R, x: &mut IntegerRegisters, f: &FloatRegisters
 
 pub fn wx(R { rd, rs1, rs2: _ }: R, x: &IntegerRegisters, f: &mut FloatRegisters) {
     let (_, rest) = decompose(f[rd]);
-    
+
     f[rd] = compose(f32::from_bits(x[rs1] as u32), rest);
 }

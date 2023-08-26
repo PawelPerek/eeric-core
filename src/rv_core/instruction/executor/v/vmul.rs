@@ -36,7 +36,9 @@ pub fn vx(
     let vreg = v
         .get(vs2)
         .iter_eew()
-        .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| vs2.wrapping_mul(x[rs1]))
+        .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| {
+            vs2.wrapping_mul(x[rs1])
+        })
         .collect_with_eew(v.vec_engine.sew.clone());
 
     v.apply(vd, vreg);

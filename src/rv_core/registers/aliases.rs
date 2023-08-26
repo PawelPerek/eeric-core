@@ -44,7 +44,7 @@ pub mod float {
     pub const FT2: usize = 2;
     pub const FT3: usize = 3;
     pub const FT4: usize = 4;
-    pub const FT5: usize = 5;   
+    pub const FT5: usize = 5;
     pub const FT6: usize = 6;
     pub const FT7: usize = 7;
     pub const FS0: usize = 8;
@@ -73,4 +73,4 @@ pub mod float {
     pub const FT11: usize = 31;
 }
 
-pub mod vector { }
+pub mod vector {}

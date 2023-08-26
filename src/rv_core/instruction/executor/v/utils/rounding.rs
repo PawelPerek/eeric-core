@@ -8,15 +8,15 @@ pub enum RoundingMode {
     Rne,
 
     // Round Down (truncate)
-    Rdn, 
+    Rdn,
 
     // Round to Odd
-    Rod  
+    Rod,
 }
 
 pub struct Roundoff {
     pub mode: RoundingMode,
-    pub signed: bool
+    pub signed: bool,
 }
 
 impl Roundoff {
@@ -26,16 +26,22 @@ impl Roundoff {
             0b01 => RoundingMode::Rne,
             0b10 => RoundingMode::Rdn,
             0b11 => RoundingMode::Rod,
-            _ => unreachable!()
+            _ => unreachable!(),
         }
     }
 
     pub fn new_unsigned(csr: &CsrRegisters) -> Self {
-        Self { mode: Self::parse_csr(csr), signed: false }
+        Self {
+            mode: Self::parse_csr(csr),
+            signed: false,
+        }
     }
 
     pub fn new_signed(csr: &CsrRegisters) -> Self {
-        Self { mode: Self::parse_csr(csr), signed: false }
+        Self {
+            mode: Self::parse_csr(csr),
+            signed: false,
+        }
     }
 }
 

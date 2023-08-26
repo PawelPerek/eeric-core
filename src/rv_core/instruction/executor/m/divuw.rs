@@ -5,7 +5,7 @@ pub fn divuw(R { rd, rs1, rs2 }: R, x: &mut IntegerRegisters) {
     let divisor = x[rs2] as u32;
 
     let quotient = if divisor == 0 {
-        u32::MAX  // Division by zero, all bits set
+        u32::MAX // Division by zero, all bits set
     } else {
         dividend.wrapping_div(divisor)
     };

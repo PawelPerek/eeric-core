@@ -1,8 +1,8 @@
+pub mod aliases;
 mod csr;
 mod float;
 mod integer;
 pub mod vector;
-pub mod aliases;
 
 pub use csr::CsrRegisters;
 pub use float::FloatRegisters;

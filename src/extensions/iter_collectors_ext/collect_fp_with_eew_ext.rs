@@ -16,17 +16,14 @@ where
                 ArbitraryFloat::F32(f) => {
                     eew = SEW::new_32();
                     f.to_le_bytes().to_vec()
-                },
+                }
                 ArbitraryFloat::F64(f) => {
                     eew = SEW::new_64();
                     f.to_le_bytes().to_vec()
-                },
+                }
             })
             .collect();
 
-        Vreg {
-            raw,
-            eew
-        }
+        Vreg { raw, eew }
     }
 }

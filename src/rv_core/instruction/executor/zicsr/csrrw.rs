@@ -1,4 +1,7 @@
-use crate::rv_core::{instruction::format::Csrr, registers::{CsrRegisters, IntegerRegisters}};
+use crate::rv_core::{
+    instruction::format::Csrr,
+    registers::{CsrRegisters, IntegerRegisters},
+};
 
 pub fn csrrw(Csrr { rd, rs1, csr }: Csrr, x: &mut IntegerRegisters, c: &mut CsrRegisters) {
     let csr_value = c[csr];

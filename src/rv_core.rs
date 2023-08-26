@@ -1,18 +1,18 @@
+mod arbitrary_float;
 pub mod instruction;
 mod memory;
 pub mod registers;
 pub mod vector_engine;
-mod arbitrary_float;
 
+pub use arbitrary_float::{compose, decompose, ArbitraryFloat};
 pub use instruction::Instruction;
 use memory::Memory;
-use registers::Registers;
 pub use registers::aliases;
-pub use arbitrary_float::{ArbitraryFloat, compose, decompose};
+use registers::Registers;
 
 pub struct RvCore {
     pub registers: Registers,
-    
+
     memory: Memory,
 }
 
@@ -29,9 +29,7 @@ impl RvCore {
         Self { registers, memory }
     }
 
-    pub fn step(&mut self) {
-
-    }
+    pub fn step(&mut self) {}
 
     #[no_mangle]
     pub fn execute(&mut self, input: Instruction) {
@@ -169,7 +167,7 @@ impl RvCore {
             Fcvtdwu(args) => d::fcvt::dwu(args, &self.registers.x, &mut self.registers.f),
             Fcvtld(args) => d::fcvt::ld(args, &mut self.registers.x, &self.registers.f),
             Fcvtlud(args) => d::fcvt::lud(args, &mut self.registers.x, &self.registers.f),
-            Fmvxd(args) => d::fmv::xd(args,  &mut self.registers.x, &self.registers.f),
+            Fmvxd(args) => d::fmv::xd(args, &mut self.registers.x, &self.registers.f),
             Fcvtdl(args) => d::fcvt::dl(args, &self.registers.x, &mut self.registers.f),
             Fcvtdlu(args) => d::fcvt::dlu(args, &self.registers.x, &mut self.registers.f),
             Fmvdx(args) => d::fmv::dx(args, &self.registers.x, &mut self.registers.f),
@@ -296,7 +294,12 @@ impl RvCore {
             Vsllvi(args) => v::vsll::vi(args, &mut self.registers.v),
 
             Vsmulvv(args) => v::vsmul::vv(args, &mut self.registers.v, &mut self.registers.c),
-            Vsmulvx(args) => v::vsmul::vx(args, &mut self.registers.v, &self.registers.x, &mut self.registers.c),
+            Vsmulvx(args) => v::vsmul::vx(
+                args,
+                &mut self.registers.v,
+                &self.registers.x,
+                &mut self.registers.c,
+            ),
 
             Vmv1rv(args) => v::vmv1r::v(args, &mut self.registers.v),
             Vmv2rv(args) => v::vmv2r::v(args, &mut self.registers.v),
@@ -328,11 +331,21 @@ impl RvCore {
             Vnsrawi(args) => v::vnsra::wi(args, &mut self.registers.v),
 
             Vnclipuwv(args) => v::vnclipu::wv(args, &mut self.registers.v, &mut self.registers.c),
-            Vnclipuwx(args) => v::vnclipu::wx(args, &mut self.registers.v, &self.registers.x, &mut self.registers.c),
+            Vnclipuwx(args) => v::vnclipu::wx(
+                args,
+                &mut self.registers.v,
+                &self.registers.x,
+                &mut self.registers.c,
+            ),
             Vnclipuwi(args) => v::vnclipu::wi(args, &mut self.registers.v, &mut self.registers.c),
 
             Vnclipwv(args) => v::vnclip::wv(args, &mut self.registers.v, &mut self.registers.c),
-            Vnclipwx(args) => v::vnclip::wx(args, &mut self.registers.v, &self.registers.x, &mut self.registers.c),
+            Vnclipwx(args) => v::vnclip::wx(
+                args,
+                &mut self.registers.v,
+                &self.registers.x,
+                &mut self.registers.c,
+            ),
             Vnclipwi(args) => v::vnclip::wi(args, &mut self.registers.v, &mut self.registers.c),
 
             Vwredsumuvs(args) => v::vwredsumu::vs(args, &mut self.registers.v),
@@ -348,22 +361,42 @@ impl RvCore {
             Vredmaxvs(args) => v::vredmax::vs(args, &mut self.registers.v),
 
             Vaadduvv(args) => v::vaaddu::vv(args, &mut self.registers.v, &self.registers.c),
-            Vaadduvx(args) => v::vaaddu::vx(args, &mut self.registers.v, &self.registers.x, &self.registers.c),
+            Vaadduvx(args) => v::vaaddu::vx(
+                args,
+                &mut self.registers.v,
+                &self.registers.x,
+                &self.registers.c,
+            ),
 
             Vaaddvv(args) => v::vaadd::vv(args, &mut self.registers.v, &self.registers.c),
-            Vaaddvx(args) => v::vaadd::vx(args, &mut self.registers.v, &self.registers.x, &self.registers.c),
+            Vaaddvx(args) => v::vaadd::vx(
+                args,
+                &mut self.registers.v,
+                &self.registers.x,
+                &self.registers.c,
+            ),
 
             Vasubuvv(args) => v::vasubu::vv(args, &mut self.registers.v, &self.registers.c),
-            Vasubuvx(args) => v::vasubu::vx(args, &mut self.registers.v, &self.registers.x, &self.registers.c),
+            Vasubuvx(args) => v::vasubu::vx(
+                args,
+                &mut self.registers.v,
+                &self.registers.x,
+                &self.registers.c,
+            ),
 
             Vasubvv(args) => v::vasub::vv(args, &mut self.registers.v, &self.registers.c),
-            Vasubvx(args) => v::vasub::vx(args, &mut self.registers.v, &self.registers.x, &self.registers.c),
+            Vasubvx(args) => v::vasub::vx(
+                args,
+                &mut self.registers.v,
+                &self.registers.x,
+                &self.registers.c,
+            ),
 
             Vslide1upvx(args) => v::vslide1up::vx(args, &mut self.registers.v, &self.registers.x),
 
             Vslide1downvx(args) => {
                 v::vslide1down::vx(args, &mut self.registers.v, &self.registers.x)
-            },
+            }
 
             Vmvxs(args) => v::vmv::xs(args, &self.registers.v, &mut self.registers.x),
             Vcpopm(args) => v::vcpop::m(args, &self.registers.v, &mut self.registers.x),

@@ -7,7 +7,16 @@ use crate::rv_core::{
 
 use super::utils::rounding::Roundoff;
 
-pub fn vv(Opmvv { dest: vd, vs1, vs2, vm }: Opmvv, v: &mut VectorRegisters, csr: &CsrRegisters) {
+pub fn vv(
+    Opmvv {
+        dest: vd,
+        vs1,
+        vs2,
+        vm,
+    }: Opmvv,
+    v: &mut VectorRegisters,
+    csr: &CsrRegisters,
+) {
     let roundoff_signed = Roundoff::new_signed(csr);
 
     let vreg = izip!(v.get(vs2).iter_eew(), v.get(vs1).iter_eew())
@@ -19,7 +28,12 @@ pub fn vv(Opmvv { dest: vd, vs1, vs2, vm }: Opmvv, v: &mut VectorRegisters, csr:
     v.apply(vd, vreg);
 }
 
-pub fn vx(Opmvx { dest, rs1, vs2, vm }: Opmvx, v: &mut VectorRegisters, x: &IntegerRegisters, csr: &CsrRegisters) {
+pub fn vx(
+    Opmvx { dest, rs1, vs2, vm }: Opmvx,
+    v: &mut VectorRegisters,
+    x: &IntegerRegisters,
+    csr: &CsrRegisters,
+) {
     let roundoff_signed = Roundoff::new_signed(csr);
 
     let vreg = v

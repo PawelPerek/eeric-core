@@ -6,8 +6,15 @@ use crate::prelude::*;
 
 use crate::rv_core::{instruction::format::Vfunary1, registers::VectorRegisters};
 
-pub fn v(Vfunary1 { dest: vd, vs2, vm, .. }: Vfunary1, v: &mut VectorRegisters) {
-    let vreg = v.get(vs2).iter_fp()
+pub fn v(
+    Vfunary1 {
+        dest: vd, vs2, vm, ..
+    }: Vfunary1,
+    v: &mut VectorRegisters,
+) {
+    let vreg = v
+        .get(vs2)
+        .iter_fp()
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| {
             match vs2.classify() {
                 FpCategory::Infinite if vs2 < ArbitraryFloat::zero() => 1 << 0,

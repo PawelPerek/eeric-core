@@ -1,6 +1,9 @@
 use crate::prelude::*;
 
-use crate::rv_core::{instruction::format::R, registers::{FloatRegisters, IntegerRegisters}};
+use crate::rv_core::{
+    instruction::format::R,
+    registers::{FloatRegisters, IntegerRegisters},
+};
 
 pub fn sd(R { rd, rs1, rs2: _ }: R, f: &mut FloatRegisters) {
     let (fs1, _) = decompose(f[rs1]);
@@ -11,7 +14,7 @@ pub fn sd(R { rd, rs1, rs2: _ }: R, f: &mut FloatRegisters) {
 pub fn ds(R { rd, rs1, rs2: _ }: R, f: &mut FloatRegisters) {
     let (fs1, _) = decompose(f[rs1]);
     let (_, rest) = decompose(f[rd]);
-    
+
     f[rd] = compose(fs1, rest);
 }
 

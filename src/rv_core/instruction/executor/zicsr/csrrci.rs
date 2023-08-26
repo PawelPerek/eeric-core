@@ -1,4 +1,7 @@
-use crate::rv_core::{instruction::format::Csri, registers::{CsrRegisters, IntegerRegisters}};
+use crate::rv_core::{
+    instruction::format::Csri,
+    registers::{CsrRegisters, IntegerRegisters},
+};
 
 pub fn csrrci(Csri { rd, uimm, csr }: Csri, x: &mut IntegerRegisters, c: &mut CsrRegisters) {
     let csr_value = c[csr];
