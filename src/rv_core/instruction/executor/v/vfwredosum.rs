@@ -2,7 +2,15 @@ use crate::prelude::*;
 
 use crate::rv_core::{instruction::format::Opfvv, registers::VectorRegisters};
 
-pub fn vs(Opfvv { dest: vd, vs1, vs2, vm }: Opfvv, v: &mut VectorRegisters) {
+pub fn vs(
+    Opfvv {
+        dest: vd,
+        vs1,
+        vs2,
+        vm,
+    }: Opfvv,
+    v: &mut VectorRegisters,
+) {
     let initial_value = v.get_wide(vs1).iter_fp().next().unwrap();
     let sum =
         izip!(v.get(vs2).iter_fp(), v.default_mask(vm)).fold(initial_value, |acc, (vs2, mask)| {

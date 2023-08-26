@@ -13,7 +13,11 @@ pub fn vf(Opfvf { vd, rs1, vs2, vm }: Opfvf, v: &mut VectorRegisters, f: &FloatR
         .get(vs2)
         .iter_byte()
         .take(v.vec_engine.vlmax() - v.vec_engine.sew.byte_length())
-        .chain(last_value[0..v.vec_engine.sew.byte_length()].into_iter().copied())
+        .chain(
+            last_value[0..v.vec_engine.sew.byte_length()]
+                .into_iter()
+                .copied(),
+        )
         .collect();
 
     let vreg = vreg_values

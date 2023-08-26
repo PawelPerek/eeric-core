@@ -55,7 +55,8 @@ impl Vreg {
 
     pub fn iter_mask(&self) -> VregMaskIterator<'_> {
         VregMaskIterator {
-            eew_iterator: self.iter_eew(),
+            vreg: self,
+            bit_pos: 0,
         }
     }
 
@@ -136,17 +137,18 @@ impl<'a> Iterator for VregEEWIterator<'a> {
 // mask (1u64 or 0u64)
 
 pub struct VregMaskIterator<'a> {
-    eew_iterator: VregEEWIterator<'a>,
+    vreg: &'a Vreg,
+    bit_pos: usize,
 }
 
 impl<'a> Iterator for VregMaskIterator<'a> {
     type Item = u64;
 
     fn next(&mut self) -> Option<Self::Item> {
-        // mask is encoded as least significant bit of each element
-        self.eew_iterator
-            .next()
-            .map(|vel| if vel & 1 == 1 { 1 } else { 0 })
+        let vreg_data = self.vreg.raw.get(self.bit_pos / 8)?;
+        let element = (*vreg_data >> (self.bit_pos % 8)) & 1;
+        self.bit_pos += 1;
+        Some(element as u64)
     }
 }
 

@@ -54,6 +54,13 @@ impl ArbitraryFloat {
             Self::F64(_) => unimplemented!("No f128 support"),
         }
     }
+
+    pub fn half_precision(self) -> Self {
+        match self {
+            Self::F32(_) => unimplemented!("No f16 support"),
+            Self::F64(fp) => Self::F32(fp as f32),
+        }
+    }
 }
 
 impl Neg for ArbitraryFloat {
