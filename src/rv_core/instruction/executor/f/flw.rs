@@ -1,6 +1,6 @@
-use crate::rv_core::{instruction::format::I, registers::{FloatRegisters, IntegerRegisters}, memory::Memory};
+use crate::prelude::*;
 
-use super::utils::convert::{decompose, compose};
+use crate::rv_core::{instruction::format::I, registers::{FloatRegisters, IntegerRegisters}, memory::Memory};
 
 pub fn flw(I { rd, rs1, imm12 }: I, x: &IntegerRegisters, f: &mut FloatRegisters, mem: &Memory) {
     let addr = x[rs1] + imm12;

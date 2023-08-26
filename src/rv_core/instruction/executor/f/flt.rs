@@ -1,6 +1,7 @@
+use crate::prelude::*;
+
 use crate::rv_core::{instruction::format::R, registers::{FloatRegisters, IntegerRegisters}};
 
-use super::utils::convert::decompose;
 
 pub fn s(R { rd, rs1, rs2 }: R, x: &mut IntegerRegisters, f: &FloatRegisters) {
     let (fs1, _) = decompose(f[rs1]);

@@ -1,6 +1,7 @@
+use crate::prelude::*;
+
 use crate::rv_core::{instruction::format::S, registers::{FloatRegisters, IntegerRegisters}, memory::Memory};
 
-use super::utils::convert::decompose;
 
 pub fn fsw(S { rs1, rs2, imm12 }: S, x: &IntegerRegisters, f: &FloatRegisters, mem: &mut Memory) {
     let addr = x[rs1] + imm12;

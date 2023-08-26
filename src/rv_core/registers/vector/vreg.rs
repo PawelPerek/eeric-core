@@ -1,6 +1,4 @@
-use crate::rv_core::vector_engine::SEW;
-
-use super::arbitrary_float::ArbitraryFloat;
+use crate::rv_core::{vector_engine::SEW, arbitrary_float::ArbitraryFloat};
 
 #[derive(Clone)]
 // A wrapper over vector unit raw data

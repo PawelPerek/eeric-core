@@ -23,5 +23,3 @@ mod fsw;
 
 pub use flw::flw;
 pub use fsw::fsw;
-
-pub mod utils;

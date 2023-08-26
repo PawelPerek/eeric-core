@@ -2,11 +2,13 @@ pub mod instruction;
 mod memory;
 pub mod registers;
 pub mod vector_engine;
+mod arbitrary_float;
 
 pub use instruction::Instruction;
 use memory::Memory;
 use registers::Registers;
 pub use registers::aliases;
+pub use arbitrary_float::{ArbitraryFloat, compose, decompose};
 
 pub struct RvCore {
     pub registers: Registers,
