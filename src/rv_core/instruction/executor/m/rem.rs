@@ -1,4 +1,4 @@
-use crate::rv_core::{instruction::format::R, registers::IntegerRegisters};
+use crate::rv_core::instruction::executor::prelude::*;
 
 pub fn rem(R { rd, rs1, rs2 }: R, x: &mut IntegerRegisters) {
     let dividend = x[rs1] as i64;

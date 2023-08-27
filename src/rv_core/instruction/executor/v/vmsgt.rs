@@ -1,9 +1,9 @@
-use crate::prelude::*;
 
-use crate::rv_core::{
-    instruction::format::{Opivi, Opivx},
-    registers::{IntegerRegisters, VectorRegisters},
-};
+
+use crate::rv_core::instruction::executor::prelude::*;
+    
+    
+
 
 pub fn vx(Opivx { vd, rs1, vs2, vm }: Opivx, v: &mut VectorRegisters, x: &IntegerRegisters) {
     let vreg = v

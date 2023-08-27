@@ -1,6 +1,6 @@
-use crate::prelude::*;
 
-use crate::rv_core::{instruction::format::Opmvv, registers::VectorRegisters};
+
+use crate::rv_core::instruction::executor::prelude::*;
 
 pub fn mm(
     Opmvv {

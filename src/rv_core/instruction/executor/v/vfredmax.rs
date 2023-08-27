@@ -1,6 +1,6 @@
-use crate::prelude::*;
 
-use crate::rv_core::{instruction::format::Opfvv, registers::VectorRegisters};
+
+use crate::rv_core::instruction::executor::prelude::*;
 
 pub fn vs(
     Opfvv {

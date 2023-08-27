@@ -1,8 +1,4 @@
-use crate::rv_core::{
-    instruction::format::S,
-    memory::Memory,
-    registers::{FloatRegisters, IntegerRegisters},
-};
+use crate::rv_core::instruction::executor::prelude::*;
 
 pub fn fsd(S { rs1, rs2, imm12 }: S, x: &IntegerRegisters, f: &FloatRegisters, mem: &mut Memory) {
     let addr = x[rs1] + imm12;

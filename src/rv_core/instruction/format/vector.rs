@@ -18,6 +18,65 @@ pub struct Vsetvl {
     pub rs2: usize,
 }
 
+/// Load/store formats
+
+// Loads
+
+// unit-stride
+pub struct Vl {
+    pub vd: usize,
+    pub rs1: usize,
+}
+
+// strided
+pub struct Vls {
+    pub vd: usize,
+    pub rs1: usize,
+    pub rs2: usize,
+}
+
+// indexed
+pub struct Vlx {
+    pub vd: usize,
+    pub rs1: usize,
+    pub vs2: usize,
+}
+
+// whole register
+pub struct Vlr {
+    pub vd: usize,
+    pub rs1: usize,
+}
+
+// Stores
+
+// unit-stride
+pub struct Vs {
+    pub vs3: usize,
+    pub rs1: usize,
+}
+
+// strided
+pub struct Vss {
+    pub vs3: usize,
+    pub rs1: usize,
+    pub rs2: usize,
+}
+
+// indexed
+pub struct Vsx {
+    pub vs3: usize,
+    pub rs1: usize,
+    pub vs2: usize,
+}
+
+// whole register
+pub struct Vsr {
+    pub vs3: usize,
+    pub rs1: usize,
+}
+
+
 /// OPI - Integer instructions
 
 // Vector - Vector

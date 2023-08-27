@@ -112,20 +112,3 @@ impl Iterator for MaskIterator {
         }
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::prelude::*;
-
-    #[test]
-    fn api() {
-        let mut vregs = VectorRegisters::default();
-
-        let vreg = izip!(vregs.get(0).iter_eew(), vregs.get(8).iter_eew())
-            .map(|(rs1_el, rs2_el)| rs1_el + rs2_el)
-            .collect_with_eew(vregs.vec_engine.sew.clone());
-
-        vregs.apply(0, vreg);
-    }
-}

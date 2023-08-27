@@ -1,6 +1,6 @@
-use crate::prelude::*;
 
-use crate::rv_core::{instruction::format::Opfvv, registers::VectorRegisters};
+
+use crate::rv_core::instruction::executor::prelude::*;
 
 // TODO: binary tree addition implementation separate from vfredosum to show differences.
 // But since vfredosum is a valid implementation, it can be used for now.

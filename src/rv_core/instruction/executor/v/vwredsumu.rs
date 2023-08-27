@@ -1,6 +1,6 @@
-use crate::prelude::*;
 
-use crate::rv_core::{instruction::format::Opivv, registers::VectorRegisters};
+
+use crate::rv_core::instruction::executor::prelude::*;
 
 pub fn vs(Opivv { vd, vs1, vs2, vm }: Opivv, v: &mut VectorRegisters) {
     let initial_value = v.get_wide(vs1).iter_eew().next().unwrap();

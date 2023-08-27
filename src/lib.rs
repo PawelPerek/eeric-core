@@ -3,9 +3,12 @@
 #![feature(iter_next_chunk)]
 
 mod extensions;
-mod prelude;
 mod rv_core;
+pub mod prelude;
 
-pub use rv_core::instruction::{format::*, Instruction};
-pub use rv_core::registers::aliases::*;
 pub use rv_core::RvCore;
+pub use rv_core::instruction::{
+    Instruction, 
+    format as Format
+};
+pub use rv_core::registers::aliases::*;

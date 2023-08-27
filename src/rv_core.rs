@@ -1,10 +1,10 @@
-mod arbitrary_float;
+pub mod arbitrary_float;
 pub mod instruction;
 mod memory;
 pub mod registers;
 pub mod vector_engine;
 
-pub use arbitrary_float::{compose, decompose, ArbitraryFloat};
+use arbitrary_float::{compose, decompose, ArbitraryFloat};
 pub use instruction::Instruction;
 use memory::Memory;
 pub use registers::aliases;
@@ -171,6 +171,40 @@ impl RvCore {
             Fcvtdl(args) => d::fcvt::dl(args, &self.registers.x, &mut self.registers.f),
             Fcvtdlu(args) => d::fcvt::dlu(args, &self.registers.x, &mut self.registers.f),
             Fmvdx(args) => d::fmv::dx(args, &self.registers.x, &mut self.registers.f),
+
+            Vsetvli(_) => todo!(),
+            Vsetivli(_) => todo!(),
+            Vsetvl(_) => todo!(),
+
+            Vlv { data, eew } => todo!(),
+            Vsv { data, eew } => todo!(),
+            
+            Vlmv(_) => todo!(),
+            Vsmv(_) => todo!(),
+            
+            Vlsv { data, eew } => todo!(),
+            Vssv { data, eew } => todo!(),
+            
+            Vluxv { data, eew } => todo!(),
+            Vloxv { data, eew } => todo!(),
+            Vsuxv { data, eew } => todo!(),
+            Vsoxv { data, eew } => todo!(),
+            
+            Vlffv { data, eew } => todo!(),
+            
+            Vlsegv { data, eew, nf } => todo!(),
+            Vssegv { data, eew, nf } => todo!(),
+            
+            Vlssegv { data, eew, nf } => todo!(),
+            Vsssegv { data, eew, nf } => todo!(),
+            
+            Vluxsegv { data, eew, nf } => todo!(),
+            Vloxsegv { data, eew, nf } => todo!(),
+            Vsuxsegv { data, eew, nf } => todo!(),
+            Vsoxsegv { data, eew, nf } => todo!(),
+            
+            Vlrv { data, eew, nf } => todo!(),
+            Vsrv { data, eew, nf } => todo!(),
 
             Vaddvv(args) => v::vadd::vv(args, &mut self.registers.v),
             Vaddvx(args) => v::vadd::vx(args, &mut self.registers.v, &self.registers.x),
@@ -658,7 +692,7 @@ impl RvCore {
             Vfwmsacvf(args) => v::vfwmsac::vf(args, &mut self.registers.v, &self.registers.f),
 
             Vfwnmsacvv(args) => v::vfwnmsac::vv(args, &mut self.registers.v),
-            Vfwnmsacvf(args) => v::vfwnmsac::vf(args, &mut self.registers.v, &self.registers.f),
+            Vfwnmsacvf(args) => v::vfwnmsac::vf(args, &mut self.registers.v, &self.registers.f)
         }
     }
 }

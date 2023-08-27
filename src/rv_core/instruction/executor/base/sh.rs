@@ -1,4 +1,4 @@
-use crate::rv_core::{instruction::format::S, memory::Memory, registers::IntegerRegisters};
+use crate::rv_core::instruction::executor::prelude::*;
 
 pub fn sh(S { rs1, rs2, imm12 }: S, x: &IntegerRegisters, mem: &mut Memory) {
     let addr = x[rs1] + imm12;

@@ -2,9 +2,9 @@ use std::num::FpCategory;
 
 use num_traits::{Float, Zero};
 
-use crate::prelude::*;
 
-use crate::rv_core::{instruction::format::Vfunary1, registers::VectorRegisters};
+
+use crate::rv_core::instruction::executor::prelude::*;
 
 pub fn v(
     Vfunary1 {

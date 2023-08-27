@@ -1,9 +1,6 @@
 use std::num::FpCategory;
 
-use crate::rv_core::{
-    instruction::format::R,
-    registers::{FloatRegisters, IntegerRegisters},
-};
+use crate::rv_core::instruction::executor::prelude::*;
 
 pub fn d(R { rd, rs1, rs2: _ }: R, x: &mut IntegerRegisters, f: &FloatRegisters) {
     // TODO: see f::fclass::s

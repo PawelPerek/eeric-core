@@ -162,6 +162,44 @@ pub enum Instruction {
     Fmvdx(R),
 
     /// V extension
+    
+    // VCFG
+    Vsetvli(Vsetvli),
+    Vsetivli(Vsetivli),
+    Vsetvl(Vsetvl),
+
+    // VMEM
+    Vlv { data: Vl, eew: usize },
+    Vsv { data: Vs, eew: usize },
+
+    Vlmv(Vl),
+    Vsmv(Vs),
+
+    Vlsv { data: Vls, eew: usize },
+    Vssv { data: Vss, eew: usize },
+
+    Vluxv { data: Vlx, eew: usize },
+    Vloxv { data: Vlx, eew: usize },
+    Vsuxv { data: Vsx, eew: usize },
+    Vsoxv { data: Vsx, eew: usize },
+
+    Vlffv { data: Vl, eew: usize },
+
+    Vlsegv { data: Vl, eew: usize, nf: usize },
+    Vssegv { data: Vs, eew: usize, nf: usize },
+
+    Vlssegv { data: Vls, eew: usize, nf: usize },
+    Vsssegv { data: Vss, eew: usize, nf: usize },
+
+    Vluxsegv { data: Vlx, eew: usize, nf: usize },
+    Vloxsegv { data: Vlx, eew: usize, nf: usize },
+    Vsuxsegv { data: Vsx, eew: usize, nf: usize },
+    Vsoxsegv { data: Vsx, eew: usize, nf: usize },
+
+    Vlrv { data: Vlr, eew: usize, nf: usize },
+    Vsrv { data: Vsr, eew: usize, nf: usize },
+
+    // VALU
     Vaddvv(Opivv),
     Vaddvx(Opivx),
     Vaddvi(Opivi),

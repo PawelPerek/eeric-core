@@ -1,4 +1,4 @@
-use crate::rv_core::{registers::vector::Vreg, vector_engine::SEW, ArbitraryFloat};
+use crate::rv_core::{registers::vector::Vreg, vector_engine::SEW, arbitrary_float::ArbitraryFloat};
 
 pub trait IterFPCollectorExt {
     fn collect_fp(self) -> Vreg;

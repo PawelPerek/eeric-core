@@ -1,6 +1,6 @@
-use crate::prelude::*;
 
-use crate::rv_core::{instruction::format::Vxunary0, registers::VectorRegisters};
+
+use crate::rv_core::instruction::executor::prelude::*;
 
 pub fn vf2(
     Vxunary0 {

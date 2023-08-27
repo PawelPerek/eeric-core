@@ -1,8 +1,8 @@
 use num_traits::{Float, ToPrimitive};
 
-use crate::prelude::*;
 
-use crate::rv_core::{instruction::format::Vfunary0, registers::VectorRegisters};
+
+use crate::rv_core::instruction::executor::prelude::*;
 
 pub fn xufw(
     Vfunary0 {
@@ -21,7 +21,12 @@ pub fn xufw(
     v.apply(vd, vreg);
 }
 
-pub fn xfw(Vfunary0 { dest: vd, vs2, vm, .. }: Vfunary0, v: &mut VectorRegisters) {
+pub fn xfw(
+    Vfunary0 {
+        dest: vd, vs2, vm, ..
+    }: Vfunary0,
+    v: &mut VectorRegisters,
+) {
     let vreg = v
         .get_wide(vs2)
         .iter_fp()
@@ -33,7 +38,12 @@ pub fn xfw(Vfunary0 { dest: vd, vs2, vm, .. }: Vfunary0, v: &mut VectorRegisters
     v.apply(vd, vreg);
 }
 
-pub fn fxuw(Vfunary0 { dest: vd, vs2, vm, .. }: Vfunary0, v: &mut VectorRegisters) {
+pub fn fxuw(
+    Vfunary0 {
+        dest: vd, vs2, vm, ..
+    }: Vfunary0,
+    v: &mut VectorRegisters,
+) {
     let vreg = v
         .get_wide(vs2)
         .iter_eew()
@@ -49,7 +59,12 @@ pub fn fxuw(Vfunary0 { dest: vd, vs2, vm, .. }: Vfunary0, v: &mut VectorRegister
     v.apply(vd, vreg);
 }
 
-pub fn fxw(Vfunary0 { dest: vd, vs2, vm, .. }: Vfunary0, v: &mut VectorRegisters) {
+pub fn fxw(
+    Vfunary0 {
+        dest: vd, vs2, vm, ..
+    }: Vfunary0,
+    v: &mut VectorRegisters,
+) {
     let vreg = v
         .get_wide(vs2)
         .iter_eew()
@@ -65,7 +80,12 @@ pub fn fxw(Vfunary0 { dest: vd, vs2, vm, .. }: Vfunary0, v: &mut VectorRegisters
     v.apply(vd, vreg);
 }
 
-pub fn ffw(Vfunary0 { dest: vd, vs2, vm, .. }: Vfunary0, v: &mut VectorRegisters) {
+pub fn ffw(
+    Vfunary0 {
+        dest: vd, vs2, vm, ..
+    }: Vfunary0,
+    v: &mut VectorRegisters,
+) {
     let vreg = v
         .get_wide(vs2)
         .iter_fp()
@@ -77,11 +97,21 @@ pub fn ffw(Vfunary0 { dest: vd, vs2, vm, .. }: Vfunary0, v: &mut VectorRegisters
     v.apply(vd, vreg);
 }
 
-pub fn rodffw(Vfunary0 { dest: vd, vs2, vm, .. }: Vfunary0, v: &mut VectorRegisters) {
+pub fn rodffw(
+    Vfunary0 {
+        dest: vd, vs2, vm, ..
+    }: Vfunary0,
+    v: &mut VectorRegisters,
+) {
     todo!()
 }
 
-pub fn rtzxufw(Vfunary0 { dest: vd, vs2, vm, .. }: Vfunary0, v: &mut VectorRegisters) {
+pub fn rtzxufw(
+    Vfunary0 {
+        dest: vd, vs2, vm, ..
+    }: Vfunary0,
+    v: &mut VectorRegisters,
+) {
     let vreg = v
         .get_wide(vs2)
         .iter_fp()
@@ -93,7 +123,12 @@ pub fn rtzxufw(Vfunary0 { dest: vd, vs2, vm, .. }: Vfunary0, v: &mut VectorRegis
     v.apply(vd, vreg);
 }
 
-pub fn rtzxfw(Vfunary0 { dest: vd, vs2, vm, .. }: Vfunary0, v: &mut VectorRegisters) {
+pub fn rtzxfw(
+    Vfunary0 {
+        dest: vd, vs2, vm, ..
+    }: Vfunary0,
+    v: &mut VectorRegisters,
+) {
     let vreg = v
         .get_wide(vs2)
         .iter_fp()

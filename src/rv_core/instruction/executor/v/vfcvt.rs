@@ -1,8 +1,8 @@
 use num_traits::{Float, ToPrimitive};
 
-use crate::prelude::*;
 
-use crate::rv_core::{instruction::format::Vfunary0, registers::VectorRegisters};
+
+use crate::rv_core::instruction::executor::prelude::*;
 
 pub fn xufv(
     Vfunary0 {

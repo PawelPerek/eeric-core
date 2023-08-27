@@ -1,10 +1,6 @@
-use crate::prelude::*;
 
-use crate::rv_core::{
-    instruction::format::I,
-    memory::Memory,
-    registers::{FloatRegisters, IntegerRegisters},
-};
+
+use crate::rv_core::instruction::executor::prelude::*;
 
 pub fn flw(I { rd, rs1, imm12 }: I, x: &IntegerRegisters, f: &mut FloatRegisters, mem: &Memory) {
     let addr = x[rs1] + imm12;

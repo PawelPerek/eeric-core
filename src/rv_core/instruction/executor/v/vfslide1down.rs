@@ -1,10 +1,6 @@
-use crate::prelude::*;
+use crate::rv_core::instruction::executor::prelude::*;
+    
 
-use crate::rv_core::registers::vector::Vreg;
-use crate::rv_core::{
-    instruction::format::Opfvf,
-    registers::{FloatRegisters, VectorRegisters},
-};
 
 pub fn vf(Opfvf { vd, rs1, vs2, vm }: Opfvf, v: &mut VectorRegisters, f: &FloatRegisters) {
     let last_value = f64::to_le_bytes(f[rs1]);
