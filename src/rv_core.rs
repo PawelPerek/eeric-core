@@ -4,7 +4,6 @@ mod memory;
 pub mod registers;
 pub mod vector_engine;
 
-use arbitrary_float::{compose, decompose, ArbitraryFloat};
 pub use instruction::Instruction;
 use memory::Memory;
 pub use registers::aliases;
@@ -172,39 +171,39 @@ impl RvCore {
             Fcvtdlu(args) => d::fcvt::dlu(args, &self.registers.x, &mut self.registers.f),
             Fmvdx(args) => d::fmv::dx(args, &self.registers.x, &mut self.registers.f),
 
-            Vsetvli(_) => todo!(),
-            Vsetivli(_) => todo!(),
-            Vsetvl(_) => todo!(),
+            Vsetvli(args) => v::vsetvli(args, &mut self.registers.x, &self.registers.v, &mut self.registers.c),
+            Vsetivli(args) => v::vsetivli(args, &mut self.registers.x, &self.registers.v, &mut self.registers.c),
+            Vsetvl(args) => v::vsetvl(args, &mut self.registers.x, &self.registers.v, &mut self.registers.c),
 
-            Vlv { data, eew } => todo!(),
-            Vsv { data, eew } => todo!(),
+            Vlv { data: args , eew } => v::vl::v(args, eew, &mut self.registers.v, &self.memory),
+            Vsv { data: args , eew } => v::vs::v(args, eew, &self.registers.v, &mut self.memory),
 
-            Vlmv(_) => todo!(),
-            Vsmv(_) => todo!(),
+            Vlmv(args) => v::vlm::v(args, &mut self.registers.v, &self.memory),
+            Vsmv(args) => v::vsm::v(args, &self.registers.v, &mut self.memory),
 
-            Vlsv { data, eew } => todo!(),
-            Vssv { data, eew } => todo!(),
+            Vlsv { data: args, eew } => v::vls::v(args, eew, &mut self.registers.v, &self.memory),
+            Vssv { data: args, eew } => v::vss::v(args, eew, &self.registers.v, &mut self.memory),
 
-            Vluxv { data, eew } => todo!(),
-            Vloxv { data, eew } => todo!(),
-            Vsuxv { data, eew } => todo!(),
-            Vsoxv { data, eew } => todo!(),
+            Vluxv { data: args, eew } => v::vlux::v(args, eew, &mut self.registers.v, &self.memory),
+            Vloxv { data: args, eew } => v::vlox::v(args, eew, &mut self.registers.v, &self.memory),
+            Vsuxv { data: args, eew } => v::vsux::v(args, eew, &self.registers.v, &mut self.memory),
+            Vsoxv { data: args, eew } => v::vsox::v(args, eew, &self.registers.v, &mut self.memory),
 
-            Vlffv { data, eew } => todo!(),
+            Vlffv { data: args, eew } => v::vlff::v(args, eew, &mut self.registers.v, &self.memory),
 
-            Vlsegv { data, eew, nf } => todo!(),
-            Vssegv { data, eew, nf } => todo!(),
+            Vlsegv { data: args, eew, nf } => v::vlseg::v(args, eew, &mut self.registers.v, &self.memory),
+            Vssegv { data: args, eew, nf } => v::vsseg::v(args, eew, &self.registers.v, &mut self.memory),
 
-            Vlssegv { data, eew, nf } => todo!(),
-            Vsssegv { data, eew, nf } => todo!(),
+            Vlssegv { data: args, eew, nf } => v::vlsseg::v(args, eew, &mut self.registers.v, &self.memory),
+            Vsssegv { data: args, eew, nf } => v::vssseg::v(args, eew, &self.registers.v, &mut self.memory),
 
-            Vluxsegv { data, eew, nf } => todo!(),
-            Vloxsegv { data, eew, nf } => todo!(),
-            Vsuxsegv { data, eew, nf } => todo!(),
-            Vsoxsegv { data, eew, nf } => todo!(),
+            Vluxsegv { data: args, eew, nf } => v::vluxseg::v(args, eew, &mut self.registers.v, &self.memory),
+            Vloxsegv { data: args, eew, nf } => v::vloxseg::v(args, eew, &mut self.registers.v, &self.memory),
+            Vsuxsegv { data: args, eew, nf } => v::vsuxseg::v(args, eew, &self.registers.v, &mut self.memory),
+            Vsoxsegv { data: args, eew, nf } => v::vsoxseg::v(args, eew, &self.registers.v, &mut self.memory),
 
-            Vlrv { data, eew, nf } => todo!(),
-            Vsrv { data, eew, nf } => todo!(),
+            Vlrv { data: args, eew, nf } => v::vlr::v(args, eew, &mut self.registers.v, &self.memory),
+            Vsrv { data: args, eew, nf } => v::vsr::v(args, eew, &self.registers.v, &mut self.memory),
 
             Vaddvv(args) => v::vadd::vv(args, &mut self.registers.v),
             Vaddvx(args) => v::vadd::vx(args, &mut self.registers.v, &self.registers.x),
