@@ -26,7 +26,7 @@ pub struct Vsetvl {
 pub struct Vl {
     pub vd: usize,
     pub rs1: usize,
-    pub vm: bool
+    pub vm: bool,
 }
 
 // strided
@@ -34,7 +34,7 @@ pub struct Vls {
     pub vd: usize,
     pub rs1: usize,
     pub rs2: usize,
-    pub vm: bool
+    pub vm: bool,
 }
 
 // indexed
@@ -42,7 +42,7 @@ pub struct Vlx {
     pub vd: usize,
     pub rs1: usize,
     pub vs2: usize,
-    pub vm: bool
+    pub vm: bool,
 }
 
 // whole register
@@ -57,7 +57,7 @@ pub struct Vlr {
 pub struct Vs {
     pub vs3: usize,
     pub rs1: usize,
-    pub vm: bool
+    pub vm: bool,
 }
 
 // strided
@@ -65,7 +65,7 @@ pub struct Vss {
     pub vs3: usize,
     pub rs1: usize,
     pub rs2: usize,
-    pub vm: bool
+    pub vm: bool,
 }
 
 // indexed
@@ -73,7 +73,7 @@ pub struct Vsx {
     pub vs3: usize,
     pub rs1: usize,
     pub vs2: usize,
-    pub vm: bool
+    pub vm: bool,
 }
 
 // whole register

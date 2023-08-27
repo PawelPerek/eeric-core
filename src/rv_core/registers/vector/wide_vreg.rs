@@ -1,4 +1,4 @@
-use crate::rv_core::{vector_engine::SEW, arbitrary_float::ArbitraryFloat};
+use crate::rv_core::{arbitrary_float::ArbitraryFloat, vector_engine::SEW};
 
 #[derive(Clone)]
 pub struct WideVreg {
