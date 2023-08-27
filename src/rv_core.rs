@@ -178,31 +178,31 @@ impl RvCore {
 
             Vlv { data, eew } => todo!(),
             Vsv { data, eew } => todo!(),
-            
+
             Vlmv(_) => todo!(),
             Vsmv(_) => todo!(),
-            
+
             Vlsv { data, eew } => todo!(),
             Vssv { data, eew } => todo!(),
-            
+
             Vluxv { data, eew } => todo!(),
             Vloxv { data, eew } => todo!(),
             Vsuxv { data, eew } => todo!(),
             Vsoxv { data, eew } => todo!(),
-            
+
             Vlffv { data, eew } => todo!(),
-            
+
             Vlsegv { data, eew, nf } => todo!(),
             Vssegv { data, eew, nf } => todo!(),
-            
+
             Vlssegv { data, eew, nf } => todo!(),
             Vsssegv { data, eew, nf } => todo!(),
-            
+
             Vluxsegv { data, eew, nf } => todo!(),
             Vloxsegv { data, eew, nf } => todo!(),
             Vsuxsegv { data, eew, nf } => todo!(),
             Vsoxsegv { data, eew, nf } => todo!(),
-            
+
             Vlrv { data, eew, nf } => todo!(),
             Vsrv { data, eew, nf } => todo!(),
 
@@ -692,7 +692,7 @@ impl RvCore {
             Vfwmsacvf(args) => v::vfwmsac::vf(args, &mut self.registers.v, &self.registers.f),
 
             Vfwnmsacvv(args) => v::vfwnmsac::vv(args, &mut self.registers.v),
-            Vfwnmsacvf(args) => v::vfwnmsac::vf(args, &mut self.registers.v, &self.registers.f)
+            Vfwnmsacvf(args) => v::vfwnmsac::vf(args, &mut self.registers.v, &self.registers.f),
         }
     }
 }

@@ -1,9 +1,4 @@
-
-
 use crate::rv_core::instruction::executor::prelude::*;
-    
-    
-
 
 pub fn vx(Opivx { vd, rs1, vs2, vm }: Opivx, v: &mut VectorRegisters, x: &IntegerRegisters) {
     let offset = x[rs1] as usize;

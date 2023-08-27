@@ -1,11 +1,6 @@
 use num_traits::Float;
 
-
-
 use crate::rv_core::instruction::executor::prelude::*;
-    
-    
-
 
 pub fn vv(
     Opfvv {

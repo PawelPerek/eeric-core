@@ -1,9 +1,4 @@
-
-
 use crate::rv_core::instruction::executor::prelude::*;
-    
-    
-
 
 pub fn csrrs(Csrr { rd, rs1, csr }: Csrr, x: &mut IntegerRegisters, c: &mut CsrRegisters) {
     let csr_value = c[csr];

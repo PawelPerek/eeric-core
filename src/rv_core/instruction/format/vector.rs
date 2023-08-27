@@ -76,7 +76,6 @@ pub struct Vsr {
     pub rs1: usize,
 }
 
-
 /// OPI - Integer instructions
 
 // Vector - Vector

@@ -1,7 +1,4 @@
-pub use crate::rv_core::{
-    RvCore, 
-    instruction::Instruction
-};
+pub use crate::rv_core::{instruction::Instruction, RvCore};
 
 pub mod format {
     pub use crate::rv_core::instruction::format::*;

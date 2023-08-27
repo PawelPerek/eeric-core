@@ -1,5 +1,3 @@
-
-
 use crate::rv_core::instruction::executor::prelude::*;
 
 // TODO: binary tree addition implementation separate from vfredosum to show differences.

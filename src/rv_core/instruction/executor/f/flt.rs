@@ -1,9 +1,4 @@
-
-
 use crate::rv_core::instruction::executor::prelude::*;
-    
-    
-
 
 pub fn s(R { rd, rs1, rs2 }: R, x: &mut IntegerRegisters, f: &FloatRegisters) {
     let (fs1, _) = decompose(f[rs1]);

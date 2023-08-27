@@ -1,5 +1,3 @@
-
-
 use crate::rv_core::instruction::executor::prelude::*;
 
 pub fn xufv(Vfunary0 { dest, vs2, vm, .. }: Vfunary0, v: &mut VectorRegisters) {

@@ -1,9 +1,4 @@
-
-
 use crate::rv_core::instruction::executor::prelude::*;
-    
-    
-
 
 pub fn vv(Opivv { vd, vs1, vs2, vm }: Opivv, v: &mut VectorRegisters) {
     let vreg = izip!(v.get(vs2).iter_mask(), v.get(vs1).iter_mask(),)

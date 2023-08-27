@@ -1,4 +1,7 @@
-use eeric::{prelude::*, integer::{T0, A2}};
+use eeric::{
+    integer::{A2, T0},
+    prelude::*,
+};
 
 // Example:
 // loop:
@@ -9,7 +12,7 @@ use eeric::{prelude::*, integer::{T0, A2}};
 //    vse8.v v0, (a3)               # Store bytes
 //      add a3, a3, t0              # Bump pointer
 //      bnez a2, loop               # Any more?
-//      ret            
+//      ret
 
 fn main() {
     let core = RvCore::new_zeroed();
@@ -21,14 +24,50 @@ fn main() {
     //TODO: vtypei! macro
 
     core.set_instructions(vec![
-        I::Vsetvli (F::Vsetvli { rd: alias::T0, rs1: alias::A2, vtypei: vtypei!{e8, m8, ta, ma}}),
-        I::Vlev { eew: 8, data: F::Vl { vd: 0, rs1: alias::A1 } },
-        I::Add (F::R { rd: alias::A1, rs1: alias::A1, rs2: alias::T0 }),
-        I::Sub (F::R { rd: alias::A2, rs1: alias::A2, rs2: alias::T0 }),
-        I::Vsev { eew: 8, data: F::Vs { vs3: 0, rs1: alias::A3 } },
-        I::Add (F::R { rd: alias::A3, rs1: alias::A3, rs2: alias::T0 }),
-        I::Bne (F::B { rs1: alias::A2, rs2: alias::ZERO, imm: -24 as usize }),
-        I::Jalr (F::I { rd: alias::ZERO, rs1: alias::RA, imm: 0 }),
+        I::Vsetvli(F::Vsetvli {
+            rd: alias::T0,
+            rs1: alias::A2,
+            vtypei: vtypei! {e8, m8, ta, ma},
+        }),
+        I::Vlev {
+            eew: 8,
+            data: F::Vl {
+                vd: 0,
+                rs1: alias::A1,
+            },
+        },
+        I::Add(F::R {
+            rd: alias::A1,
+            rs1: alias::A1,
+            rs2: alias::T0,
+        }),
+        I::Sub(F::R {
+            rd: alias::A2,
+            rs1: alias::A2,
+            rs2: alias::T0,
+        }),
+        I::Vsev {
+            eew: 8,
+            data: F::Vs {
+                vs3: 0,
+                rs1: alias::A3,
+            },
+        },
+        I::Add(F::R {
+            rd: alias::A3,
+            rs1: alias::A3,
+            rs2: alias::T0,
+        }),
+        I::Bne(F::B {
+            rs1: alias::A2,
+            rs2: alias::ZERO,
+            imm: -24_i32 as usize,
+        }),
+        I::Jalr(F::I {
+            rd: alias::ZERO,
+            rs1: alias::RA,
+            imm: 0,
+        }),
     ]);
 
     for machine_state in core.executor() {

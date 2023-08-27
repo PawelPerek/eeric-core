@@ -1,9 +1,4 @@
-
-
 use crate::rv_core::instruction::executor::prelude::*;
-    
-    
-
 
 fn checked_sub_3(x: u64, y: u64, z: u64) -> Option<u64> {
     x.checked_sub(y).and_then(|sum| sum.checked_sub(z))

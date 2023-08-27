@@ -1,7 +1,5 @@
 use num_traits::{Float, ToPrimitive};
 
-
-
 use crate::rv_core::instruction::executor::prelude::*;
 
 pub fn xufv(
