@@ -190,8 +190,8 @@ impl RvCore {
                 &mut self.registers.c,
             ),
 
-            Vlv { data: args, eew } => v::vl::v(args, eew, &mut self.registers.v, &self.memory),
-            Vsv { data: args, eew } => v::vs::v(args, eew, &self.registers.v, &mut self.memory),
+            Vlv { data: args, eew } => v::vl::v(args, eew, &self.registers.x, &mut self.registers.v, &self.memory),
+            Vsv { data: args, eew } => v::vs::v(args, eew, &self.registers.x, &self.registers.v, &mut self.memory),
 
             Vlmv(args) => v::vlm::v(args, &mut self.registers.v, &self.memory),
             Vsmv(args) => v::vsm::v(args, &self.registers.v, &mut self.memory),

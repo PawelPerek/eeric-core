@@ -73,21 +73,22 @@ impl VectorRegisters {
     }
 
     pub fn apply(&mut self, nth: usize, vreg: Vreg) {
+        let engine_vlen = (self.vec_engine.vlen.byte_length() as f32 * self.vec_engine.lmul.ratio()) as usize;
         let start = self.start_ptr(nth);
-        let end = start
-            + (self.vec_engine.vlen.byte_length() as f32 * self.vec_engine.lmul.ratio()) as usize;
-        let vreg_length = end - start;
 
-        self.raw[start..end].clone_from_slice(&vreg.raw[0..vreg_length])
-    }
+        if vreg.iter_byte().len() >= engine_vlen {
+            let end = start + engine_vlen;
+            let vreg_length = end - start;
 
-    // Useful when vreg holds less elements than VLEN / SEW (see vcompress.vm)
-    pub fn partial_apply(&mut self, nth: usize, vreg: Vreg) {
-        let start = self.start_ptr(nth);
-        let vreg_length = vreg.raw.len();
-        let end = start + vreg_length;
+            self.raw[start..end].clone_from_slice(&vreg.raw[0..vreg_length])
+        } else {
+            // Vreg has fractional EMUL or has less elements than VLEN / SEW
+            let vreg_length = vreg.raw.len();
+            let end = start + vreg_length;
 
-        self.raw[start..end].clone_from_slice(&vreg.raw[0..vreg_length])
+            self.raw[start..end].clone_from_slice(&vreg.raw[0..vreg_length])
+        }
+
     }
 }
 

@@ -16,5 +16,5 @@ pub fn vm(
         })
         .collect_with_eew(v.vec_engine.sew.clone());
 
-    v.partial_apply(vd, vreg);
+    v.apply(vd, vreg);
 }
