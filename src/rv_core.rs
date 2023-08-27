@@ -9,6 +9,8 @@ use memory::Memory;
 pub use registers::aliases;
 use registers::Registers;
 
+use crate::rv_core::vector_engine::SEW;
+
 pub struct RvCore {
     pub registers: Registers,
 
@@ -190,14 +192,14 @@ impl RvCore {
                 &mut self.registers.c,
             ),
 
-            Vlv { data: args, eew } => v::vl::v(args, eew, &self.registers.x, &mut self.registers.v, &self.memory),
-            Vsv { data: args, eew } => v::vs::v(args, eew, &self.registers.x, &self.registers.v, &mut self.memory),
+            Vlv { data: args, eew } => v::vl::v(args, SEW::new(eew).unwrap(), &self.registers.x, &mut self.registers.v, &self.memory),
+            Vsv { data: args, eew } => v::vs::v(args, SEW::new(eew).unwrap(), &self.registers.x, &self.registers.v, &mut self.memory),
 
             Vlmv(args) => v::vlm::v(args, &mut self.registers.v, &self.memory),
             Vsmv(args) => v::vsm::v(args, &self.registers.v, &mut self.memory),
 
-            Vlsv { data: args, eew } => v::vls::v(args, eew, &mut self.registers.v, &self.memory),
-            Vssv { data: args, eew } => v::vss::v(args, eew, &self.registers.v, &mut self.memory),
+            Vlsv { data: args, eew } => v::vls::v(args, SEW::new(eew).unwrap(), &self.registers.x, &mut self.registers.v, &self.memory),
+            Vssv { data: args, eew } => v::vss::v(args, SEW::new(eew).unwrap(), &self.registers.v, &mut self.memory),
 
             Vluxv { data: args, eew } => v::vlux::v(args, eew, &mut self.registers.v, &self.memory),
             Vloxv { data: args, eew } => v::vlox::v(args, eew, &mut self.registers.v, &self.memory),

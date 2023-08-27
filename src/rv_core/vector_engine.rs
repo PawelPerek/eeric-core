@@ -81,7 +81,7 @@ impl Default for VLEN {
 pub struct SEW(usize);
 
 impl SEW {
-    fn new(length: usize) -> Result<Self, &'static str> {
+    pub fn new(length: usize) -> Result<Self, &'static str> {
         if length <= 64 && length >= 8 && length.count_ones() == 1 {
             Ok(Self(length))
         } else {
