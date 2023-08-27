@@ -688,7 +688,7 @@ impl RvCore {
             Vfdivvv(args) => v::vfdiv::vv(args, &mut self.registers.v),
             Vfdivvf(args) => v::vfdiv::vf(args, &mut self.registers.v, &self.registers.f),
 
-            Vfrdirvf(args) => v::vfrdiv::vf(args, &mut self.registers.v, &self.registers.f),
+            Vfrdivvf(args) => v::vfrdiv::vf(args, &mut self.registers.v, &self.registers.f),
 
             Vfmulvv(args) => v::vfmul::vv(args, &mut self.registers.v),
             Vfmulvf(args) => v::vfmul::vf(args, &mut self.registers.v, &self.registers.f),

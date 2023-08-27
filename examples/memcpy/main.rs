@@ -1,7 +1,4 @@
-use eeric::{
-    integer::{A2, T0},
-    prelude::*,
-};
+use eeric::prelude::*;
 
 // Example:
 // loop:

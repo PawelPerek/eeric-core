@@ -667,7 +667,7 @@ pub enum Instruction {
     Vfdivvv(Opfvv),
     Vfdivvf(Opfvf),
 
-    Vfrdirvf(Opfvf),
+    Vfrdivvf(Opfvf),
 
     Vfmulvv(Opfvv),
     Vfmulvf(Opfvf),
