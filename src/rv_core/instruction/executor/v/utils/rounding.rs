@@ -21,7 +21,7 @@ pub struct Roundoff {
 
 impl Roundoff {
     fn parse_csr(csr: &CsrRegisters) -> RoundingMode {
-        match csr.vxrm() {
+        match csr[VXRM] {
             0b00 => RoundingMode::Rnu,
             0b01 => RoundingMode::Rne,
             0b10 => RoundingMode::Rdn,

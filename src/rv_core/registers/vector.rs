@@ -15,6 +15,18 @@ pub struct VectorRegisters {
 }
 
 impl VectorRegisters {
+    pub fn snapshot(&self) -> [Vec<u8>; 32] {
+        let mut snapshot = [0; 32].map(|_| Vec::new()); 
+        
+        for i in 0..32 {
+            let vreg = self.get(i);
+            snapshot[i] = vreg.iter_byte().collect();
+        }
+
+        snapshot
+    }
+
+
     fn new_zeros(vlen: VLEN, sew: SEW, lmul: LMUL) -> Self {
         Self {
             raw: vec![0x00; vlen.byte_length() * 32],

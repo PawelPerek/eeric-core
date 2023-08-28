@@ -1,5 +1,13 @@
 use eeric::prelude::*;
 
+use format as F;
+use Instruction as I;
+
+use alias::integer::*;
+use alias::csr::*;
+use alias::float::*;
+use alias::vector::*;
+
 // Example:
 // loop:
 //    vsetvli t0, a2, e8, m8, ta, ma   # Vectors of 8b
@@ -12,62 +20,63 @@ use eeric::prelude::*;
 //      ret
 
 fn main() {
-    let core = RvCore::new_zeroed();
-
     // Important note: eeric as low-level back-end abstraction layer does not support pseudo-instructions
     // Burden of decoding pseudo-instructions is on the front-end layer
-    // E.G: ret == I::Jalr (F::I { rd: alias::ZERO, rs1: alias::RA, imm: 0 }),
+    // E.G: ret == I::Jalr (F::I { rd: ZERO, rs1: RA, imm: 0 }),
 
-    //TODO: vtypei! macro
-
-    core.set_instructions(vec![
+    let mut core = RvCore::with_instructions(vec![
+        
         I::Vsetvli(F::Vsetvli {
-            rd: alias::T0,
-            rs1: alias::A2,
-            vtypei: vtypei! {e8, m8, ta, ma},
+            rd: T0,
+            rs1: A2,
+            vtypei: 0b_1_1_000_011,
         }),
-        I::Vlev {
+        I::Vlv {
             eew: 8,
             data: F::Vl {
                 vd: 0,
-                rs1: alias::A1,
+                rs1: A1,
+                vm: false
             },
         },
         I::Add(F::R {
-            rd: alias::A1,
-            rs1: alias::A1,
-            rs2: alias::T0,
+            rd: A1,
+            rs1: A1,
+            rs2: T0,
         }),
         I::Sub(F::R {
-            rd: alias::A2,
-            rs1: alias::A2,
-            rs2: alias::T0,
+            rd: A2,
+            rs1: A2,
+            rs2: T0,
         }),
-        I::Vsev {
+        I::Vsv {
             eew: 8,
             data: F::Vs {
                 vs3: 0,
-                rs1: alias::A3,
+                rs1: A3,
+                vm: false
             },
         },
         I::Add(F::R {
-            rd: alias::A3,
-            rs1: alias::A3,
-            rs2: alias::T0,
+            rd: A3,
+            rs1: A3,
+            rs2: T0,
         }),
-        I::Bne(F::B {
-            rs1: alias::A2,
-            rs2: alias::ZERO,
-            imm: -24_i32 as usize,
+        I::Bne(F::S {
+            rs1: A2,
+            rs2: ZERO,
+            imm12: -24_i64 as u64,
         }),
         I::Jalr(F::I {
-            rd: alias::ZERO,
-            rs1: alias::RA,
-            imm: 0,
+            rd: ZERO,
+            rs1: RA,
+            imm12: 0,
         }),
     ]);
 
-    for machine_state in core.executor() {
+    
+
+    for machine_state in core.run() {
         println!("{:?}", machine_state);
     }
 }

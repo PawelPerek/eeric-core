@@ -1,17 +1,20 @@
 /// Configuration formats
 
+#[derive(Clone)]
 pub struct Vsetvli {
     pub rd: usize,
     pub rs1: usize,
     pub vtypei: u32,
 }
 
+#[derive(Clone)]
 pub struct Vsetivli {
     pub rd: usize,
     pub uimm: u32,
     pub vtypei: u32,
 }
 
+#[derive(Clone)]
 pub struct Vsetvl {
     pub rd: usize,
     pub rs1: usize,
@@ -23,6 +26,7 @@ pub struct Vsetvl {
 // Loads
 
 // unit-stride
+#[derive(Clone)]
 pub struct Vl {
     pub vd: usize,
     pub rs1: usize,
@@ -30,6 +34,7 @@ pub struct Vl {
 }
 
 // strided
+#[derive(Clone)]
 pub struct Vls {
     pub vd: usize,
     pub rs1: usize,
@@ -38,6 +43,7 @@ pub struct Vls {
 }
 
 // indexed
+#[derive(Clone)]
 pub struct Vlx {
     pub vd: usize,
     pub rs1: usize,
@@ -46,6 +52,7 @@ pub struct Vlx {
 }
 
 // whole register
+#[derive(Clone)]
 pub struct Vlr {
     pub vd: usize,
     pub rs1: usize,
@@ -54,6 +61,7 @@ pub struct Vlr {
 // Stores
 
 // unit-stride
+#[derive(Clone)]
 pub struct Vs {
     pub vs3: usize,
     pub rs1: usize,
@@ -61,6 +69,7 @@ pub struct Vs {
 }
 
 // strided
+#[derive(Clone)]
 pub struct Vss {
     pub vs3: usize,
     pub rs1: usize,
@@ -69,6 +78,7 @@ pub struct Vss {
 }
 
 // indexed
+#[derive(Clone)]
 pub struct Vsx {
     pub vs3: usize,
     pub rs1: usize,
@@ -77,6 +87,7 @@ pub struct Vsx {
 }
 
 // whole register
+#[derive(Clone)]
 pub struct Vsr {
     pub vs3: usize,
     pub rs1: usize,
@@ -85,6 +96,7 @@ pub struct Vsr {
 /// OPI - Integer instructions
 
 // Vector - Vector
+#[derive(Clone)]
 pub struct Opivv {
     pub vd: usize,
     pub vs1: usize,
@@ -94,6 +106,7 @@ pub struct Opivv {
 
 // Vector - Scalar (Register)
 
+#[derive(Clone)]
 pub struct Opivx {
     pub vd: usize,
     pub rs1: usize,
@@ -102,6 +115,7 @@ pub struct Opivx {
 }
 
 // Vector - Immediate
+#[derive(Clone)]
 pub struct Opivi {
     pub vd: usize,
     pub imm5: u64,
@@ -112,6 +126,7 @@ pub struct Opivi {
 /// OPM - Mask instructions
 
 // Vector - Vector
+#[derive(Clone)]
 pub struct Opmvv {
     pub dest: usize, // Note: can be either vd/rd
     pub vs1: usize,
@@ -120,6 +135,7 @@ pub struct Opmvv {
 }
 
 // Vector - Scalar (Register)
+#[derive(Clone)]
 pub struct Opmvx {
     pub dest: usize, // Note: can be either vd/rd
     pub rs1: usize,
@@ -130,6 +146,7 @@ pub struct Opmvx {
 /// OPF - Floating point instructions
 
 // Vector - Vector
+#[derive(Clone)]
 pub struct Opfvv {
     pub dest: usize, // Note: can be either vd/rd
     pub vs1: usize,
@@ -138,6 +155,7 @@ pub struct Opfvv {
 }
 
 // Vector - Scalar (FP Register)
+#[derive(Clone)]
 pub struct Opfvf {
     pub vd: usize,
     pub rs1: usize,

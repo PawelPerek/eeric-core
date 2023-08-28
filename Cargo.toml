@@ -1,6 +1,6 @@
 [package]
 name = "eeric"
-version = "0.0.3"
+version = "0.0.4"
 edition = "2021"
 description = "An easily embeddable RV64I core with MFDV extensions"
 license = "MIT"
@@ -8,11 +8,12 @@ license = "MIT"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [lib]
-crate-type = ["rlib"]
+crate-type = ["rlib", "cdylib"]
 
 [profile.release]
 lto = true
 opt-level = 's'
+codegen-units = 1
 
 [dependencies]
 itertools = "0.11.0"

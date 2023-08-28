@@ -1,6 +1,12 @@
 #[derive(Clone, Default)]
 pub struct IntegerRegisters([u64; 31]);
 
+impl IntegerRegisters {
+    pub fn snapshot(&self) -> [u64; 31] {
+        self.0
+    }
+}
+
 impl std::ops::Index<usize> for IntegerRegisters {
     type Output = u64;
 
