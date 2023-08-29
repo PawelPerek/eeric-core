@@ -18,7 +18,7 @@ pub struct Registers {
     pub pc: u64,
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct RegistersSnapshot {
     pub x: [u64; 31],
     pub c: [u64; 4096],
