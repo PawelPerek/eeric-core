@@ -2,8 +2,10 @@
 pub struct IntegerRegisters([u64; 31]);
 
 impl IntegerRegisters {
-    pub fn snapshot(&self) -> [u64; 31] {
-        self.0
+    pub fn snapshot(&self) -> [u64; 32] {
+        let mut regs = [0; 32];
+        regs[1..].copy_from_slice(&self.0);
+        regs
     }
 }
 

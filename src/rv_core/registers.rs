@@ -20,7 +20,7 @@ pub struct Registers {
 
 #[derive(Clone, Debug)]
 pub struct RegistersSnapshot {
-    pub x: [u64; 31],
+    pub x: [u64; 32],
     pub c: [u64; 4096],
     pub f: [f64; 32],
     pub v: [Vec<u8>; 32],
