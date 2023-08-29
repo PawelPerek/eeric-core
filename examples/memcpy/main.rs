@@ -3,10 +3,6 @@ use eeric::prelude::*;
 use format as F;
 use Instruction as I;
 
-use alias::integer::*;
-use alias::csr::*;
-use alias::float::*;
-use alias::vector::*;
 
 // Example:
 // loop:
@@ -23,6 +19,8 @@ fn main() {
     // Important note: eeric as low-level back-end abstraction layer does not support pseudo-instructions
     // Burden of decoding pseudo-instructions is on the front-end layer
     // E.G: ret == I::Jalr (F::I { rd: ZERO, rs1: RA, imm: 0 }),
+
+    use alias::*;
 
     let mut core = RvCore::with_instructions(vec![
         

@@ -1,12 +1,11 @@
 pub mod arbitrary_float;
 pub mod instruction;
-mod memory;
 pub mod registers;
 pub mod vector_engine;
+mod memory;
 
-pub use instruction::{Instruction, executor::Executor};
+use instruction::{Instruction, executor::Executor};
 use memory::Memory;
-pub use registers::aliases;
 use registers::{Registers, RegistersSnapshot};
 
 pub struct RvCore {
