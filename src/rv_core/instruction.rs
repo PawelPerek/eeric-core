@@ -3,7 +3,7 @@ pub mod format;
 
 use format::*;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum Instruction {
     /// Base instructions
     // Arithmetic Operations

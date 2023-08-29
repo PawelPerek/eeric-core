@@ -1,4 +1,4 @@
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct R4 {
     pub rd: usize,
     pub rs1: usize,
