@@ -63,7 +63,7 @@ fn main() {
         I::Bne(F::S {
             rs1: A2,
             rs2: ZERO,
-            imm12: -24_i64 as u64,
+            imm12: -24,
         }),
         I::Jalr(F::I {
             rd: ZERO,

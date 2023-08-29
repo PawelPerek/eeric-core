@@ -49,7 +49,7 @@ pub fn vi(
     let vreg = v
         .get(vd)
         .iter_eew()
-        .map(|_| imm5)
+        .map(|_| imm5 as u64)
         .collect_with_eew(v.vec_engine.sew.clone());
 
     v.apply(vd, vreg);

@@ -29,7 +29,7 @@ pub fn wi(Opivi { vd, imm5, vs2, vm }: Opivi, v: &mut VectorRegisters) {
         .get_wide(vs2)
         .iter_eew()
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| {
-            (vs2 >> narrow_shamt(imm5, v.vec_engine.sew.byte_length())) as u64
+            (vs2 >> narrow_shamt(imm5 as u64, v.vec_engine.sew.byte_length())) as u64
         })
         .collect_with_eew(v.vec_engine.sew.clone());
 

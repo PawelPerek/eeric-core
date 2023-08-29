@@ -118,7 +118,7 @@ pub struct Opivx {
 #[derive(Clone, Debug)]
 pub struct Opivi {
     pub vd: usize,
-    pub imm5: u64,
+    pub imm5: i32,
     pub vs2: usize,
     pub vm: bool,
 }

@@ -5,8 +5,6 @@ pub trait NumMaskExt {
 
 impl NumMaskExt for u64 {
     fn with_mask_bit(self, bit: u64) -> u64 {
-        let bit = self.get_mask_bit();
-
         if bit == 1 {
             self | 1
         } else {

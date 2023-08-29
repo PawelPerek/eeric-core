@@ -35,7 +35,7 @@ pub fn vi(Opivi { vd, imm5, vs2, vm }: Opivi, v: &mut VectorRegisters) {
         .get(vs2)
         .iter_mask()
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| {
-            if vs2 <= imm5 {
+            if vs2 <= imm5 as u64 {
                 1
             } else {
                 0

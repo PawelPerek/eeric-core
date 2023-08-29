@@ -47,7 +47,7 @@ pub fn vim(
     v: &mut VectorRegisters,
 ) {
     let vreg = izip!(v.get(vs2).iter_eew(), v.default_mask(true))
-        .map(|(vs2, mask)| vs2 + imm5 + mask)
+        .map(|(vs2, mask)| vs2 + imm5 as u64 + mask)
         .collect_with_eew(v.vec_engine.sew.clone());
 
     v.apply(vd, vreg);

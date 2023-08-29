@@ -14,7 +14,7 @@ pub fn vi(Opivi { vd, imm5, vs2, vm }: Opivi, v: &mut VectorRegisters) {
     let vreg = v
         .get(vs2)
         .iter_eew()
-        .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| imm5 - vs2)
+        .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| imm5 as u64 - vs2)
         .collect_with_eew(v.vec_engine.sew.clone());
 
     v.apply(vd, vreg);

@@ -72,7 +72,7 @@ pub fn vim(
         v.get(vs2).iter_eew(),
         v.default_mask(true)
     )
-    .map(|(vd, vs2, mask)| (vd, checked_add_3(imm5, vs2, mask)))
+    .map(|(vd, vs2, mask)| (vd, checked_add_3(imm5 as u64, vs2, mask)))
     .map(|(vd, maybe_sum)| {
         vd.with_mask_bit(match maybe_sum {
             Some(_) => 1,
@@ -143,7 +143,7 @@ pub fn vi(
     v: &mut VectorRegisters,
 ) {
     let vreg = izip!(v.get(vd).iter_eew(), v.get(vs2).iter_eew())
-        .map(|(vd, vs2)| (vd, imm5.checked_add(vs2)))
+        .map(|(vd, vs2)| (vd, (imm5 as u64).checked_add(vs2)))
         .map(|(vd, maybe_sum)| {
             vd.with_mask_bit(match maybe_sum {
                 Some(_) => 1,
