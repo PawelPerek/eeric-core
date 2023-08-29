@@ -53,8 +53,8 @@ impl Iterator for RunningRvCore<'_> {
     type Item = RegistersSnapshot;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let program_counter = self.core.registers.pc;
-        let instruction = self.core.instructions.get(program_counter as usize)?.clone();
+        let instruction_pointer = self.core.registers.pc / 4;
+        let instruction = self.core.instructions.get(instruction_pointer as usize)?.clone();
         self.core.registers.pc += 4;
         Executor::new(&mut self.core.registers, &mut self.core.memory).execute(instruction);
         Some(self.core.registers.snapshot())

@@ -1,6 +1,6 @@
 [package]
 name = "eeric"
-version = "0.0.10"
+version = "0.0.11"
 edition = "2021"
 description = "An easily embeddable RV64I core with MFDV extensions"
 license = "MIT"
@@ -12,7 +12,7 @@ crate-type = ["rlib", "cdylib"]
 
 [profile.release]
 lto = true
-opt-level = 's'
+opt-level = 'z'
 codegen-units = 1
 
 [dependencies]
