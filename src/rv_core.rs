@@ -8,6 +8,7 @@ use instruction::{Instruction, executor::Executor};
 use memory::Memory;
 use registers::{Registers, RegistersSnapshot};
 
+#[derive(Clone)]
 pub struct RvCore {
     registers: Registers,
     instructions: Vec<Instruction>,
@@ -29,6 +30,10 @@ impl RvCore {
             instructions,
             memory: Default::default(),
         }
+    }
+
+    pub fn step(&mut self) -> Option<RegistersSnapshot> {
+        self.run().next()
     }
 
     pub fn run(&mut self) -> RunningRvCore {
