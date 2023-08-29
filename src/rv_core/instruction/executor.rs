@@ -199,55 +199,54 @@ impl<'m> Executor<'m> {
                 data: args,
                 eew,
                 nf,
-            } => v::vlseg::v(args, eew, &mut self.registers.v, &self.memory),
+            } => v::vlseg::v(args, eew, nf, &mut self.registers.v, &self.memory),
             Vssegv {
                 data: args,
                 eew,
                 nf,
-            } => v::vsseg::v(args, eew, &self.registers.v, &mut self.memory),
+            } => v::vsseg::v(args, eew, nf, &self.registers.v, &mut self.memory),
 
             Vlssegv {
                 data: args,
                 eew,
                 nf,
-            } => v::vlsseg::v(args, eew, &mut self.registers.v, &self.memory),
+            } => v::vlsseg::v(args, eew, nf, &mut self.registers.v, &self.memory),
             Vsssegv {
                 data: args,
                 eew,
                 nf,
-            } => v::vssseg::v(args, eew, &self.registers.v, &mut self.memory),
+            } => v::vssseg::v(args, eew, nf, &self.registers.v, &mut self.memory),
 
             Vluxsegv {
                 data: args,
                 eew,
                 nf,
-            } => v::vluxseg::v(args, eew, &mut self.registers.v, &self.memory),
+            } => v::vluxseg::v(args, eew, nf,  &mut self.registers.v, &self.memory),
             Vloxsegv {
                 data: args,
                 eew,
                 nf,
-            } => v::vloxseg::v(args, eew, &mut self.registers.v, &self.memory),
+            } => v::vloxseg::v(args, eew, nf, &mut self.registers.v, &self.memory),
             Vsuxsegv {
                 data: args,
                 eew,
                 nf,
-            } => v::vsuxseg::v(args, eew, &self.registers.v, &mut self.memory),
+            } => v::vsuxseg::v(args, eew, nf, &self.registers.v, &mut self.memory),
             Vsoxsegv {
                 data: args,
                 eew,
                 nf,
-            } => v::vsoxseg::v(args, eew, &self.registers.v, &mut self.memory),
+            } => v::vsoxseg::v(args, eew, nf, &self.registers.v, &mut self.memory),
 
             Vlrv {
                 data: args,
                 eew,
                 nf,
-            } => v::vlr::v(args, eew, &mut self.registers.v, &self.memory),
+            } => v::vlr::v(args, eew, nf, &mut self.registers.v, &self.memory),
             Vsrv {
                 data: args,
-                eew,
                 nf,
-            } => v::vsr::v(args, eew, &self.registers.v, &mut self.memory),
+            } => v::vsr::v(args, nf, &self.registers.v, &mut self.memory),
 
             Vaddvv(args) => v::vadd::vv(args, &mut self.registers.v),
             Vaddvx(args) => v::vadd::vx(args, &mut self.registers.v, &self.registers.x),

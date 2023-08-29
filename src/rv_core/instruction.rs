@@ -262,7 +262,6 @@ pub enum Instruction {
     },
     Vsrv {
         data: Vsr,
-        eew: usize,
         nf: usize,
     },
 
