@@ -32,6 +32,10 @@ impl RvCore {
         }
     }
 
+    pub fn registers_snapshot(&self) -> RegistersSnapshot {
+        self.registers.snapshot()
+    }
+
     pub fn step(&mut self) -> Option<RegistersSnapshot> {
         self.run().next()
     }
