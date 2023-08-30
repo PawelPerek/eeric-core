@@ -736,5 +736,7 @@ impl<'m> Executor<'m> {
             Vfwnmsacvv(args) => v::vfwnmsac::vv(args, &mut self.registers.v),
             Vfwnmsacvf(args) => v::vfwnmsac::vf(args, &mut self.registers.v, &self.registers.f),
         }
+
+        self.registers.pc += 4;
     }
 }
