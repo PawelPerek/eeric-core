@@ -10,7 +10,6 @@ pub fn v(
     v: &mut VectorRegisters,
 ) {
     for i in 0..8 {
-        // Note: vs1 = vs2
         super::vmv::vv(
             Opivv {
                 vd: vd + i,

@@ -11,7 +11,7 @@ pub fn m(
         .enumerate()
         .find(|&(_, (v0_mask, vs2_mask))| v0_mask == 1 && vs2_mask == 1)
         .map(|(index, _)| index as u64)
-        .unwrap_or(u64::MAX); // -1_i64 == u64::MAX
+        .unwrap_or(u64::MAX);
 
     x[rd] = maybe_index;
 }

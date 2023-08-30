@@ -17,7 +17,7 @@ pub fn vv(
     .masked_map(
         v.default_mask(vm),
         v.get(vd).iter_eew(),
-        |(vd, vs2, vs1)| vs2 - (vs1 * vd),
+        |(vd, vs2, vs1)| vs2.wrapping_sub(vs1.wrapping_mul(vd)),
     )
     .collect_with_eew(v.vec_engine.sew.clone());
 
@@ -36,7 +36,7 @@ pub fn vx(
 ) {
     let vreg = izip!(v.get(vd).iter_eew(), v.get(vs2).iter_eew())
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |(vd, vs2)| {
-            vs2 - (x[rs1] * vd)
+            vs2.wrapping_sub(x[rs1].wrapping_mul(vd))
         })
         .collect_with_eew(v.vec_engine.sew.clone());
 

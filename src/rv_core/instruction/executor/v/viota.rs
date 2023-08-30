@@ -14,7 +14,7 @@ pub fn m(
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| {
             let sum_snapshot = sum;
             if vs2 != 0 {
-                sum += 1;
+                sum = sum.wrapping_add(1);
             }
             sum_snapshot
         })
