@@ -211,8 +211,8 @@ impl<'m> Executor<'m> {
                 &mut self.memory,
             ),
 
-            Vluxv { data: args, eew } => v::vlux::v(args, eew, &mut self.registers.v, &self.memory),
-            Vloxv { data: args, eew } => v::vlox::v(args, eew, &mut self.registers.v, &self.memory),
+            Vluxv { data: args, eew } => v::vlux::v(args, SEW::new(eew).unwrap(), &mut self.registers.v, &self.registers.x, &self.memory),
+            Vloxv { data: args, eew } => v::vlox::v(args, SEW::new(eew).unwrap(), &mut self.registers.v, &self.registers.x, &self.memory),
             Vsuxv { data: args, eew } => v::vsux::v(args, eew, &self.registers.v, &mut self.memory),
             Vsoxv { data: args, eew } => v::vsox::v(args, eew, &self.registers.v, &mut self.memory),
 
