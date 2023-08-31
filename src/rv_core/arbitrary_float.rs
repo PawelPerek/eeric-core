@@ -126,6 +126,20 @@ impl ToPrimitive for ArbitraryFloat {
         }
     }
 
+    fn to_i128(&self) -> Option<i128> {
+        match self {
+            Self::F32(fp) => Some(*fp as i128),
+            Self::F64(fp) => Some(*fp as i128),
+        }
+    }
+
+    fn to_u128(&self) -> Option<u128> {
+        match self {
+            Self::F32(fp) => Some(*fp as u128),
+            Self::F64(fp) => Some(*fp as u128),
+        }
+    }
+
     fn to_isize(&self) -> Option<isize> {
         match self {
             Self::F32(fp) => fp.to_isize(),
