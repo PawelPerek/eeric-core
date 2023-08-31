@@ -1,4 +1,3 @@
-
 #[derive(Clone, Debug)]
 pub struct R {
     pub rd: usize,

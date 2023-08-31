@@ -88,7 +88,7 @@ pub fn ffw(
         .get_wide(vs2)
         .iter_fp()
         .masked_map(v.default_mask(vm), v.get(vd).iter_fp(), |vs2| {
-            vs2.half_precision()
+            vs2.half_precision(RoundingMode::Nearest)
         })
         .collect_fp();
 
@@ -101,7 +101,15 @@ pub fn rodffw(
     }: Vfunary0,
     v: &mut VectorRegisters,
 ) {
-    todo!()
+    let vreg = v
+        .get_wide(vs2)
+        .iter_fp()
+        .masked_map(v.default_mask(vm), v.get(vd).iter_fp(), |vs2| {
+            vs2.half_precision(RoundingMode::TowardsOdd)
+        })
+        .collect_fp();
+
+    v.apply(vd, vreg);
 }
 
 pub fn rtzxufw(

@@ -5,7 +5,6 @@ impl FloatRegisters {
     pub fn snapshot(&self) -> [f64; 32] {
         self.0
     }
-    
 }
 
 impl std::ops::Index<usize> for FloatRegisters {

@@ -5,15 +5,15 @@ pub use crate::extensions::{
 };
 
 pub use crate::rv_core::{
-    arbitrary_float::{compose, decompose, ArbitraryFloat},
+    arbitrary_float::{compose, decompose, RoundingMode, ArbitraryFloat},
     instruction::format::*,
     memory::Memory,
-    vector_engine::SEW,
     registers::{
         aliases::{csr::*, float::*, integer::*, vector::*},
         vector::{Vreg, WideVreg},
         *,
     },
+    vector_engine::SEW,
 };
 
 pub use itertools::{izip, Itertools};

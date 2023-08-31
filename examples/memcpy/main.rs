@@ -3,7 +3,6 @@ use eeric::prelude::*;
 use format as F;
 use Instruction as I;
 
-
 // Example:
 // loop:
 //    vsetvli t0, a2, e8, m8, ta, ma   # Vectors of 8b
@@ -23,7 +22,6 @@ fn main() {
     use alias::*;
 
     let mut core = RvCore::with_instructions(vec![
-        
         I::Vsetvli(F::Vsetvli {
             rd: T0,
             rs1: A2,
@@ -34,7 +32,7 @@ fn main() {
             data: F::Vl {
                 vd: 0,
                 rs1: A1,
-                vm: false
+                vm: false,
             },
         },
         I::Add(F::R {
@@ -52,7 +50,7 @@ fn main() {
             data: F::Vs {
                 vs3: 0,
                 rs1: A3,
-                vm: false
+                vm: false,
             },
         },
         I::Add(F::R {
@@ -71,8 +69,6 @@ fn main() {
             imm12: 0,
         }),
     ]);
-
-    
 
     for machine_state in core.run() {
         println!("{:?}", machine_state);

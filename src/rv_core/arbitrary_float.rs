@@ -40,6 +40,11 @@ pub enum ArbitraryFloat {
     F64(f64),
 }
 
+pub enum RoundingMode {
+    Nearest,
+    TowardsOdd
+}
+
 impl ArbitraryFloat {
     pub fn copy_type(other: &Self, value: f64) -> Self {
         match other {
@@ -55,10 +60,20 @@ impl ArbitraryFloat {
         }
     }
 
-    pub fn half_precision(self) -> Self {
+    pub fn half_precision(self, mode: RoundingMode) -> Self {
         match self {
             Self::F32(_) => unimplemented!("No f16 support"),
-            Self::F64(fp) => Self::F32(fp as f32),
+            Self::F64(fp) => {
+                let hp = fp as f32;
+                Self::F32(match mode {
+                    RoundingMode::Nearest => hp,
+                    RoundingMode::TowardsOdd => {
+                        let mut bits = hp.to_bits();
+                        bits |= 1;
+                        f32::from_bits(bits)
+                    }
+                })
+            },
         }
     }
 }

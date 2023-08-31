@@ -16,8 +16,8 @@ pub struct VectorRegisters {
 
 impl VectorRegisters {
     pub fn snapshot(&self) -> [Vec<u8>; 32] {
-        let mut snapshot = [0; 32].map(|_| Vec::new()); 
-        
+        let mut snapshot = [0; 32].map(|_| Vec::new());
+
         for i in 0..32 {
             let vreg = self.get(i);
             snapshot[i] = vreg.iter_byte().collect();
@@ -25,7 +25,6 @@ impl VectorRegisters {
 
         snapshot
     }
-
 
     fn new_zeros(vlen: VLEN, sew: SEW, lmul: LMUL) -> Self {
         Self {
@@ -85,7 +84,8 @@ impl VectorRegisters {
     }
 
     pub fn apply(&mut self, nth: usize, vreg: Vreg) {
-        let engine_vlen = (self.vec_engine.vlen.byte_length() as f32 * self.vec_engine.lmul.ratio()) as usize;
+        let engine_vlen =
+            (self.vec_engine.vlen.byte_length() as f32 * self.vec_engine.lmul.ratio()) as usize;
         let start = self.start_ptr(nth);
 
         if vreg.iter_byte().len() >= engine_vlen {
@@ -100,7 +100,6 @@ impl VectorRegisters {
 
             self.raw[start..end].clone_from_slice(&vreg.raw[0..vreg_length])
         }
-
     }
 }
 

@@ -13,6 +13,20 @@ impl Memory {
         bytes
     }
 
+    pub fn fallible_get<const BYTES: usize>(&self, address: usize) -> Option<[u8; BYTES]> {
+        let mut bytes = [0; BYTES];
+
+        for offset in 0..BYTES {
+            let Some(byte) = self.0.get(address + offset).cloned() else {
+                return None;
+            };
+
+            bytes[offset] = byte;
+        }
+
+        Some(bytes)
+    }
+
     pub fn set<const BYTES: usize>(&mut self, address: usize, value: [u8; BYTES]) {
         for offset in 0..BYTES {
             self.0[address + offset] = value[offset];

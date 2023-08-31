@@ -1,10 +1,10 @@
 pub mod arbitrary_float;
 pub mod instruction;
+mod memory;
 pub mod registers;
 pub mod vector_engine;
-mod memory;
 
-use instruction::{Instruction, executor::Executor};
+use instruction::{executor::Executor, Instruction};
 use memory::Memory;
 use registers::{Registers, RegistersSnapshot};
 
@@ -12,7 +12,7 @@ use registers::{Registers, RegistersSnapshot};
 pub struct RvCore {
     registers: Registers,
     instructions: Vec<Instruction>,
-    memory: Memory
+    memory: Memory,
 }
 
 impl RvCore {
@@ -54,7 +54,11 @@ impl Iterator for RunningRvCore<'_> {
 
     fn next(&mut self) -> Option<Self::Item> {
         let instruction_pointer = self.core.registers.pc / 4;
-        let instruction = self.core.instructions.get(instruction_pointer as usize)?.clone();
+        let instruction = self
+            .core
+            .instructions
+            .get(instruction_pointer as usize)?
+            .clone();
         Executor::new(&mut self.core.registers, &mut self.core.memory).execute(instruction);
         Some(self.core.registers.snapshot())
     }

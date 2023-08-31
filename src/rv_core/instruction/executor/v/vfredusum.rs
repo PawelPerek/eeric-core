@@ -1,7 +1,20 @@
+use num_traits::Zero;
+
 use crate::rv_core::instruction::executor::prelude::*;
 
-// TODO: binary tree addition implementation separate from vfredosum to show differences.
-// But since vfredosum is a valid implementation, it can be used for now.
+fn binary_tree_sum(input: impl IntoIterator<Item = ArbitraryFloat>) -> ArbitraryFloat {
+    let input_vec: Vec<_> = input.into_iter().collect_vec();
+    
+    if input_vec.len() == 1 {
+        return input_vec[0];
+    }
+
+    let result: Vec<ArbitraryFloat> = input_vec.array_chunks::<2>()
+        .map(|&[f1, f2]| f1 + f2)
+        .collect();
+
+    binary_tree_sum(result)
+}
 
 pub fn vs(
     Opfvv {
@@ -13,14 +26,12 @@ pub fn vs(
     v: &mut VectorRegisters,
 ) {
     let initial_value = v.get(vs1).iter_fp().next().unwrap();
-    let sum =
-        izip!(v.get(vs2).iter_fp(), v.default_mask(vm)).fold(initial_value, |acc, (vs2, mask)| {
-            if mask == 1 {
-                acc + vs2
-            } else {
-                acc
-            }
-        });
+    let binding = v.get(vs2);
+    let values = izip!(binding.iter_fp(), v.default_mask(vm)).map(|(vs2, mask)| 
+        if mask == 1 { vs2 } else { ArbitraryFloat::zero() }
+    );
+
+    let sum = initial_value + binary_tree_sum(values);
 
     let mut vd_snapshot = v.get(vd).iter_fp().collect_vec();
     vd_snapshot[0] = sum;

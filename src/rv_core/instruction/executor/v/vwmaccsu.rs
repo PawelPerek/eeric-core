@@ -17,7 +17,11 @@ pub fn vv(
     .masked_map(
         v.default_mask(vm),
         v.get_wide(vd).iter_eew(),
-        |(vs1, vs2, vd)| (vs2 as u128).wrapping_mul(vs1 as i64 as u128).wrapping_add(vd),
+        |(vs1, vs2, vd)| {
+            (vs2 as u128)
+                .wrapping_mul(vs1 as i64 as u128)
+                .wrapping_add(vd)
+        },
     )
     .collect_with_wide_eew(v.vec_engine.sew.clone());
 
@@ -38,7 +42,11 @@ pub fn vx(
         .masked_map(
             v.default_mask(vm),
             v.get_wide(vd).iter_eew(),
-            |(vs2, vd)| (vs2 as u128).wrapping_mul(x[rs1] as i64 as u128).wrapping_add(vd),
+            |(vs2, vd)| {
+                (vs2 as u128)
+                    .wrapping_mul(x[rs1] as i64 as u128)
+                    .wrapping_add(vd)
+            },
         )
         .collect_with_wide_eew(v.vec_engine.sew.clone());
 

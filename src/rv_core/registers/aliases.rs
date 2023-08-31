@@ -34,6 +34,9 @@ pub mod integer {
 }
 
 pub mod csr {
+    pub const VL: usize = 0x0C20;
+    pub const VTYPE: usize = 0x0C21;
+    pub const VSTART: usize = 0x0008;
     pub const VXRM: usize = 0x000a;
     pub const VXSAT: usize = 0x0009;
 }

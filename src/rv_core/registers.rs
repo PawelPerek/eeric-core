@@ -27,7 +27,6 @@ pub struct RegistersSnapshot {
     pub pc: u64,
 }
 
-
 impl Registers {
     pub fn snapshot(&self) -> RegistersSnapshot {
         RegistersSnapshot {

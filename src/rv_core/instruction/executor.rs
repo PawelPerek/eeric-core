@@ -179,21 +179,44 @@ impl<'m> Executor<'m> {
                 &mut self.registers.c,
             ),
 
-            Vlv { data: args, eew } => v::vl::v(args, SEW::new(eew).unwrap(), &self.registers.x, &mut self.registers.v, &self.memory),
-            Vsv { data: args, eew } => v::vs::v(args, SEW::new(eew).unwrap(), &self.registers.x, &self.registers.v, &mut self.memory),
+            Vlv { data: args, eew } => v::vl::v(
+                args,
+                SEW::new(eew).unwrap(),
+                &self.registers.x,
+                &mut self.registers.v,
+                &self.memory,
+            ),
+            Vsv { data: args, eew } => v::vs::v(
+                args,
+                SEW::new(eew).unwrap(),
+                &self.registers.x,
+                &self.registers.v,
+                &mut self.memory,
+            ),
 
             Vlmv(args) => v::vlm::v(args, &mut self.registers.v, &self.memory),
             Vsmv(args) => v::vsm::v(args, &self.registers.v, &mut self.memory),
 
-            Vlsv { data: args, eew } => v::vls::v(args, SEW::new(eew).unwrap(), &self.registers.x, &mut self.registers.v, &self.memory),
-            Vssv { data: args, eew } => v::vss::v(args, SEW::new(eew).unwrap(), &self.registers.v, &mut self.memory),
+            Vlsv { data: args, eew } => v::vls::v(
+                args,
+                SEW::new(eew).unwrap(),
+                &self.registers.x,
+                &mut self.registers.v,
+                &self.memory,
+            ),
+            Vssv { data: args, eew } => v::vss::v(
+                args,
+                SEW::new(eew).unwrap(),
+                &self.registers.v,
+                &mut self.memory,
+            ),
 
             Vluxv { data: args, eew } => v::vlux::v(args, eew, &mut self.registers.v, &self.memory),
             Vloxv { data: args, eew } => v::vlox::v(args, eew, &mut self.registers.v, &self.memory),
             Vsuxv { data: args, eew } => v::vsux::v(args, eew, &self.registers.v, &mut self.memory),
             Vsoxv { data: args, eew } => v::vsox::v(args, eew, &self.registers.v, &mut self.memory),
 
-            Vlffv { data: args, eew } => v::vlff::v(args, eew, &mut self.registers.v, &self.memory),
+            Vlffv { data: args, eew } => v::vlff::v(args, SEW::new(eew).unwrap(), &mut self.registers.v, &self.registers.x, &mut self.registers.c, &self.memory),
 
             Vlsegv {
                 data: args,
@@ -221,7 +244,7 @@ impl<'m> Executor<'m> {
                 data: args,
                 eew,
                 nf,
-            } => v::vluxseg::v(args, eew, nf,  &mut self.registers.v, &self.memory),
+            } => v::vluxseg::v(args, eew, nf, &mut self.registers.v, &self.memory),
             Vloxsegv {
                 data: args,
                 eew,
@@ -243,10 +266,7 @@ impl<'m> Executor<'m> {
                 eew,
                 nf,
             } => v::vlr::v(args, eew, nf, &mut self.registers.v, &self.memory),
-            Vsrv {
-                data: args,
-                nf,
-            } => v::vsr::v(args, nf, &self.registers.v, &mut self.memory),
+            Vsrv { data: args, nf } => v::vsr::v(args, nf, &self.registers.v, &mut self.memory),
 
             Vaddvv(args) => v::vadd::vv(args, &mut self.registers.v),
             Vaddvx(args) => v::vadd::vx(args, &mut self.registers.v, &self.registers.x),
