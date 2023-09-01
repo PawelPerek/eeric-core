@@ -222,7 +222,7 @@ impl<'m> Executor<'m> {
                 data: args,
                 eew,
                 nf,
-            } => v::vlseg::v(args, eew, nf, &mut self.registers.v, &self.memory),
+            } => v::vlseg::v(args, SEW::new(eew).unwrap(), nf, &mut self.registers.v, &self.registers.x, &self.memory),
             Vssegv {
                 data: args,
                 eew,

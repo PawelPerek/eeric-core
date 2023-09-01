@@ -10,7 +10,7 @@ eeric is a RV64I core with support for Zicsr, M, F, D and V extensions. I design
 - It's doesn't support interrupts
 - It's single threaded, hence no A extension support
 - It's not designed to be most performant emulator, but it should be reasonably fast
-- It's meant to be an abstract back-end machine, so it needs a front-end compiler or interpreter to work (see https://github.com/PawelPerek/rv-interpreter)
+- It's meant to be an abstract back-end machine, so it needs a front-end compiler or interpreter to work (see https://github.com/PawelPerek/eeric-interpreter)
 
 # Example
 
@@ -33,64 +33,64 @@ It can be expressed as following eeric core:
 use eeric::prelude::*;
 
 fn main() {
-    let core = RvCore::new_zeroed();
-
-    // Important note: eeric as low-level back-end abstraction layer does not support pseudo-instructions
-    // Burden of decoding pseudo-instructions is on the front-end layer
-    // E.G: ret == I::Jalr (F::I { rd: alias::ZERO, rs1: alias::RA, imm: 0 }),
-
-    core.set_instructions(vec![
+    let mut core = RvCore::with_instructions(vec![
         I::Vsetvli(F::Vsetvli {
-            rd: alias::T0,
-            rs1: alias::A2,
-            vtypei: vtypei! {e8, m8, ta, ma},
+            rd: T0,
+            rs1: A2,
+            vtypei: 0b_1_1_000_011,
         }),
-        I::Vlev {
+        I::Vlv {
             eew: 8,
             data: F::Vl {
                 vd: 0,
-                rs1: alias::A1,
+                rs1: A1,
+                vm: false,
             },
         },
         I::Add(F::R {
-            rd: alias::A1,
-            rs1: alias::A1,
-            rs2: alias::T0,
+            rd: A1,
+            rs1: A1,
+            rs2: T0,
         }),
         I::Sub(F::R {
-            rd: alias::A2,
-            rs1: alias::A2,
-            rs2: alias::T0,
+            rd: A2,
+            rs1: A2,
+            rs2: T0,
         }),
-        I::Vsev {
+        I::Vsv {
             eew: 8,
             data: F::Vs {
                 vs3: 0,
-                rs1: alias::A3,
+                rs1: A3,
+                vm: false,
             },
         },
         I::Add(F::R {
-            rd: alias::A3,
-            rs1: alias::A3,
-            rs2: alias::T0,
+            rd: A3,
+            rs1: A3,
+            rs2: T0,
         }),
-        I::Bne(F::B {
-            rs1: alias::A2,
-            rs2: alias::ZERO,
-            imm: -24_i32 as usize,
+        I::Bne(F::S {
+            rs1: A2,
+            rs2: ZERO,
+            imm12: -24,
         }),
         I::Jalr(F::I {
-            rd: alias::ZERO,
-            rs1: alias::RA,
-            imm: 0,
+            rd: ZERO,
+            rs1: RA,
+            imm12: 0,
         }),
     ]);
+
+    for machine_state in core.run() {
+        println!("{:?}", machine_state);
+    }
 }
 ```
 
 # Roadmap
 
-As for version 0.0.1, `eeric` doesn't support a few vector instructions and it not yet usable as RISC-V Virtual Machine. They need to be implemented before bump to version 0.1.0.
+As for version 0.0.x, `eeric` doesn't support a few vector instructions and it not yet usable as RISC-V Virtual Machine. They need to be implemented before bump to version 0.1.0.
 Besides that, I keep an eye on following features:
  
  - Document code with comment docs
