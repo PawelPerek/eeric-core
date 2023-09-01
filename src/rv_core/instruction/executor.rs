@@ -755,6 +755,11 @@ impl<'m> Executor<'m> {
 
             Vfwnmsacvv(args) => v::vfwnmsac::vv(args, &mut self.registers.v),
             Vfwnmsacvf(args) => v::vfwnmsac::vf(args, &mut self.registers.v, &self.registers.f),
+
+            Fusion(first, second) => {
+                self.execute(*first);
+                self.execute(*second);
+            }
         }
 
         self.registers.pc += 4;
