@@ -105,7 +105,7 @@ impl VectorRegisters {
 
 impl Default for VectorRegisters {
     fn default() -> Self {
-        Self::new_zeros(VLEN::new_128(), SEW::new_8(), LMUL::M1)
+        Self::new_zeros(VLEN::new_128(), Default::default(), Default::default())
     }
 }
 

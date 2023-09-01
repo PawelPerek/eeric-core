@@ -10,7 +10,7 @@ impl WideVreg {
     pub fn new(raw: Vec<u8>, eew: SEW) -> Self {
         Self {
             raw,
-            eew: eew.double(),
+            eew: eew.double().unwrap(),
         }
     }
 
@@ -40,7 +40,7 @@ impl FromIterator<u8> for WideVreg {
 
         WideVreg {
             raw,
-            eew: SEW::new_8(),
+            eew: SEW::E8,
         }
     }
 }

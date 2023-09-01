@@ -14,7 +14,7 @@ where
                 .map(u128::to_le_bytes)
                 .flat_map(|bytes| bytes[0..eew.byte_length()].to_owned())
                 .collect(),
-            eew: eew.double(),
+            eew: eew.double().unwrap(),
         }
     }
 }

@@ -181,14 +181,14 @@ impl<'m> Executor<'m> {
 
             Vlv { data: args, eew } => v::vl::v(
                 args,
-                SEW::new(eew).unwrap(),
+                SEW::try_from(eew).unwrap(),
                 &self.registers.x,
                 &mut self.registers.v,
                 &self.memory,
             ),
             Vsv { data: args, eew } => v::vs::v(
                 args,
-                SEW::new(eew).unwrap(),
+                SEW::try_from(eew).unwrap(),
                 &self.registers.x,
                 &self.registers.v,
                 &mut self.memory,
@@ -199,30 +199,30 @@ impl<'m> Executor<'m> {
 
             Vlsv { data: args, eew } => v::vls::v(
                 args,
-                SEW::new(eew).unwrap(),
+                SEW::try_from(eew).unwrap(),
                 &self.registers.x,
                 &mut self.registers.v,
                 &self.memory,
             ),
             Vssv { data: args, eew } => v::vss::v(
                 args,
-                SEW::new(eew).unwrap(),
+                SEW::try_from(eew).unwrap(),
                 &self.registers.v,
                 &mut self.memory,
             ),
 
-            Vluxv { data: args, eew } => v::vlux::v(args, SEW::new(eew).unwrap(), &mut self.registers.v, &self.registers.x, &self.memory),
-            Vloxv { data: args, eew } => v::vlox::v(args, SEW::new(eew).unwrap(), &mut self.registers.v, &self.registers.x, &self.memory),
+            Vluxv { data: args, eew } => v::vlux::v(args, SEW::try_from(eew).unwrap(), &mut self.registers.v, &self.registers.x, &self.memory),
+            Vloxv { data: args, eew } => v::vlox::v(args, SEW::try_from(eew).unwrap(), &mut self.registers.v, &self.registers.x, &self.memory),
             Vsuxv { data: args, eew } => v::vsux::v(args, eew, &self.registers.v, &mut self.memory),
             Vsoxv { data: args, eew } => v::vsox::v(args, eew, &self.registers.v, &mut self.memory),
 
-            Vlffv { data: args, eew } => v::vlff::v(args, SEW::new(eew).unwrap(), &mut self.registers.v, &self.registers.x, &mut self.registers.c, &self.memory),
+            Vlffv { data: args, eew } => v::vlff::v(args, SEW::try_from(eew).unwrap(), &mut self.registers.v, &self.registers.x, &mut self.registers.c, &self.memory),
 
             Vlsegv {
                 data: args,
                 eew,
                 nf,
-            } => v::vlseg::v(args, SEW::new(eew).unwrap(), nf, &mut self.registers.v, &self.registers.x, &self.memory),
+            } => v::vlseg::v(args, SEW::try_from(eew).unwrap(), nf, &mut self.registers.v, &self.registers.x, &self.memory),
             Vssegv {
                 data: args,
                 eew,

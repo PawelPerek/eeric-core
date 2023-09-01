@@ -49,7 +49,7 @@ impl Vreg {
     pub fn iter_eew_e16(&self) -> VregEEWIterator<'_> {
         VregEEWIterator {
             byte_iterator: self.iter_byte(),
-            eew: SEW::new_16(),
+            eew: SEW::E16,
         }
     }
 
@@ -75,7 +75,7 @@ impl FromIterator<u8> for Vreg {
 
         Vreg {
             raw,
-            eew: SEW::new_8(),
+            eew: SEW::E8,
         }
     }
 }
@@ -189,7 +189,7 @@ mod tests {
     fn e8() {
         let vector_data = vec![0xef, 0xcd, 0xab, 0x89, 0x67, 0x45, 0x23, 0x01];
 
-        let vreg = Vreg::new(vector_data, SEW::new_8());
+        let vreg = Vreg::new(vector_data, SEW::E8);
 
         let mut iter = vreg.iter_eew();
 
@@ -208,7 +208,7 @@ mod tests {
     fn e16() {
         let vector_data = vec![0xef, 0xcd, 0xab, 0x89, 0x67, 0x45, 0x23, 0x01];
 
-        let vreg = Vreg::new(vector_data, SEW::new_16());
+        let vreg = Vreg::new(vector_data, SEW::E16);
 
         let mut iter = vreg.iter_eew();
 
@@ -223,7 +223,7 @@ mod tests {
     fn e32() {
         let vector_data = vec![0xef, 0xcd, 0xab, 0x89, 0x67, 0x45, 0x23, 0x01];
 
-        let vreg = Vreg::new(vector_data, SEW::new_32());
+        let vreg = Vreg::new(vector_data, SEW::E32);
 
         let mut iter = vreg.iter_eew();
 
@@ -236,7 +236,7 @@ mod tests {
     fn e64() {
         let vector_data = vec![0xef, 0xcd, 0xab, 0x89, 0x67, 0x45, 0x23, 0x01];
 
-        let vreg = Vreg::new(vector_data, SEW::new_64());
+        let vreg = Vreg::new(vector_data, SEW::E64);
 
         let mut iter = vreg.iter_eew();
 

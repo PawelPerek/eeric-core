@@ -1,8 +1,7 @@
 /// Vector length multiplier
 #[derive(Default, Clone)]
 pub enum LMUL {
-    // Fractional multipliers, not supported yet
-    // TODO: support fractional multipliers
+    // Fractional multipliers
     MF8,
     MF4,
     MF2,
@@ -74,55 +73,89 @@ impl Default for VLEN {
     }
 }
 
-/// Size of an element inside vector
-// RISC-V vector extension spec v1.0 defines four SEW lengths:
-// (000 - 8b, 001 - 16b, 010 - 32b, 011 - 64b).
 #[derive(Clone)]
-pub struct SEW(usize);
+pub enum SEW {
+    E8,
+    E16,
+    E32,
+    E64,
+    // Only for widening instructions
+    E128
+}
+
+impl TryFrom<usize> for SEW {
+    type Error = &'static str;
+
+    fn try_from(value: usize) -> Result<Self, Self::Error> {
+        let sew = match value {
+            8 => Self::E8,
+            16 => Self::E16,
+            32 => Self::E32,
+            64 => Self::E64,
+            _ => return Err("Incorrect SEW (should be 8b, 16b, 32b or 64b)")
+        };
+
+        Ok(sew)
+    }
+}
 
 impl SEW {
-    pub fn new(length: usize) -> Result<Self, &'static str> {
-        if length <= 64 && length >= 8 && length.count_ones() == 1 {
-            Ok(Self(length))
-        } else {
-            Err("Length of SEW must be one of the 8, 16, 32, 64")
-        }
-    }
+    pub fn double(self) -> Result<Self, &'static str> {
+        let doubled = match self {
+            Self::E8 => Self::E16,
+            Self::E16 => Self::E32,
+            Self::E32 => Self::E64,
+            Self::E64 => Self::E128,
+            Self::E128 => return Err("Doubing 128-bit SEW is not defined")
+        };
 
-    pub fn new_8() -> Self {
-        Self::new(8).unwrap()
-    }
-
-    pub fn new_16() -> Self {
-        Self::new(16).unwrap()
-    }
-
-    pub fn new_32() -> Self {
-        Self::new(32).unwrap()
-    }
-
-    pub fn new_64() -> Self {
-        Self::new(64).unwrap()
-    }
-
-    pub fn double(self) -> Self {
-        Self(self.0 * 2)
+        Ok(doubled)
     }
 
     pub fn half(self) -> Result<Self, &'static str> {
-        Self::new(self.0 / 2)
+        let halved = match self {
+            Self::E128 => Self::E64,
+            Self::E64 => Self::E32,
+            Self::E32 => Self::E16,
+            Self::E16 => Self::E8,
+            Self::E8 => return Err("Halving 8-bit SEW is not defined"),
+        };
+
+        Ok(halved)
     }
 
     pub fn fourth(self) -> Result<Self, &'static str> {
-        Self::new(self.0 / 4)
+        let fourthed = match self {
+            Self::E128 => Self::E32,
+            Self::E64 => Self::E16,
+            Self::E32 => Self::E8,
+            Self::E16 => return Err("Fourthing 16-bit SEW is not defined"),
+            Self::E8 => return Err("Fourthing 8-bit SEW is not defined"),
+        };
+
+        Ok(fourthed)
     }
 
     pub fn eighth(self) -> Result<Self, &'static str> {
-        Self::new(self.0 / 8)
+        let eighted = match self {
+            Self::E128 => Self::E16,
+            Self::E64 => Self::E8,
+            Self::E32 => return Err("Eighting 32-bit SEW is not defined"),
+            Self::E16 => return Err("Eighting 16-bit SEW is not defined"),
+            Self::E8 => return Err("Eighting 8-bit SEW is not defined"),
+        };
+
+        Ok(eighted)
     }
 
     pub fn bit_length(&self) -> usize {
-        self.0
+        match self {
+            Self::E8 => 8,
+            Self::E16 => 16,
+            Self::E32 => 32,
+            Self::E64 => 64,
+            Self::E128 => 128
+        }
     }
 
     pub fn byte_length(&self) -> usize {
@@ -132,7 +165,7 @@ impl SEW {
 
 impl Default for SEW {
     fn default() -> Self {
-        Self::new(8).unwrap()
+        Self::E8
     }
 }
 
@@ -165,7 +198,7 @@ impl VectorEngine {
         tail_elements: MaskBehavior,
         inactive_elements: MaskBehavior,
     ) -> Result<Self, &'static str> {
-        if sew.0 <= vlen.0 {
+        if sew.bit_length() <= vlen.bit_length() {
             Ok(Self {
                 lmul,
                 vlen,
