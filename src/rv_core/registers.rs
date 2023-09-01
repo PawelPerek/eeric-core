@@ -38,3 +38,15 @@ impl Registers {
         }
     }
 }
+
+impl Default for RegistersSnapshot {
+    fn default() -> Self {
+        RegistersSnapshot { 
+            x: [0; 32], 
+            c: [0; 4096], 
+            f: [0.0; 32],
+            v: [0; 32].map(|_| Vec::new()), 
+            pc: 0
+        }
+    }
+}
