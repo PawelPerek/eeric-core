@@ -1,9 +1,10 @@
 [package]
 name = "eeric"
-version = "0.0.15"
+version = "0.0.16"
 edition = "2021"
 description = "An easily embeddable RV64I core with MFDV extensions"
 license = "MIT"
+repository = "https://github.com/PawelPerek/eeric"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
