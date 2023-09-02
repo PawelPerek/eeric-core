@@ -1,13 +1,15 @@
-#[derive(Clone)]
-pub struct Memory(Vec<u8>);
+use super::snapshot::Snapshotable;
 
 #[derive(Clone)]
 #[cfg_attr(debug_assertions, derive(Debug))]
-pub struct MemorySnapshot(Vec<u8>);
+pub struct Memory(Vec<u8>);
 
-impl Memory {
-    pub fn snapshot(&self) -> MemorySnapshot {
-        MemorySnapshot(self.0.clone())
+
+impl Snapshotable for Memory {
+    type Snapshot = Vec<u8>;
+    
+    fn snapshot(&self) -> Self::Snapshot {
+        self.0.clone()
     }
 }
 

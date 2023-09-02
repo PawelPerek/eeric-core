@@ -1,5 +1,5 @@
 #[derive(Clone, Default)]
-#[cfg_attr(debug_assertions, derive(Debug))]
+#[cfg_attr(debug_assertions, derive(Debug, PartialEq))]
 pub enum SEW {
     #[default]
     E8,

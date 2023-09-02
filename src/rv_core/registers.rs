@@ -4,18 +4,23 @@ mod float;
 mod integer;
 pub mod vector;
 
+use std::{rc::Rc, cell::RefCell};
+
+use super::{snapshot::Snapshotable, vector_engine::VectorEngine};
+
 pub use csr::CsrRegisters;
 pub use float::FloatRegisters;
 pub use integer::IntegerRegisters;
 pub use vector::VectorRegisters;
 
 #[derive(Clone, Default)]
+#[cfg_attr(debug_assertions, derive(Debug))]
 pub struct Registers {
+    pub pc: u64,
     pub x: IntegerRegisters,
     pub c: CsrRegisters,
     pub f: FloatRegisters,
     pub v: VectorRegisters,
-    pub pc: u64,
 }
 
 #[derive(Clone)]
@@ -24,12 +29,14 @@ pub struct RegistersSnapshot {
     pub x: [u64; 32],
     pub c: [u64; 4096],
     pub f: [f64; 32],
-    pub v: [Vec<u8>; 32],
+    pub v: Vec<u8>,
     pub pc: u64,
 }
 
-impl Registers {
-    pub fn snapshot(&self) -> RegistersSnapshot {
+impl Snapshotable for Registers {
+    type Snapshot = RegistersSnapshot;
+    
+    fn snapshot(&self) -> RegistersSnapshot {
         RegistersSnapshot {
             x: self.x.snapshot(),
             c: self.c.snapshot(),
@@ -46,7 +53,7 @@ impl Default for RegistersSnapshot {
             x: [0; 32], 
             c: [0; 4096], 
             f: [0.0; 32],
-            v: [0; 32].map(|_| Vec::new()), 
+            v: Vec::new(), 
             pc: 0
         }
     }

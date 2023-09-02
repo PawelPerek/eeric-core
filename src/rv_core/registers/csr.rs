@@ -1,8 +1,13 @@
+use crate::prelude::Snapshotable;
+
 #[derive(Clone)]
+#[cfg_attr(debug_assertions, derive(Debug))]
 pub struct CsrRegisters([u64; 4096]);
 
-impl CsrRegisters {
-    pub fn snapshot(&self) -> [u64; 4096] {
+impl Snapshotable for CsrRegisters {
+    type Snapshot = [u64; 4096];
+
+    fn snapshot(&self) -> Self::Snapshot {
         self.0
     }
 }

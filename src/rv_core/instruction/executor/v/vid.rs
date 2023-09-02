@@ -7,14 +7,14 @@ pub fn v(
         vm,
         ..
     }: Vmunary0,
-    v: &mut VectorRegisters,
+    v: &mut VectorRegisters, vec_engine: &VectorEngine,
 ) {
     let vreg = v
-        .get(vd)
+        .get(vd, vec_engine)
         .iter_eew()
         .enumerate()
-        .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |(i, _)| i as u64)
-        .collect_with_eew(v.vec_engine.sew.clone());
+        .masked_map(v.default_mask(vm, vec_engine), v.get(vd, vec_engine).iter_eew(), |(i, _)| i as u64)
+        .collect_with_eew(vec_engine.sew.clone());
 
-    v.apply(vd, vreg);
+    v.apply(vd, vreg, vec_engine);
 }

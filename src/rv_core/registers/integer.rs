@@ -1,8 +1,13 @@
+use crate::prelude::Snapshotable;
+
 #[derive(Clone, Default)]
+#[cfg_attr(debug_assertions, derive(Debug))]
 pub struct IntegerRegisters([u64; 31]);
 
-impl IntegerRegisters {
-    pub fn snapshot(&self) -> [u64; 32] {
+impl Snapshotable for IntegerRegisters {
+    type Snapshot = [u64; 32];
+
+    fn snapshot(&self) -> Self::Snapshot {
         let mut regs = [0; 32];
         regs[1..].copy_from_slice(&self.0);
         regs

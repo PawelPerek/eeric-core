@@ -23,20 +23,20 @@ pub fn vs(
         vs2,
         vm,
     }: Opfvv,
-    v: &mut VectorRegisters,
+    v: &mut VectorRegisters, vec_engine: &VectorEngine,
 ) {
-    let initial_value = v.get(vs1).iter_fp().next().unwrap();
-    let binding = v.get(vs2);
-    let values = izip!(binding.iter_fp(), v.default_mask(vm)).map(|(vs2, mask)| 
+    let initial_value = v.get(vs1, vec_engine).iter_fp().next().unwrap();
+    let binding = v.get(vs2, vec_engine);
+    let values = izip!(binding.iter_fp(), v.default_mask(vm, vec_engine)).map(|(vs2, mask)| 
         if mask == 1 { vs2 } else { ArbitraryFloat::zero() }
     );
 
     let sum = initial_value + binary_tree_sum(values);
 
-    let mut vd_snapshot = v.get(vd).iter_fp().collect_vec();
+    let mut vd_snapshot = v.get(vd, vec_engine).iter_fp().collect_vec();
     vd_snapshot[0] = sum;
 
     let vreg = vd_snapshot.into_iter().collect_fp();
 
-    v.apply(vd, vreg);
+    v.apply(vd, vreg, vec_engine);
 }

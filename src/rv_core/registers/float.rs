@@ -1,8 +1,13 @@
+use crate::prelude::Snapshotable;
+
 #[derive(Clone, Default)]
+#[cfg_attr(debug_assertions, derive(Debug))]
 pub struct FloatRegisters([f64; 32]);
 
-impl FloatRegisters {
-    pub fn snapshot(&self) -> [f64; 32] {
+impl Snapshotable for FloatRegisters {
+    type Snapshot = [f64; 32];
+
+    fn snapshot(&self) -> Self::Snapshot {
         self.0
     }
 }

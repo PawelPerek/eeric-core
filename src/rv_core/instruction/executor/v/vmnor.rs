@@ -7,15 +7,15 @@ pub fn mm(
         vs2,
         vm: _,
     }: Opmvv,
-    v: &mut VectorRegisters,
+    v: &mut VectorRegisters, vec_engine: &VectorEngine,
 ) {
     let vreg = izip!(
-        v.get(vd).iter_eew(),
-        v.get(vs2).iter_mask(),
-        v.get(vs1).iter_mask(),
+        v.get(vd, vec_engine).iter_eew(),
+        v.get(vs2, vec_engine).iter_mask(),
+        v.get(vs1, vec_engine).iter_mask(),
     )
     .map(|(vd, vs2, vs1)| vd.with_mask_bit(!(vs2 | vs1)))
-    .collect_with_eew(v.vec_engine.sew.clone());
+    .collect_with_eew(vec_engine.sew.clone());
 
-    v.apply(vd, vreg);
+    v.apply(vd, vreg, vec_engine);
 }

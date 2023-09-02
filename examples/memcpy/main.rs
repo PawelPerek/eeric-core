@@ -21,7 +21,7 @@ fn main() {
 
     use alias::*;
 
-    let mut core = RvCore::with_instructions(vec![
+    let mut core = RvCoreBuilder::default().instructions(vec![
         I::Vsetvli(F::Vsetvli {
             rd: T0,
             rs1: A2,
@@ -68,7 +68,7 @@ fn main() {
             rs1: RA,
             imm12: 0,
         }),
-    ]);
+    ]).build().unwrap();
 
     for machine_state in core.run() {
         println!("{:?}", machine_state);

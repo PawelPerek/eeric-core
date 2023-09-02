@@ -7,14 +7,14 @@ pub fn vm(
         vs2,
         vm: _,
     }: Opmvv,
-    v: &mut VectorRegisters,
+    v: &mut VectorRegisters, vec_engine: &VectorEngine,
 ) {
-    let vreg = izip!(v.get(vs2).iter_eew(), v.get(vs1).iter_mask())
+    let vreg = izip!(v.get(vs2, vec_engine).iter_eew(), v.get(vs1, vec_engine).iter_mask())
         .filter_map(|(vs2, vs1)| match vs1 {
             0 => None,
             _ => Some(vs2),
         })
-        .collect_with_eew(v.vec_engine.sew.clone());
+        .collect_with_eew(vec_engine.sew.clone());
 
-    v.apply(vd, vreg);
+    v.apply(vd, vreg, vec_engine);
 }

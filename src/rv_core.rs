@@ -3,49 +3,31 @@ pub mod instruction;
 pub mod memory;
 pub mod registers;
 pub mod vector_engine;
+pub mod snapshot;
+
+use derive_builder::Builder;
 
 use instruction::{executor::Executor, Instruction};
-use memory::{Memory, MemorySnapshot};
-use registers::{Registers, RegistersSnapshot};
-use vector_engine::VectorEngineSnapshot;
+use memory::Memory;
+use registers::Registers;
 
-#[derive(Clone)]
+use self::vector_engine::VectorEngine;
+
+#[derive(Builder, Clone, Default)]
+#[cfg_attr(debug_assertions, derive(Debug))]
 pub struct RvCore {
-    registers: Registers,
-    instructions: Vec<Instruction>,
-    memory: Memory,
+    #[builder(default)]
+    pub memory: Memory,
+    #[builder(default)]
+    pub instructions: Vec<Instruction>,
+    #[builder(default)]
+    pub registers: Registers,
+    #[builder(default)]
+    pub vec_engine: VectorEngine
 }
 
 impl RvCore {
-    pub fn new_zeroed() -> Self {
-        Self {
-            registers: Default::default(),
-            instructions: Default::default(),
-            memory: Default::default(),
-        }
-    }
-
-    pub fn with_instructions(instructions: Vec<Instruction>) -> Self {
-        Self {
-            registers: Default::default(),
-            instructions,
-            memory: Default::default(),
-        }
-    }
-
-    pub fn registers_snapshot(&self) -> RegistersSnapshot {
-        self.registers.snapshot()
-    }
-
-    pub fn memory_snapshot(&self) -> MemorySnapshot {
-        self.memory.snapshot()
-    }
-
-    pub fn vector_engine_snapshot(&self) -> VectorEngineSnapshot {
-        self.registers.v.vec_engine.snapshot()
-    }
-
-    pub fn step(&mut self) -> Option<RegistersSnapshot> {
+    pub fn step(&mut self) -> Option<()> {
         self.run().next()
     }
 
@@ -54,12 +36,12 @@ impl RvCore {
     }
 }
 
-pub struct RunningRvCore<'m> {
-    core: &'m mut RvCore,
+pub struct RunningRvCore<'core> {
+    core: &'core mut RvCore,
 }
 
 impl Iterator for RunningRvCore<'_> {
-    type Item = RegistersSnapshot;
+    type Item = ();
 
     fn next(&mut self) -> Option<Self::Item> {
         let instruction_pointer = self.core.registers.pc / 4;
@@ -68,7 +50,17 @@ impl Iterator for RunningRvCore<'_> {
             .instructions
             .get(instruction_pointer as usize)?
             .clone();
-        Executor::new(&mut self.core.registers, &mut self.core.memory).execute(instruction);
-        Some(self.core.registers.snapshot())
+        Executor::new(&mut self.core.registers, &mut self.core.memory, &mut self.core.vec_engine).execute(instruction);
+        Some(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::RvCoreBuilder;
+
+    #[test]
+    fn all_props_have_default_values() {
+        RvCoreBuilder::default().build().unwrap();
     }
 }

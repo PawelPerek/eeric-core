@@ -1,9 +1,9 @@
 use crate::rv_core::instruction::executor::prelude::*;
 
-pub fn v(Vl { vd, rs1, vm }: Vl, eew: SEW, nf: usize, v: &mut VectorRegisters, x: &IntegerRegisters, mem: &Memory) {
+pub fn v(Vl { vd, rs1, vm }: Vl, eew: SEW, nf: usize, v: &mut VectorRegisters, vec_engine: &VectorEngine, x: &IntegerRegisters, mem: &Memory) {
     let addr = x[rs1] as usize;
 
-    let element_amount = v.vec_engine.vlen.bit_length() / v.vec_engine.sew.bit_length();
+    let element_amount = vec_engine.sew.byte_length() / vec_engine.sew.bit_length();
 
     let mut store: Vec<Vec<u64>> = vec![vec![0; element_amount]; nf];
 
@@ -24,15 +24,15 @@ pub fn v(Vl { vd, rs1, vm }: Vl, eew: SEW, nf: usize, v: &mut VectorRegisters, x
 
     for nth_reg in 0..nf {
         let vreg = v
-            .get(vd + nth_reg)
+            .get(vd + nth_reg, vec_engine)
             .iter_eew()
             .enumerate()
-            .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |(index, _)| {
+            .masked_map(v.default_mask(vm, vec_engine), v.get(vd, vec_engine).iter_eew(), |(index, _)| {
                 store[nth_reg][index]
             })
-            .collect_with_eew(v.vec_engine.sew.clone());
+            .collect_with_eew(vec_engine.sew.clone());
 
-        v.apply(vd, vreg);
+        v.apply(vd, vreg, vec_engine);
     }
     
     todo!("not finished yet");

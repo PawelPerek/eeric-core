@@ -7,7 +7,7 @@ pub fn v(
         vs2,
         vm,
     }: Opivi,
-    v: &mut VectorRegisters,
+    v: &mut VectorRegisters, vec_engine: &VectorEngine,
 ) {
     for i in 0..1 {
         super::vmv::vv(
@@ -18,6 +18,7 @@ pub fn v(
                 vm,
             },
             v,
+            vec_engine
         )
     }
 }
