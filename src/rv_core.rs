@@ -1,11 +1,11 @@
 pub mod arbitrary_float;
 pub mod instruction;
-mod memory;
+pub mod memory;
 pub mod registers;
 pub mod vector_engine;
 
 use instruction::{executor::Executor, Instruction};
-use memory::Memory;
+use memory::{Memory, MemorySnapshot};
 use registers::{Registers, RegistersSnapshot};
 
 #[derive(Clone)]
@@ -34,6 +34,10 @@ impl RvCore {
 
     pub fn registers_snapshot(&self) -> RegistersSnapshot {
         self.registers.snapshot()
+    }
+
+    pub fn memory_snapshot(&self) -> MemorySnapshot {
+        self.memory.snapshot()
     }
 
     pub fn step(&mut self) -> Option<RegistersSnapshot> {

@@ -1,7 +1,15 @@
 #[derive(Clone)]
 pub struct Memory(Vec<u8>);
 
-// TODO: Experimental api, maybe there is better way to do this
+#[derive(Clone, Debug)]
+pub struct MemorySnapshot(Vec<u8>);
+
+impl Memory {
+    pub fn snapshot(&self) -> MemorySnapshot {
+        MemorySnapshot(self.0.clone())
+    }
+}
+
 impl Memory {
     pub fn get<const BYTES: usize>(&self, address: usize) -> [u8; BYTES] {
         let mut bytes = [0; BYTES];

@@ -1,6 +1,7 @@
 pub use crate::rv_core::{
     instruction::{format, Instruction},
     registers::RegistersSnapshot,
+    memory::MemorySnapshot,
     vector_engine::{MaskBehavior, LMUL, SEW, VLEN},
     RvCore,
 };

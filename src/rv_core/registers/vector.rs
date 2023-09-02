@@ -30,7 +30,6 @@ impl VectorRegisters {
         Self {
             raw: vec![0x00; vlen.byte_length() * 32],
             vec_engine: VectorEngine::new(lmul, vlen, sew, Default::default(), Default::default())
-                .unwrap(),
         }
     }
 
@@ -62,7 +61,7 @@ impl VectorRegisters {
         // Note: Since we are working on multiples of two
         // multiplying 2^n (vlenb) by 2^(-n) (lmul) will not create floating point errors
         let end = start
-            + (self.vec_engine.vlen.byte_length() as f32 * self.vec_engine.lmul.double_ratio())
+            + (self.vec_engine.vlen.byte_length() as f32 * self.vec_engine.lmul.clone().double().unwrap().ratio())
                 as usize;
 
         self.raw[start..end].into_iter().copied()
@@ -105,7 +104,7 @@ impl VectorRegisters {
 
 impl Default for VectorRegisters {
     fn default() -> Self {
-        Self::new_zeros(VLEN::new_128(), Default::default(), Default::default())
+        Self::new_zeros(Default::default(), Default::default(), Default::default())
     }
 }
 
