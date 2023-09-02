@@ -1,5 +1,5 @@
 /// Vector unit size of microarchitecture
-#[derive(Clone, Default, PartialEq)]
+#[derive(Clone, Copy, Default, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub enum VLEN {
     V64,
