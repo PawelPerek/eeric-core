@@ -21,7 +21,7 @@ pub struct Registers {
     pub v: VectorRegisters,
 }
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct RegistersSnapshot {
     pub x: [u64; 32],
