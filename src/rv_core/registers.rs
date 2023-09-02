@@ -4,9 +4,7 @@ mod float;
 mod integer;
 pub mod vector;
 
-use std::{rc::Rc, cell::RefCell};
-
-use super::{snapshot::Snapshotable, vector_engine::VectorEngine};
+use super::snapshot::Snapshotable;
 
 pub use csr::CsrRegisters;
 pub use float::FloatRegisters;

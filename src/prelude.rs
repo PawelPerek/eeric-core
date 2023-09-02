@@ -1,6 +1,6 @@
 pub use crate::rv_core::{
     instruction::{format, Instruction},
-    registers::Registers,
+    registers::{Registers, RegistersSnapshot},
     memory::Memory,
     vector_engine::{VectorEngine, LMUL, SEW, VLEN, MaskBehavior},
     snapshot::Snapshotable,
