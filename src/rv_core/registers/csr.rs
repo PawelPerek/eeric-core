@@ -1,6 +1,6 @@
 use crate::prelude::Snapshotable;
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct CsrRegisters([u64; 4096]);
 

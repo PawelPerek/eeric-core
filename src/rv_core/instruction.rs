@@ -3,7 +3,7 @@ pub mod format;
 
 use format::*;
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub enum Instruction {
     /// Base instructions

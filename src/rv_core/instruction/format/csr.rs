@@ -1,4 +1,4 @@
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct Csrr {
     pub rd: usize,
@@ -6,7 +6,7 @@ pub struct Csrr {
     pub csr: usize,
 }
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct Csri {
     pub rd: usize,

@@ -10,8 +10,8 @@ pub use mask_behaviour::MaskBehavior;
 
 use super::snapshot::Snapshotable;
 
-#[derive(Clone, Default)]
-#[cfg_attr(debug_assertions, derive(Debug, PartialEq))]
+#[derive(Clone, Default, PartialEq)]
+#[cfg_attr(debug_assertions, derive(Debug))]
 pub struct VectorEngine {
     pub lmul: LMUL,
     pub vlen: VLEN,

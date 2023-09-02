@@ -1,6 +1,6 @@
 /// Configuration formats
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct Vsetvli {
     pub rd: usize,
@@ -8,7 +8,7 @@ pub struct Vsetvli {
     pub vtypei: u32,
 }
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct Vsetivli {
     pub rd: usize,
@@ -16,7 +16,7 @@ pub struct Vsetivli {
     pub vtypei: u32,
 }
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct Vsetvl {
     pub rd: usize,
@@ -29,7 +29,7 @@ pub struct Vsetvl {
 // Loads
 
 // unit-stride
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct Vl {
     pub vd: usize,
@@ -38,7 +38,7 @@ pub struct Vl {
 }
 
 // strided
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct Vls {
     pub vd: usize,
@@ -48,7 +48,7 @@ pub struct Vls {
 }
 
 // indexed
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct Vlx {
     pub vd: usize,
@@ -58,7 +58,7 @@ pub struct Vlx {
 }
 
 // whole register
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct Vlr {
     pub vd: usize,
@@ -68,7 +68,7 @@ pub struct Vlr {
 // Stores
 
 // unit-stride
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct Vs {
     pub vs3: usize,
@@ -77,7 +77,7 @@ pub struct Vs {
 }
 
 // strided
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct Vss {
     pub vs3: usize,
@@ -87,7 +87,7 @@ pub struct Vss {
 }
 
 // indexed
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct Vsx {
     pub vs3: usize,
@@ -97,7 +97,7 @@ pub struct Vsx {
 }
 
 // whole register
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct Vsr {
     pub vs3: usize,
@@ -107,7 +107,7 @@ pub struct Vsr {
 /// OPI - Integer instructions
 
 // Vector - Vector
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct Opivv {
     pub vd: usize,
@@ -118,7 +118,7 @@ pub struct Opivv {
 
 // Vector - Scalar (Register)
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct Opivx {
     pub vd: usize,
@@ -128,7 +128,7 @@ pub struct Opivx {
 }
 
 // Vector - Immediate
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct Opivi {
     pub vd: usize,
@@ -140,7 +140,7 @@ pub struct Opivi {
 /// OPM - Mask instructions
 
 // Vector - Vector
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct Opmvv {
     pub dest: usize, // Note: can be either vd/rd
@@ -150,7 +150,7 @@ pub struct Opmvv {
 }
 
 // Vector - Scalar (Register)
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct Opmvx {
     pub dest: usize, // Note: can be either vd/rd
@@ -162,7 +162,7 @@ pub struct Opmvx {
 /// OPF - Floating point instructions
 
 // Vector - Vector
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct Opfvv {
     pub dest: usize, // Note: can be either vd/rd
@@ -172,7 +172,7 @@ pub struct Opfvv {
 }
 
 // Vector - Scalar (FP Register)
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct Opfvf {
     pub vd: usize,

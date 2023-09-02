@@ -7,7 +7,7 @@ use crate::prelude::*;
 pub use vreg::Vreg;
 pub use wide_vreg::WideVreg;
 
-#[derive(Clone, Default)]
+#[derive(Clone, Default, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct VectorRegisters(Vec<u8>);
 

@@ -1,4 +1,4 @@
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct R {
     pub rd: usize,
@@ -6,7 +6,7 @@ pub struct R {
     pub rs2: usize,
 }
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct I {
     pub rd: usize,
@@ -14,7 +14,7 @@ pub struct I {
     pub imm12: i32,
 }
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct S {
     pub rs1: usize,
@@ -22,7 +22,7 @@ pub struct S {
     pub imm12: i32,
 }
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct U {
     pub rd: usize,

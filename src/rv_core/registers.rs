@@ -11,7 +11,7 @@ pub use float::FloatRegisters;
 pub use integer::IntegerRegisters;
 pub use vector::VectorRegisters;
 
-#[derive(Clone, Default)]
+#[derive(Clone, Default, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct Registers {
     pub pc: u64,
