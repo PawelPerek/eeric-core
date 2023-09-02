@@ -2,8 +2,8 @@ pub mod arbitrary_float;
 pub mod instruction;
 pub mod memory;
 pub mod registers;
-pub mod vector_engine;
 pub mod snapshot;
+pub mod vector_engine;
 
 use derive_builder::Builder;
 
@@ -23,7 +23,7 @@ pub struct RvCore {
     #[builder(default)]
     pub registers: Registers,
     #[builder(default)]
-    pub vec_engine: VectorEngine
+    pub vec_engine: VectorEngine,
 }
 
 impl RvCore {
@@ -50,7 +50,12 @@ impl Iterator for RunningRvCore<'_> {
             .instructions
             .get(instruction_pointer as usize)?
             .clone();
-        Executor::new(&mut self.core.registers, &mut self.core.memory, &mut self.core.vec_engine).execute(instruction);
+        Executor::new(
+            &mut self.core.registers,
+            &mut self.core.memory,
+            &mut self.core.vec_engine,
+        )
+        .execute(instruction);
         Some(())
     }
 }

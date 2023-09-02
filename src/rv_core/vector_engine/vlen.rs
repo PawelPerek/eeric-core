@@ -1,12 +1,12 @@
 /// Vector unit size of microarchitecture
-#[derive(Clone, Default)]
-#[cfg_attr(debug_assertions, derive(Debug, PartialEq))]
+#[derive(Clone, Default, PartialEq)]
+#[cfg_attr(debug_assertions, derive(Debug))]
 pub enum VLEN {
     V64,
     #[default]
     V128,
     V256,
-    V512
+    V512,
 }
 
 impl VLEN {
@@ -15,7 +15,7 @@ impl VLEN {
             Self::V64 => 64,
             Self::V128 => 128,
             Self::V256 => 256,
-            Self::V512 => 512
+            Self::V512 => 512,
         }
     }
 

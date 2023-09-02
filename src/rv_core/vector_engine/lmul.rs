@@ -1,6 +1,6 @@
 /// Vector length multiplier
-#[derive(Clone, Default)]
-#[cfg_attr(debug_assertions, derive(Debug, PartialEq))]
+#[derive(Clone, Default, PartialEq)]
+#[cfg_attr(debug_assertions, derive(Debug))]
 pub enum LMUL {
     // Fractional multipliers
     MF8,
@@ -15,7 +15,7 @@ pub enum LMUL {
     M8,
 
     // Only for widening instructions
-    M16
+    M16,
 }
 
 impl LMUL {

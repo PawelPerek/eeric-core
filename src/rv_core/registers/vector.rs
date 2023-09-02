@@ -30,13 +30,16 @@ impl VectorRegisters {
         nth * vec_engine.vlen.byte_length()
     }
 
-    fn register_view(&self, nth: usize, vec_engine: &VectorEngine) -> impl Iterator<Item = u8> + '_ {
+    fn register_view(
+        &self,
+        nth: usize,
+        vec_engine: &VectorEngine,
+    ) -> impl Iterator<Item = u8> + '_ {
         let start = self.start_ptr(nth, vec_engine);
 
         // Note: Since we are working on multiples of two
         // multiplying 2^n (vlenb) by 2^(-n) (lmul) will not create floating point errors
-        let end = start
-            + (vec_engine.vlen.byte_length() as f32 * vec_engine.lmul.ratio()) as usize;
+        let end = start + (vec_engine.vlen.byte_length() as f32 * vec_engine.lmul.ratio()) as usize;
 
         self.0[start..end].into_iter().copied()
     }
@@ -48,14 +51,18 @@ impl VectorRegisters {
         )
     }
 
-    fn wide_register_view(&self, nth: usize, vec_engine: &VectorEngine) -> impl Iterator<Item = u8> + '_ {
+    fn wide_register_view(
+        &self,
+        nth: usize,
+        vec_engine: &VectorEngine,
+    ) -> impl Iterator<Item = u8> + '_ {
         let start = self.start_ptr(nth, vec_engine);
 
         // Note: Since we are working on multiples of two
         // multiplying 2^n (vlenb) by 2^(-n) (lmul) will not create floating point errors
         let end = start
-            + (vec_engine.vlen.byte_length() as f32 * vec_engine.lmul.clone().double().unwrap().ratio())
-                as usize;
+            + (vec_engine.vlen.byte_length() as f32
+                * vec_engine.lmul.clone().double().unwrap().ratio()) as usize;
 
         self.0[start..end].into_iter().copied()
     }
@@ -76,8 +83,7 @@ impl VectorRegisters {
     }
 
     pub fn apply(&mut self, nth: usize, vreg: Vreg, vec_engine: &VectorEngine) {
-        let engine_vlen =
-            (vec_engine.vlen.byte_length() as f32 * vec_engine.lmul.ratio()) as usize;
+        let engine_vlen = (vec_engine.vlen.byte_length() as f32 * vec_engine.lmul.ratio()) as usize;
         let start = self.start_ptr(nth, vec_engine);
 
         if vreg.iter_byte().len() >= engine_vlen {

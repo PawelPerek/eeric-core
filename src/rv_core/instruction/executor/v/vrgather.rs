@@ -8,19 +8,28 @@ pub fn vv(Opivv { vd, vs1, vs2, vm }: Opivv, v: &mut VectorRegisters, vec_engine
     let vreg = v
         .get(vs1, vec_engine)
         .iter_eew()
-        .masked_map(v.default_mask(vm, vec_engine), v.get(vd, vec_engine).iter_eew(), |vindex| {
-            if vindex as usize >= vlmax {
-                0
-            } else {
-                vs2_state[vindex as usize]
-            }
-        })
+        .masked_map(
+            v.default_mask(vm, vec_engine),
+            v.get(vd, vec_engine).iter_eew(),
+            |vindex| {
+                if vindex as usize >= vlmax {
+                    0
+                } else {
+                    vs2_state[vindex as usize]
+                }
+            },
+        )
         .collect_with_eew(vec_engine.sew.clone());
 
     v.apply(vd, vreg, vec_engine);
 }
 
-pub fn vx(Opivx { vd, rs1, vs2, vm }: Opivx, v: &mut VectorRegisters, vec_engine: &VectorEngine, x: &IntegerRegisters) {
+pub fn vx(
+    Opivx { vd, rs1, vs2, vm }: Opivx,
+    v: &mut VectorRegisters,
+    vec_engine: &VectorEngine,
+    x: &IntegerRegisters,
+) {
     let vlmax = vec_engine.vlmax();
     let index = x[rs1];
 
@@ -29,13 +38,17 @@ pub fn vx(Opivx { vd, rs1, vs2, vm }: Opivx, v: &mut VectorRegisters, vec_engine
     let vreg = v
         .get(vd, vec_engine)
         .iter_eew()
-        .masked_map(v.default_mask(vm, vec_engine), v.get(vd, vec_engine).iter_eew(), |_| {
-            if index as usize >= vlmax {
-                0
-            } else {
-                vs2_state[index as usize]
-            }
-        })
+        .masked_map(
+            v.default_mask(vm, vec_engine),
+            v.get(vd, vec_engine).iter_eew(),
+            |_| {
+                if index as usize >= vlmax {
+                    0
+                } else {
+                    vs2_state[index as usize]
+                }
+            },
+        )
         .collect_with_eew(vec_engine.sew.clone());
 
     v.apply(vd, vreg, vec_engine);
@@ -50,13 +63,17 @@ pub fn vi(Opivi { vd, imm5, vs2, vm }: Opivi, v: &mut VectorRegisters, vec_engin
     let vreg = v
         .get(vd, vec_engine)
         .iter_eew()
-        .masked_map(v.default_mask(vm, vec_engine), v.get(vd, vec_engine).iter_eew(), |_| {
-            if index as usize >= vlmax {
-                0
-            } else {
-                vs2_state[index as usize]
-            }
-        })
+        .masked_map(
+            v.default_mask(vm, vec_engine),
+            v.get(vd, vec_engine).iter_eew(),
+            |_| {
+                if index as usize >= vlmax {
+                    0
+                } else {
+                    vs2_state[index as usize]
+                }
+            },
+        )
         .collect_with_eew(vec_engine.sew.clone());
 
     v.apply(vd, vreg, vec_engine);

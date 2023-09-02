@@ -4,7 +4,8 @@ pub fn v(
     Vls { vd, rs1, rs2, vm }: Vls,
     eew: usize,
     nf: usize,
-    v: &mut VectorRegisters, vec_engine: &VectorEngine,
+    v: &mut VectorRegisters,
+    vec_engine: &VectorEngine,
     mem: &Memory,
 ) {
     todo!()

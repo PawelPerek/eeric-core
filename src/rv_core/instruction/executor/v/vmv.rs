@@ -7,7 +7,8 @@ pub fn vv(
         vs2: _,
         vm: _,
     }: Opivv,
-    v: &mut VectorRegisters, vec_engine: &VectorEngine,
+    v: &mut VectorRegisters,
+    vec_engine: &VectorEngine,
 ) {
     let vreg = v
         .get(vs1, vec_engine)
@@ -25,7 +26,8 @@ pub fn vx(
         vs2: _,
         vm: _,
     }: Opivx,
-    v: &mut VectorRegisters, vec_engine: &VectorEngine,
+    v: &mut VectorRegisters,
+    vec_engine: &VectorEngine,
     x: &IntegerRegisters,
 ) {
     let vreg = v
@@ -44,7 +46,8 @@ pub fn vi(
         vs2: _,
         vm: _,
     }: Opivi,
-    v: &mut VectorRegisters, vec_engine: &VectorEngine,
+    v: &mut VectorRegisters,
+    vec_engine: &VectorEngine,
 ) {
     let vreg = v
         .get(vd, vec_engine)
@@ -62,7 +65,8 @@ pub fn xs(
         vm: _,
         ..
     }: Vwxunary0,
-    v: &VectorRegisters, vec_engine: &VectorEngine,
+    v: &VectorRegisters,
+    vec_engine: &VectorEngine,
     x: &mut IntegerRegisters,
 ) {
     let first_value = v.get(vs2, vec_engine).iter_eew().next().unwrap();
@@ -77,7 +81,8 @@ pub fn sx(
         vm: _,
         ..
     }: Vrxunary0,
-    v: &mut VectorRegisters, vec_engine: &VectorEngine,
+    v: &mut VectorRegisters,
+    vec_engine: &VectorEngine,
     x: &IntegerRegisters,
 ) {
     let first_value = u64::to_le_bytes(x[rs1]);

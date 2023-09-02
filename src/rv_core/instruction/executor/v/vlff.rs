@@ -3,7 +3,8 @@ use crate::rv_core::{instruction::executor::prelude::*, registers::aliases::csr}
 pub fn v(
     Vl { vd, rs1, vm }: Vl,
     eew: SEW,
-    v: &mut VectorRegisters, vec_engine: &VectorEngine,
+    v: &mut VectorRegisters,
+    vec_engine: &VectorEngine,
     x: &IntegerRegisters,
     c: &mut CsrRegisters,
     mem: &Memory,
@@ -48,9 +49,11 @@ pub fn v(
         .get(vd, vec_engine)
         .iter_eew()
         .enumerate()
-        .masked_map(v.default_mask(vm, vec_engine), v.get(vd, vec_engine).iter_eew(), |(index, _)| {
-            store[index]
-        })
+        .masked_map(
+            v.default_mask(vm, vec_engine),
+            v.get(vd, vec_engine).iter_eew(),
+            |(index, _)| store[index],
+        )
         .collect_with_eew(vec_engine.sew.clone());
 
     v.apply(vd, vreg, vec_engine)

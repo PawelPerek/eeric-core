@@ -1,5 +1,5 @@
-#[derive(Clone, Default)]
-#[cfg_attr(debug_assertions, derive(Debug, PartialEq))]
+#[derive(Clone, Default, PartialEq)]
+#[cfg_attr(debug_assertions, derive(Debug))]
 pub enum SEW {
     #[default]
     E8,
@@ -7,7 +7,7 @@ pub enum SEW {
     E32,
     E64,
     // Only for widening instructions
-    E128
+    E128,
 }
 
 impl TryFrom<usize> for SEW {
@@ -19,7 +19,7 @@ impl TryFrom<usize> for SEW {
             16 => Self::E16,
             32 => Self::E32,
             64 => Self::E64,
-            _ => return Err("Incorrect SEW (should be 8b, 16b, 32b or 64b)")
+            _ => return Err("Incorrect SEW (should be 8b, 16b, 32b or 64b)"),
         };
 
         Ok(sew)
@@ -33,7 +33,7 @@ impl SEW {
             Self::E16 => Self::E32,
             Self::E32 => Self::E64,
             Self::E64 => Self::E128,
-            Self::E128 => return Err("Doubing 128-bit SEW is not defined")
+            Self::E128 => return Err("Doubing 128-bit SEW is not defined"),
         };
 
         Ok(doubled)
@@ -81,7 +81,7 @@ impl SEW {
             Self::E16 => 16,
             Self::E32 => 32,
             Self::E64 => 64,
-            Self::E128 => 128
+            Self::E128 => 128,
         }
     }
 

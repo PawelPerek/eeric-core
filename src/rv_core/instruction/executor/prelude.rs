@@ -5,7 +5,7 @@ pub use crate::extensions::{
 };
 
 pub use crate::rv_core::{
-    arbitrary_float::{compose, decompose, RoundingMode, ArbitraryFloat},
+    arbitrary_float::{compose, decompose, ArbitraryFloat, RoundingMode},
     instruction::format::*,
     memory::Memory,
     registers::{
@@ -13,7 +13,7 @@ pub use crate::rv_core::{
         vector::{Vreg, WideVreg},
         *,
     },
-    vector_engine::{SEW, VectorEngine},
+    vector_engine::{VectorEngine, SEW},
 };
 
 pub use itertools::{izip, Itertools};

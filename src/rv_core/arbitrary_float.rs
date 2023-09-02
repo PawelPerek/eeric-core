@@ -42,7 +42,7 @@ pub enum ArbitraryFloat {
 
 pub enum RoundingMode {
     Nearest,
-    TowardsOdd
+    TowardsOdd,
 }
 
 impl ArbitraryFloat {
@@ -73,7 +73,7 @@ impl ArbitraryFloat {
                         f32::from_bits(bits)
                     }
                 })
-            },
+            }
         }
     }
 }

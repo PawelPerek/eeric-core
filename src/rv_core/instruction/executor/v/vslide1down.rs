@@ -7,7 +7,8 @@ pub fn vx(
         vs2,
         vm,
     }: Opmvx,
-    v: &mut VectorRegisters, vec_engine: &VectorEngine,
+    v: &mut VectorRegisters,
+    vec_engine: &VectorEngine,
     x: &IntegerRegisters,
 ) {
     let last_value = u64::to_le_bytes(x[rs1]);
@@ -25,7 +26,11 @@ pub fn vx(
 
     let vreg = vreg_values
         .iter_eew()
-        .masked_map(v.default_mask(vm, vec_engine), v.get(vd, vec_engine).iter_eew(), |vd| vd)
+        .masked_map(
+            v.default_mask(vm, vec_engine),
+            v.get(vd, vec_engine).iter_eew(),
+            |vd| vd,
+        )
         .collect_with_eew(vec_engine.sew.clone());
 
     v.apply(vd, vreg, vec_engine);

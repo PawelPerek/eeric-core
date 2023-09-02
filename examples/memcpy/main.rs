@@ -21,54 +21,57 @@ fn main() {
 
     use alias::*;
 
-    let mut core = RvCoreBuilder::default().instructions(vec![
-        I::Vsetvli(F::Vsetvli {
-            rd: T0,
-            rs1: A2,
-            vtypei: 0b_1_1_000_011,
-        }),
-        I::Vlv {
-            eew: 8,
-            data: F::Vl {
-                vd: 0,
+    let mut core = RvCoreBuilder::default()
+        .instructions(vec![
+            I::Vsetvli(F::Vsetvli {
+                rd: T0,
+                rs1: A2,
+                vtypei: 0b_1_1_000_011,
+            }),
+            I::Vlv {
+                eew: 8,
+                data: F::Vl {
+                    vd: 0,
+                    rs1: A1,
+                    vm: false,
+                },
+            },
+            I::Add(F::R {
+                rd: A1,
                 rs1: A1,
-                vm: false,
+                rs2: T0,
+            }),
+            I::Sub(F::R {
+                rd: A2,
+                rs1: A2,
+                rs2: T0,
+            }),
+            I::Vsv {
+                eew: 8,
+                data: F::Vs {
+                    vs3: 0,
+                    rs1: A3,
+                    vm: false,
+                },
             },
-        },
-        I::Add(F::R {
-            rd: A1,
-            rs1: A1,
-            rs2: T0,
-        }),
-        I::Sub(F::R {
-            rd: A2,
-            rs1: A2,
-            rs2: T0,
-        }),
-        I::Vsv {
-            eew: 8,
-            data: F::Vs {
-                vs3: 0,
+            I::Add(F::R {
+                rd: A3,
                 rs1: A3,
-                vm: false,
-            },
-        },
-        I::Add(F::R {
-            rd: A3,
-            rs1: A3,
-            rs2: T0,
-        }),
-        I::Bne(F::S {
-            rs1: A2,
-            rs2: ZERO,
-            imm12: -24,
-        }),
-        I::Jalr(F::I {
-            rd: ZERO,
-            rs1: RA,
-            imm12: 0,
-        }),
-    ]).build().unwrap();
+                rs2: T0,
+            }),
+            I::Bne(F::S {
+                rs1: A2,
+                rs2: ZERO,
+                imm12: -24,
+            }),
+            I::Jalr(F::I {
+                rd: ZERO,
+                rs1: RA,
+                imm12: 0,
+            }),
+        ])
+        .build()
+        .unwrap();
 
     for machine_state in core.run() {
         println!("{:?}", machine_state);

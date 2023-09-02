@@ -7,7 +7,8 @@ pub fn vvm(
         vs2,
         vm: _,
     }: Opivv,
-    v: &mut VectorRegisters, vec_engine: &VectorEngine,
+    v: &mut VectorRegisters,
+    vec_engine: &VectorEngine,
 ) {
     let vreg = izip!(
         v.get(vs2, vec_engine).iter_eew(),
@@ -27,12 +28,16 @@ pub fn vxm(
         vs2,
         vm: _,
     }: Opivx,
-    v: &mut VectorRegisters, vec_engine: &VectorEngine,
+    v: &mut VectorRegisters,
+    vec_engine: &VectorEngine,
     x: &IntegerRegisters,
 ) {
-    let vreg = izip!(v.get(vs2, vec_engine).iter_eew(), v.default_mask(true, vec_engine))
-        .map(|(vs2, mask)| vs2.wrapping_sub(x[rs1]).wrapping_sub(mask))
-        .collect_with_eew(vec_engine.sew.clone());
+    let vreg = izip!(
+        v.get(vs2, vec_engine).iter_eew(),
+        v.default_mask(true, vec_engine)
+    )
+    .map(|(vs2, mask)| vs2.wrapping_sub(x[rs1]).wrapping_sub(mask))
+    .collect_with_eew(vec_engine.sew.clone());
 
     v.apply(vd, vreg, vec_engine);
 }

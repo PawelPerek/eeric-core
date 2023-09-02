@@ -7,7 +7,8 @@ pub fn vf(
         vs2: _,
         vm: _,
     }: Opfvf,
-    v: &mut VectorRegisters, vec_engine: &VectorEngine,
+    v: &mut VectorRegisters,
+    vec_engine: &VectorEngine,
     f: &FloatRegisters,
 ) {
     let vreg = v
@@ -26,7 +27,8 @@ pub fn fs(
         vm: _,
         ..
     }: Vwfunary0,
-    v: &VectorRegisters, vec_engine: &VectorEngine,
+    v: &VectorRegisters,
+    vec_engine: &VectorEngine,
     f: &mut FloatRegisters,
 ) {
     let first_value = v.get(vs2, vec_engine).iter_fp().next().unwrap();
@@ -44,7 +46,8 @@ pub fn fs(
 
 pub fn sf(
     Vrfunary0 { vd, rs1, vm: _, .. }: Vrfunary0,
-    v: &mut VectorRegisters, vec_engine: &VectorEngine,
+    v: &mut VectorRegisters,
+    vec_engine: &VectorEngine,
     f: &FloatRegisters,
 ) {
     let first_value = f64::to_le_bytes(f[rs1]);

@@ -731,5 +731,5 @@ pub enum Instruction {
     Vfwnmsacvf(Opfvf),
 
     // Instruction fusion for pseudo instructions
-    Fusion(Box<Instruction>, Box<Instruction>)
+    Fusion(Box<Instruction>, Box<Instruction>),
 }

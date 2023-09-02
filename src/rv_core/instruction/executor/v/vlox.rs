@@ -1,6 +1,13 @@
 use crate::rv_core::instruction::executor::prelude::*;
 
-pub fn v(Vlx { vd, rs1, vs2, vm }: Vlx, eew: SEW, v: &mut VectorRegisters, vec_engine: &VectorEngine, x: &IntegerRegisters, mem: &Memory) {
+pub fn v(
+    Vlx { vd, rs1, vs2, vm }: Vlx,
+    eew: SEW,
+    v: &mut VectorRegisters,
+    vec_engine: &VectorEngine,
+    x: &IntegerRegisters,
+    mem: &Memory,
+) {
     let addr = x[rs1] as usize;
     let vs2 = v.get(vs2, vec_engine).iter_eew().collect_vec();
 
@@ -27,9 +34,11 @@ pub fn v(Vlx { vd, rs1, vs2, vm }: Vlx, eew: SEW, v: &mut VectorRegisters, vec_e
         .get(vd, vec_engine)
         .iter_eew()
         .enumerate()
-        .masked_map(v.default_mask(vm, vec_engine), v.get(vd, vec_engine).iter_eew(), |(index, _)| {
-            store[index]
-        })
+        .masked_map(
+            v.default_mask(vm, vec_engine),
+            v.get(vd, vec_engine).iter_eew(),
+            |(index, _)| store[index],
+        )
         .collect_with_eew(vec_engine.sew.clone());
 
     v.apply(vd, vreg, vec_engine);

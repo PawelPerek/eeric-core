@@ -4,7 +4,12 @@ pub fn vv(Opivv { vd, vs1, vs2, vm }: Opivv, v: &mut VectorRegisters, vec_engine
     todo!()
 }
 
-pub fn vx(Opivx { vd, rs1, vs2, vm }: Opivx, v: &mut VectorRegisters, vec_engine: &VectorEngine, x: &IntegerRegisters) {
+pub fn vx(
+    Opivx { vd, rs1, vs2, vm }: Opivx,
+    v: &mut VectorRegisters,
+    vec_engine: &VectorEngine,
+    x: &IntegerRegisters,
+) {
     todo!()
 }
 

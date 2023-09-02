@@ -4,21 +4,26 @@ pub fn m(
     Vmunary0 {
         dest: vd, vs2, vm, ..
     }: Vmunary0,
-    v: &mut VectorRegisters, vec_engine: &VectorEngine,
+    v: &mut VectorRegisters,
+    vec_engine: &VectorEngine,
 ) {
     let mut found_mask_bit = false;
 
     let vreg = v
         .get(vs2, vec_engine)
         .iter_eew()
-        .masked_map(v.default_mask(vm, vec_engine), v.get(vd, vec_engine).iter_eew(), |vs2| {
-            if !found_mask_bit && vs2 != 0 {
-                found_mask_bit = true;
-                1
-            } else {
-                0
-            }
-        })
+        .masked_map(
+            v.default_mask(vm, vec_engine),
+            v.get(vd, vec_engine).iter_eew(),
+            |vs2| {
+                if !found_mask_bit && vs2 != 0 {
+                    found_mask_bit = true;
+                    1
+                } else {
+                    0
+                }
+            },
+        )
         .collect_with_eew(vec_engine.sew.clone());
 
     v.apply(vd, vreg, vec_engine);

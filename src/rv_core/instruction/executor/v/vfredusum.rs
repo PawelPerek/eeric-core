@@ -4,12 +4,13 @@ use crate::rv_core::instruction::executor::prelude::*;
 
 fn binary_tree_sum(input: impl IntoIterator<Item = ArbitraryFloat>) -> ArbitraryFloat {
     let input_vec: Vec<_> = input.into_iter().collect_vec();
-    
+
     if input_vec.len() == 1 {
         return input_vec[0];
     }
 
-    let result: Vec<ArbitraryFloat> = input_vec.array_chunks::<2>()
+    let result: Vec<ArbitraryFloat> = input_vec
+        .array_chunks::<2>()
         .map(|&[f1, f2]| f1 + f2)
         .collect();
 
@@ -23,13 +24,18 @@ pub fn vs(
         vs2,
         vm,
     }: Opfvv,
-    v: &mut VectorRegisters, vec_engine: &VectorEngine,
+    v: &mut VectorRegisters,
+    vec_engine: &VectorEngine,
 ) {
     let initial_value = v.get(vs1, vec_engine).iter_fp().next().unwrap();
     let binding = v.get(vs2, vec_engine);
-    let values = izip!(binding.iter_fp(), v.default_mask(vm, vec_engine)).map(|(vs2, mask)| 
-        if mask == 1 { vs2 } else { ArbitraryFloat::zero() }
-    );
+    let values = izip!(binding.iter_fp(), v.default_mask(vm, vec_engine)).map(|(vs2, mask)| {
+        if mask == 1 {
+            vs2
+        } else {
+            ArbitraryFloat::zero()
+        }
+    });
 
     let sum = initial_value + binary_tree_sum(values);
 

@@ -4,7 +4,8 @@ pub fn v(
     Vs { vs3, rs1, vm }: Vs,
     eew: SEW,
     x: &IntegerRegisters,
-    v: &VectorRegisters, vec_engine: &VectorEngine,
+    v: &VectorRegisters,
+    vec_engine: &VectorEngine,
     mem: &mut Memory,
 ) {
     todo!()

@@ -1,10 +1,10 @@
 pub use crate::rv_core::{
     instruction::{format, Instruction},
-    registers::{Registers, RegistersSnapshot},
     memory::Memory,
-    vector_engine::{VectorEngine, LMUL, SEW, VLEN, MaskBehavior},
+    registers::{Registers, RegistersSnapshot},
     snapshot::Snapshotable,
-    RvCore, RvCoreBuilder
+    vector_engine::{MaskBehavior, VectorEngine, LMUL, SEW, VLEN},
+    RvCore, RvCoreBuilder,
 };
 
 pub mod alias {

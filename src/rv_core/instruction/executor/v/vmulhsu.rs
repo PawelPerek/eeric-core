@@ -7,13 +7,19 @@ pub fn vv(
         vs2,
         vm,
     }: Opmvv,
-    v: &mut VectorRegisters, vec_engine: &VectorEngine,
+    v: &mut VectorRegisters,
+    vec_engine: &VectorEngine,
 ) {
-    let vreg = izip!(v.get(vs2, vec_engine).iter_eew(), v.get(vs1, vec_engine).iter_eew())
-        .masked_map(v.default_mask(vm, vec_engine), v.get(vd, vec_engine).iter_eew(), |(vs2, vs1)| {
-            (vs2 as i64 as u128 * vs1 as u128 >> vec_engine.sew.bit_length()) as u64
-        })
-        .collect_with_eew(vec_engine.sew.clone());
+    let vreg = izip!(
+        v.get(vs2, vec_engine).iter_eew(),
+        v.get(vs1, vec_engine).iter_eew()
+    )
+    .masked_map(
+        v.default_mask(vm, vec_engine),
+        v.get(vd, vec_engine).iter_eew(),
+        |(vs2, vs1)| (vs2 as i64 as u128 * vs1 as u128 >> vec_engine.sew.bit_length()) as u64,
+    )
+    .collect_with_eew(vec_engine.sew.clone());
 
     v.apply(vd, vreg, vec_engine);
 }
@@ -25,15 +31,18 @@ pub fn vx(
         vs2,
         vm,
     }: Opmvx,
-    v: &mut VectorRegisters, vec_engine: &VectorEngine,
+    v: &mut VectorRegisters,
+    vec_engine: &VectorEngine,
     x: &IntegerRegisters,
 ) {
     let vreg = v
         .get(vs2, vec_engine)
         .iter_eew()
-        .masked_map(v.default_mask(vm, vec_engine), v.get(vd, vec_engine).iter_eew(), |vs2| {
-            (vs2 as i64 as u128 * x[rs1] as u128 >> vec_engine.sew.bit_length()) as u64
-        })
+        .masked_map(
+            v.default_mask(vm, vec_engine),
+            v.get(vd, vec_engine).iter_eew(),
+            |vs2| (vs2 as i64 as u128 * x[rs1] as u128 >> vec_engine.sew.bit_length()) as u64,
+        )
         .collect_with_eew(vec_engine.sew.clone());
 
     v.apply(vd, vreg, vec_engine);

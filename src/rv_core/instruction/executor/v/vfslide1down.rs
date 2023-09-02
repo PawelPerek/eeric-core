@@ -1,6 +1,11 @@
 use crate::rv_core::instruction::executor::prelude::*;
 
-pub fn vf(Opfvf { vd, rs1, vs2, vm }: Opfvf, v: &mut VectorRegisters, vec_engine: &VectorEngine, f: &FloatRegisters) {
+pub fn vf(
+    Opfvf { vd, rs1, vs2, vm }: Opfvf,
+    v: &mut VectorRegisters,
+    vec_engine: &VectorEngine,
+    f: &FloatRegisters,
+) {
     let last_value = f64::to_le_bytes(f[rs1]);
 
     let vreg_values: Vreg = v
@@ -16,7 +21,11 @@ pub fn vf(Opfvf { vd, rs1, vs2, vm }: Opfvf, v: &mut VectorRegisters, vec_engine
 
     let vreg = vreg_values
         .iter_eew()
-        .masked_map(v.default_mask(vm, vec_engine), v.get(vd, vec_engine).iter_eew(), |vd| vd)
+        .masked_map(
+            v.default_mask(vm, vec_engine),
+            v.get(vd, vec_engine).iter_eew(),
+            |vd| vd,
+        )
         .collect_with_eew(vec_engine.sew.clone());
 
     v.apply(vd, vreg, vec_engine);

@@ -11,7 +11,8 @@ pub fn vvm(
         vs2,
         vm: _,
     }: Opivv,
-    v: &mut VectorRegisters, vec_engine: &VectorEngine,
+    v: &mut VectorRegisters,
+    vec_engine: &VectorEngine,
 ) {
     let vreg = izip!(
         v.get(vd, vec_engine).iter_eew(),
@@ -38,7 +39,8 @@ pub fn vxm(
         vs2,
         vm: _,
     }: Opivx,
-    v: &mut VectorRegisters, vec_engine: &VectorEngine,
+    v: &mut VectorRegisters,
+    vec_engine: &VectorEngine,
     x: &IntegerRegisters,
 ) {
     let vreg = izip!(
@@ -65,7 +67,8 @@ pub fn vv(
         vs2,
         vm: _,
     }: Opivv,
-    v: &mut VectorRegisters, vec_engine: &VectorEngine,
+    v: &mut VectorRegisters,
+    vec_engine: &VectorEngine,
 ) {
     let vreg = izip!(
         v.get(vd, vec_engine).iter_eew(),
@@ -91,18 +94,22 @@ pub fn vx(
         vs2,
         vm: _,
     }: Opivx,
-    v: &mut VectorRegisters, vec_engine: &VectorEngine,
+    v: &mut VectorRegisters,
+    vec_engine: &VectorEngine,
     x: &IntegerRegisters,
 ) {
-    let vreg = izip!(v.get(vd, vec_engine).iter_eew(), v.get(vs2, vec_engine).iter_eew())
-        .map(|(vd, vs2)| (vd, x[rs1].checked_sub(vs2)))
-        .map(|(vd, maybe_sum)| {
-            vd.with_mask_bit(match maybe_sum {
-                Some(_) => 1,
-                None => 0,
-            })
+    let vreg = izip!(
+        v.get(vd, vec_engine).iter_eew(),
+        v.get(vs2, vec_engine).iter_eew()
+    )
+    .map(|(vd, vs2)| (vd, x[rs1].checked_sub(vs2)))
+    .map(|(vd, maybe_sum)| {
+        vd.with_mask_bit(match maybe_sum {
+            Some(_) => 1,
+            None => 0,
         })
-        .collect_with_eew(vec_engine.sew.clone());
+    })
+    .collect_with_eew(vec_engine.sew.clone());
 
     v.apply(vd, vreg, vec_engine);
 }

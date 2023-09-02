@@ -73,10 +73,7 @@ impl FromIterator<u8> for Vreg {
         let mut raw = Vec::new();
         raw.extend(iter);
 
-        Vreg {
-            raw,
-            eew: SEW::E8,
-        }
+        Vreg { raw, eew: SEW::E8 }
     }
 }
 

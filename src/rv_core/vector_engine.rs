@@ -1,12 +1,12 @@
 mod lmul;
+mod mask_behaviour;
 mod sew;
 mod vlen;
-mod mask_behaviour;
 
 pub use lmul::LMUL;
+pub use mask_behaviour::MaskBehavior;
 pub use sew::SEW;
 pub use vlen::VLEN;
-pub use mask_behaviour::MaskBehavior;
 
 use super::snapshot::Snapshotable;
 

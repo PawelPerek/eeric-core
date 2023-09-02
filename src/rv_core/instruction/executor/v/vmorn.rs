@@ -7,7 +7,8 @@ pub fn mm(
         vs2,
         vm: _,
     }: Opmvv,
-    v: &mut VectorRegisters, vec_engine: &VectorEngine,
+    v: &mut VectorRegisters,
+    vec_engine: &VectorEngine,
 ) {
     let vreg = izip!(
         v.get(vd, vec_engine).iter_eew(),

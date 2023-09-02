@@ -33,7 +33,7 @@ pub struct RegistersSnapshot {
 
 impl Snapshotable for Registers {
     type Snapshot = RegistersSnapshot;
-    
+
     fn snapshot(&self) -> RegistersSnapshot {
         RegistersSnapshot {
             x: self.x.snapshot(),
@@ -47,12 +47,12 @@ impl Snapshotable for Registers {
 
 impl Default for RegistersSnapshot {
     fn default() -> Self {
-        Self { 
-            x: [0; 32], 
-            c: [0; 4096], 
+        Self {
+            x: [0; 32],
+            c: [0; 4096],
             f: [0.0; 32],
-            v: Vec::new(), 
-            pc: 0
+            v: Vec::new(),
+            pc: 0,
         }
     }
 }

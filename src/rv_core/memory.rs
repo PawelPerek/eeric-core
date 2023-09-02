@@ -4,10 +4,9 @@ use super::snapshot::Snapshotable;
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct Memory(Vec<u8>);
 
-
 impl Snapshotable for Memory {
     type Snapshot = Vec<u8>;
-    
+
     fn snapshot(&self) -> Self::Snapshot {
         self.0.clone()
     }

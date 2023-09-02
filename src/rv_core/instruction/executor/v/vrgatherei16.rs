@@ -9,13 +9,17 @@ pub fn vv(Opivv { vd, vs1, vs2, vm }: Opivv, v: &mut VectorRegisters, vec_engine
         .get(vs1, vec_engine)
         .iter_eew_e16()
         .take(vlmax)
-        .masked_map(v.default_mask(vm, vec_engine), v.get(vd, vec_engine).iter_eew(), |vindex| {
-            if vindex as usize >= vlmax {
-                0
-            } else {
-                vs2_state[vindex as usize]
-            }
-        })
+        .masked_map(
+            v.default_mask(vm, vec_engine),
+            v.get(vd, vec_engine).iter_eew(),
+            |vindex| {
+                if vindex as usize >= vlmax {
+                    0
+                } else {
+                    vs2_state[vindex as usize]
+                }
+            },
+        )
         .collect_with_eew(vec_engine.sew.clone());
 
     v.apply(vd, vreg, vec_engine);

@@ -4,7 +4,8 @@ pub fn v(
     Vls { vd, rs1, rs2, vm }: Vls,
     eew: SEW,
     x: &IntegerRegisters,
-    v: &mut VectorRegisters, vec_engine: &VectorEngine,
+    v: &mut VectorRegisters,
+    vec_engine: &VectorEngine,
     mem: &Memory,
 ) {
     let addr = x[rs1] as usize;
@@ -30,9 +31,11 @@ pub fn v(
         .get(vd, vec_engine)
         .iter_eew()
         .enumerate()
-        .masked_map(v.default_mask(vm, vec_engine), v.get(vd, vec_engine).iter_eew(), |(index, _)| {
-            store[index]
-        })
+        .masked_map(
+            v.default_mask(vm, vec_engine),
+            v.get(vd, vec_engine).iter_eew(),
+            |(index, _)| store[index],
+        )
         .collect_with_eew(vec_engine.sew.clone());
 
     v.apply(vd, vreg, vec_engine);
