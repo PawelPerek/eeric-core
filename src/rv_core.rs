@@ -7,6 +7,7 @@ pub mod vector_engine;
 use instruction::{executor::Executor, Instruction};
 use memory::{Memory, MemorySnapshot};
 use registers::{Registers, RegistersSnapshot};
+use vector_engine::VectorEngineSnapshot;
 
 #[derive(Clone)]
 pub struct RvCore {
@@ -38,6 +39,10 @@ impl RvCore {
 
     pub fn memory_snapshot(&self) -> MemorySnapshot {
         self.memory.snapshot()
+    }
+
+    pub fn vector_engine_snapshot(&self) -> VectorEngineSnapshot {
+        self.registers.v.vec_engine.snapshot()
     }
 
     pub fn step(&mut self) -> Option<RegistersSnapshot> {

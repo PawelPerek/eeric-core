@@ -39,4 +39,25 @@ impl VectorEngine {
     pub fn vlmax(&self) -> usize {
         ((self.vlen.bit_length() / self.sew.bit_length()) as f32 * self.lmul.ratio()) as usize
     }
+
+    pub fn snapshot(&self) -> VectorEngineSnapshot {
+        VectorEngineSnapshot {
+            lmul: self.lmul.clone(),
+            vlen: self.vlen.clone(),
+            sew: self.sew.clone(),
+            tail_elements: self.tail_elements.clone(),
+            inactive_elements: self.inactive_elements.clone(),
+        }
+    } 
+}
+
+#[derive(Clone)]
+
+#[cfg_attr(debug_assertions, derive(Debug))]
+pub struct VectorEngineSnapshot {
+    pub lmul: LMUL,
+    pub vlen: VLEN,
+    pub sew: SEW,
+    pub tail_elements: MaskBehavior,
+    pub inactive_elements: MaskBehavior,
 }

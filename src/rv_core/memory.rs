@@ -1,7 +1,8 @@
 #[derive(Clone)]
 pub struct Memory(Vec<u8>);
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
+#[cfg_attr(debug_assertions, derive(Debug))]
 pub struct MemorySnapshot(Vec<u8>);
 
 impl Memory {

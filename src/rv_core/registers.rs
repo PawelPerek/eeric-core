@@ -18,7 +18,8 @@ pub struct Registers {
     pub pc: u64,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
+#[cfg_attr(debug_assertions, derive(Debug))]
 pub struct RegistersSnapshot {
     pub x: [u64; 32],
     pub c: [u64; 4096],
@@ -41,7 +42,7 @@ impl Registers {
 
 impl Default for RegistersSnapshot {
     fn default() -> Self {
-        RegistersSnapshot { 
+        Self { 
             x: [0; 32], 
             c: [0; 4096], 
             f: [0.0; 32],

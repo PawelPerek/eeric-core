@@ -1,5 +1,6 @@
 /// Vector length multiplier
-#[derive(Default, Clone)]
+#[derive(Clone, Default)]
+#[cfg_attr(debug_assertions, derive(Debug))]
 pub enum LMUL {
     // Fractional multipliers
     MF8,
