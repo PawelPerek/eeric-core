@@ -34,11 +34,25 @@ pub mod integer {
 }
 
 pub mod csr {
-    pub const VL: usize = 0x0C20;
-    pub const VTYPE: usize = 0x0C21;
-    pub const VSTART: usize = 0x0008;
-    pub const VXRM: usize = 0x000a;
-    pub const VXSAT: usize = 0x0009;
+    pub const INSTRET: usize = 0x0c02;
+    pub const INSTRETH: usize = 0x0c82;
+    pub const CYCLE: usize = 0x0c00;
+    pub const CYCLEH: usize = 0x0c80;
+    pub const TIME: usize = 0x0c01;
+    pub const TIMEH: usize = 0x0c81;
+    pub const MARCHID: usize = 0x0f12;
+    pub const FCSR: usize = 0x0003;
+    pub const FFLAGS: usize = 0x0001;
+    pub const FRM: usize = 0x0002;
+    pub const MSTATUS: usize = 0x0300;
+    pub const VSSTATUS: usize = 0x0200;
+    pub const VTYPE: usize = 0x0c21;
+    pub const VL: usize = 0xC20;
+    pub const VLENB: usize = 0xC22;
+    pub const VSTART: usize = 0x008;
+    pub const VXRM: usize = 0x00A;
+    pub const VXSAT: usize = 0x009;
+    pub const VCSR: usize = 0x00F;
 }
 
 pub mod float {
