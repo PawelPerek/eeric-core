@@ -2,11 +2,32 @@ use crate::rv_core::instruction::executor::prelude::*;
 
 pub fn v(
     Vsx { vs3, rs1, vs2, vm }: Vsx,
-    eew: usize,
+    eew: SEW,
     nf: usize,
     v: &VectorRegisters,
     vec_engine: &VectorEngine,
+    x: &IntegerRegisters,
     mem: &mut Memory,
 ) {
-    todo!()
+    let addr = x[rs1] as usize;
+    let vs2 = v.get(vs2, vec_engine).iter_custom_eew(eew).collect_vec();
+
+    for segment in 0..nf {
+        izip!(v.get(vs3 + segment, vec_engine).iter_eew(), v.default_mask(vm, vec_engine))
+            .enumerate()
+            .for_each(|(index, (vs3, mask))| {
+                let offset = vs2[index] as usize;
+                let address = addr.wrapping_add(offset).wrapping_add(segment.wrapping_mul(vec_engine.sew.byte_length()));
+                if mask == 1 {
+                    match vec_engine.sew {
+                        SEW::E8 => mem.set(address, (vs3 as u8).to_le_bytes()),
+                        SEW::E16 => mem.set(address, (vs3 as u16).to_le_bytes()),
+                        SEW::E32 => mem.set(address, (vs3 as u32).to_le_bytes()),
+                        SEW::E64 => mem.set(address, (vs3 as u64).to_le_bytes()),
+                        SEW::E128 => unimplemented!()
+                    };
+                }
+            });
+    }
+    
 }

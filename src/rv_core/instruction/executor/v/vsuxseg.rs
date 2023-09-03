@@ -1,12 +1,13 @@
 use crate::rv_core::instruction::executor::prelude::*;
 
 pub fn v(
-    Vsx { vs3, rs1, vs2, vm }: Vsx,
-    eew: usize,
+    vsx: Vsx,
+    eew: SEW,
     nf: usize,
     v: &VectorRegisters,
     vec_engine: &VectorEngine,
+    x: &IntegerRegisters,
     mem: &mut Memory,
 ) {
-    todo!()
+    super::vsoxseg::v(vsx, eew, nf, v, vec_engine, x, mem)
 }

@@ -355,10 +355,11 @@ impl<'m> Executor<'m> {
                 nf,
             } => v::vsuxseg::v(
                 args,
-                eew,
+                SEW::try_from(eew).unwrap(),
                 nf,
                 &self.registers.v,
                 &self.vec_engine,
+                &self.registers.x,
                 &mut self.memory,
             ),
             Vsoxsegv {
@@ -367,10 +368,11 @@ impl<'m> Executor<'m> {
                 nf,
             } => v::vsoxseg::v(
                 args,
-                eew,
+                SEW::try_from(eew).unwrap(),
                 nf,
                 &self.registers.v,
                 &self.vec_engine,
+                &self.registers.x,
                 &mut self.memory,
             ),
 
