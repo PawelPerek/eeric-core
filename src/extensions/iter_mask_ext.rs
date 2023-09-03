@@ -46,14 +46,14 @@ where
     type Item = Destination::Item;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let iter_item = self.values.next();
-        let dest_item = self.dest.next();
+        let iter_item = self.values.next()?;
+        let dest_item = self.dest.next()?;
 
         self.mask.next().map(|m| {
             if m == 1 {
-                (&mut self.func)(iter_item.unwrap())
+                (&mut self.func)(iter_item)
             } else {
-                dest_item.unwrap()
+                dest_item
             }
         })
     }

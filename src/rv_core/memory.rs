@@ -44,6 +44,20 @@ impl Memory {
     }
 }
 
+impl From<Vec<u8>> for Memory {
+    fn from(bytes: Vec<u8>) -> Self {
+        Self(bytes
+                .iter()
+                .cloned()
+                .chain(
+                    std::iter::repeat(0)
+                    .take(0x1000 - bytes.len())
+                )
+                .collect()
+            )
+    }
+} 
+
 impl Default for Memory {
     fn default() -> Self {
         Self(vec![0; 0x1000])
