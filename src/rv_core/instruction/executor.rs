@@ -224,6 +224,7 @@ impl<'m> Executor<'m> {
                 SEW::try_from(eew).unwrap(),
                 &self.registers.v,
                 &self.vec_engine,
+                &self.registers.x,
                 &mut self.memory,
             ),
 
