@@ -384,10 +384,11 @@ impl<'m> Executor<'m> {
                 nf,
             } => v::vlr::v(
                 args,
-                eew,
+                SEW::try_from(eew).unwrap(),
                 nf,
                 &mut self.registers.v,
                 &self.vec_engine,
+                &mut self.registers.x,
                 &self.memory,
             ),
             Vsrv { data: args, nf } => v::vsr::v(
