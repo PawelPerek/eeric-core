@@ -193,7 +193,7 @@ impl<'m> Executor<'m> {
 
             Vlv { data: args, eew } => v::vl::v(
                 args,
-                SEW::try_from(eew).unwrap(),
+                eew,
                 &self.registers.x,
                 &mut self.registers.v,
                 &self.vec_engine,
@@ -201,7 +201,7 @@ impl<'m> Executor<'m> {
             ),
             Vsv { data: args, eew } => v::vs::v(
                 args,
-                SEW::try_from(eew).unwrap(),
+                eew,
                 &self.registers.x,
                 &self.registers.v,
                 &self.vec_engine,
@@ -213,7 +213,7 @@ impl<'m> Executor<'m> {
 
             Vlsv { data: args, eew } => v::vls::v(
                 args,
-                SEW::try_from(eew).unwrap(),
+                eew,
                 &self.registers.x,
                 &mut self.registers.v,
                 &self.vec_engine,
@@ -221,7 +221,7 @@ impl<'m> Executor<'m> {
             ),
             Vssv { data: args, eew } => v::vss::v(
                 args,
-                SEW::try_from(eew).unwrap(),
+                eew,
                 &self.registers.v,
                 &self.vec_engine,
                 &self.registers.x,
@@ -230,7 +230,7 @@ impl<'m> Executor<'m> {
 
             Vluxv { data: args, eew } => v::vlux::v(
                 args,
-                SEW::try_from(eew).unwrap(),
+                eew,
                 &mut self.registers.v,
                 &self.vec_engine,
                 &self.registers.x,
@@ -238,7 +238,7 @@ impl<'m> Executor<'m> {
             ),
             Vloxv { data: args, eew } => v::vlox::v(
                 args,
-                SEW::try_from(eew).unwrap(),
+                eew,
                 &mut self.registers.v,
                 &self.vec_engine,
                 &self.registers.x,
@@ -246,7 +246,7 @@ impl<'m> Executor<'m> {
             ),
             Vsuxv { data: args, eew } => v::vsux::v(
                 args,
-                SEW::try_from(eew).unwrap(),
+                eew,
                 &self.registers.v,
                 &self.vec_engine,
                 &self.registers.x,
@@ -254,7 +254,7 @@ impl<'m> Executor<'m> {
             ),
             Vsoxv { data: args, eew } => v::vsox::v(
                 args,
-                SEW::try_from(eew).unwrap(),
+                eew,
                 &self.registers.v,
                 &self.vec_engine,
                 &self.registers.x,
@@ -263,7 +263,7 @@ impl<'m> Executor<'m> {
 
             Vlffv { data: args, eew } => v::vlff::v(
                 args,
-                SEW::try_from(eew).unwrap(),
+                eew,
                 &mut self.registers.v,
                 &self.vec_engine,
                 &self.registers.x,
@@ -277,7 +277,7 @@ impl<'m> Executor<'m> {
                 nf,
             } => v::vlseg::v(
                 args,
-                SEW::try_from(eew).unwrap(),
+                eew,
                 nf,
                 &mut self.registers.v,
                 &self.vec_engine,
@@ -290,7 +290,7 @@ impl<'m> Executor<'m> {
                 nf,
             } => v::vsseg::v(
                 args,
-                SEW::try_from(eew).unwrap(),
+                eew,
                 nf,
                 &self.registers.v,
                 &self.vec_engine,
@@ -304,7 +304,7 @@ impl<'m> Executor<'m> {
                 nf,
             } => v::vlsseg::v(
                 args,
-                SEW::try_from(eew).unwrap(),
+                eew,
                 nf,
                 &mut self.registers.v,
                 &self.vec_engine,
@@ -317,7 +317,7 @@ impl<'m> Executor<'m> {
                 nf,
             } => v::vssseg::v(
                 args,
-                SEW::try_from(eew).unwrap(),
+                eew,
                 nf,
                 &self.registers.v,
                 &self.vec_engine,
@@ -331,7 +331,7 @@ impl<'m> Executor<'m> {
                 nf,
             } => v::vluxseg::v(
                 args,
-                SEW::try_from(eew).unwrap(),
+                eew,
                 nf,
                 &mut self.registers.v,
                 &self.vec_engine,
@@ -344,7 +344,7 @@ impl<'m> Executor<'m> {
                 nf,
             } => v::vloxseg::v(
                 args,
-                SEW::try_from(eew).unwrap(),
+                eew,
                 nf,
                 &mut self.registers.v,
                 &self.vec_engine,
@@ -357,7 +357,7 @@ impl<'m> Executor<'m> {
                 nf,
             } => v::vsuxseg::v(
                 args,
-                SEW::try_from(eew).unwrap(),
+                eew,
                 nf,
                 &self.registers.v,
                 &self.vec_engine,
@@ -370,7 +370,7 @@ impl<'m> Executor<'m> {
                 nf,
             } => v::vsoxseg::v(
                 args,
-                SEW::try_from(eew).unwrap(),
+                eew,
                 nf,
                 &self.registers.v,
                 &self.vec_engine,
@@ -384,7 +384,7 @@ impl<'m> Executor<'m> {
                 nf,
             } => v::vlr::v(
                 args,
-                SEW::try_from(eew).unwrap(),
+                eew,
                 nf,
                 &mut self.registers.v,
                 &self.vec_engine,
