@@ -46,6 +46,13 @@ impl Vreg {
         }
     }
 
+    pub fn iter_custom_eew(&self, eew: SEW) -> VregEEWIterator<'_> {
+        VregEEWIterator {
+            byte_iterator: self.iter_byte(),
+            eew,
+        }
+    }
+
     pub fn iter_eew_e16(&self) -> VregEEWIterator<'_> {
         VregEEWIterator {
             byte_iterator: self.iter_byte(),
