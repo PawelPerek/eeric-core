@@ -14,6 +14,7 @@ pub fn v(
         .enumerate()
         .for_each(|(index, (vs3, mask))| {
             let address = addr.wrapping_add(index.wrapping_mul(eew.byte_length()));
+            
             if mask == 1 {
                 match eew {
                     SEW::E8 => mem.set(address, (vs3 as u8).to_le_bytes()),

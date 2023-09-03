@@ -9,17 +9,17 @@ pub fn v(
     mem: &Memory,
 ) {
     let addr = x[rs1] as usize;
-    let vs2 = v.get(vs2, vec_engine).iter_eew().collect_vec();
+    let vs2 = v.get(vs2, vec_engine).iter_custom_eew(eew).collect_vec();
 
     let element_amount = vec_engine.vlen.bit_length() / vec_engine.sew.bit_length();
 
-    let mut store = Vec::<u64>::with_capacity(element_amount);
+    let mut store = Vec::with_capacity(element_amount);
 
     for offset in 0..element_amount {
         let offset = vs2[offset] as usize;
         let address = addr.wrapping_add(offset);
 
-        let element: u64 = match eew.byte_length() {
+        let element: u64 = match vec_engine.sew.byte_length() {
             1 => u8::from_le_bytes(mem.get(address)) as u64,
             2 => u16::from_le_bytes(mem.get(address)) as u64,
             4 => u32::from_le_bytes(mem.get(address)) as u64,

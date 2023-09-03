@@ -246,16 +246,18 @@ impl<'m> Executor<'m> {
             ),
             Vsuxv { data: args, eew } => v::vsux::v(
                 args,
-                eew,
+                SEW::try_from(eew).unwrap(),
                 &self.registers.v,
                 &self.vec_engine,
+                &self.registers.x,
                 &mut self.memory,
             ),
             Vsoxv { data: args, eew } => v::vsox::v(
                 args,
-                eew,
+                SEW::try_from(eew).unwrap(),
                 &self.registers.v,
                 &self.vec_engine,
+                &self.registers.x,
                 &mut self.memory,
             ),
 

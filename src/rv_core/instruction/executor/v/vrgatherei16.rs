@@ -7,7 +7,7 @@ pub fn vv(Opivv { vd, vs1, vs2, vm }: Opivv, v: &mut VectorRegisters, vec_engine
 
     let vreg = v
         .get(vs1, vec_engine)
-        .iter_eew_e16()
+        .iter_custom_eew(SEW::E16)
         .take(vlmax)
         .masked_map(
             v.default_mask(vm, vec_engine),
