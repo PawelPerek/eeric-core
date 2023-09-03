@@ -9,19 +9,20 @@ pub fn v(
     x: &IntegerRegisters,
     mem: &Memory,
 ) {
-    let base_addr = x[rs1] as usize;
+    let addr = x[rs1] as usize;
     let element_amount = vec_engine.vlen.bit_length() / vec_engine.sew.bit_length();
 
     for segment in 0..nf {
         let mut vn = Vec::new();
         
         for offset in 0..element_amount {
-            let element_addr = base_addr + (offset * nf + segment) * eew.byte_length();
+            let address = addr + (offset * nf + segment) * eew.byte_length();
+
             let element: u64 = match eew {
-                SEW::E8 => u8::from_le_bytes(mem.get(element_addr)) as u64,
-                SEW::E16 => u16::from_le_bytes(mem.get(element_addr)) as u64,
-                SEW::E32 => u32::from_le_bytes(mem.get(element_addr)) as u64,
-                SEW::E64 => u64::from_le_bytes(mem.get(element_addr)),
+                SEW::E8 => u8::from_le_bytes(mem.get(address)) as u64,
+                SEW::E16 => u16::from_le_bytes(mem.get(address)) as u64,
+                SEW::E32 => u32::from_le_bytes(mem.get(address)) as u64,
+                SEW::E64 => u64::from_le_bytes(mem.get(address)),
                 _ => unimplemented!(),
             };
 

@@ -290,10 +290,11 @@ impl<'m> Executor<'m> {
                 nf,
             } => v::vsseg::v(
                 args,
-                eew,
+                SEW::try_from(eew).unwrap(),
                 nf,
                 &self.registers.v,
                 &self.vec_engine,
+                &self.registers.x,
                 &mut self.memory,
             ),
 
