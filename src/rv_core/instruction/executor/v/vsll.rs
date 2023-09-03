@@ -10,7 +10,7 @@ pub fn vv(Opivv { vd, vs1, vs2, vm }: Opivv, v: &mut VectorRegisters, vec_engine
     .masked_map(
         v.default_mask(vm, vec_engine),
         v.get(vd, vec_engine).iter_eew(),
-        |(vs2, vs1)| vs2 << shamt(vs1, vec_engine.sew.byte_length()),
+        |(vs2, vs1)| vs2 << shamt(vs1, vec_engine.sew),
     )
     .collect_with_eew(vec_engine.sew.clone());
 
@@ -29,7 +29,7 @@ pub fn vx(
         .masked_map(
             v.default_mask(vm, vec_engine),
             v.get(vd, vec_engine).iter_eew(),
-            |vs2| vs2 << shamt(x[rs1], vec_engine.sew.byte_length()),
+            |vs2| vs2 << shamt(x[rs1], vec_engine.sew),
         )
         .collect_with_eew(vec_engine.sew.clone());
 
@@ -43,7 +43,7 @@ pub fn vi(Opivi { vd, imm5, vs2, vm }: Opivi, v: &mut VectorRegisters, vec_engin
         .masked_map(
             v.default_mask(vm, vec_engine),
             v.get(vd, vec_engine).iter_eew(),
-            |vs2| vs2 << shamt(imm5 as u64, vec_engine.sew.byte_length()),
+            |vs2| vs2 << shamt(imm5 as u64, vec_engine.sew),
         )
         .collect_with_eew(vec_engine.sew.clone());
 

@@ -1,6 +1,6 @@
 use crate::rv_core::instruction::executor::prelude::*;
 
-use super::utils::rounding::Roundoff;
+use super::utils::{rounding::Roundoff, shamt::shamt};
 
 pub fn vv(Opivv { vd, vs1, vs2, vm }: Opivv, v: &mut VectorRegisters, vec_engine: &VectorEngine, csr: &CsrRegisters) {
     let roundoff_unsigned = Roundoff::new_unsigned(csr);
@@ -12,7 +12,7 @@ pub fn vv(Opivv { vd, vs1, vs2, vm }: Opivv, v: &mut VectorRegisters, vec_engine
     .masked_map(
         v.default_mask(vm, vec_engine),
         v.get(vd, vec_engine).iter_eew(),
-        |(vs2, vs1)| roundoff_unsigned(vs2 as u128, vs1 as u8),
+        |(vs2, vs1)| roundoff_unsigned(vs2 as u128, shamt(vs1, vec_engine.sew) as u8),
     )
     .collect_with_eew(vec_engine.sew.clone());
 
@@ -34,7 +34,7 @@ pub fn vx(
         .masked_map(
             v.default_mask(vm, vec_engine),
             v.get(vd, vec_engine).iter_eew(),
-            |vs2| roundoff_unsigned(vs2 as u128, x[rs1] as u8),
+            |vs2| roundoff_unsigned(vs2 as u128, shamt(x[rs1], vec_engine.sew) as u8),
         )
         .collect_with_eew(vec_engine.sew.clone());
 
@@ -50,7 +50,7 @@ pub fn vi(Opivi { vd, imm5, vs2, vm }: Opivi, v: &mut VectorRegisters, vec_engin
         .masked_map(
             v.default_mask(vm, vec_engine),
             v.get(vd, vec_engine).iter_eew(),
-            |vs2| roundoff_unsigned(vs2 as u128, imm5 as u8),
+            |vs2| roundoff_unsigned(vs2 as u128, shamt(imm5 as u64, vec_engine.sew) as u8),
         )
         .collect_with_eew(vec_engine.sew.clone());
 
