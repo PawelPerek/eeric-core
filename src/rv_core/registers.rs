@@ -4,14 +4,14 @@ mod float;
 mod integer;
 pub mod vector;
 
-use super::snapshot::Snapshotable;
+use super::{snapshot::Snapshotable, vector_engine::VectorEngine};
 
 pub use csr::CsrRegisters;
 pub use float::FloatRegisters;
 pub use integer::IntegerRegisters;
 pub use vector::VectorRegisters;
 
-#[derive(Clone, Default, PartialEq)]
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct Registers {
     pub pc: u64,
@@ -19,6 +19,18 @@ pub struct Registers {
     pub c: CsrRegisters,
     pub f: FloatRegisters,
     pub v: VectorRegisters,
+}
+
+impl Registers {
+    pub fn default(vec_engine: &VectorEngine) -> Self {
+        Self {
+            pc: 0,
+            x: IntegerRegisters::default(),
+            c: CsrRegisters::default(),
+            f: FloatRegisters::default(),
+            v: VectorRegisters::default(vec_engine),
+        }
+    }
 }
 
 #[derive(Clone, PartialEq)]
