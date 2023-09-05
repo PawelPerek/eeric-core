@@ -729,25 +729,45 @@ impl<'m> Executor<'m> {
             ),
             Vsravi(args) => v::vsra::vi(args, &mut self.registers.v, &self.vec_engine),
 
-            Vssrlvv(args) => v::vssrl::vv(args, &mut self.registers.v, &self.vec_engine, &self.registers.c),
+            Vssrlvv(args) => v::vssrl::vv(
+                args,
+                &mut self.registers.v,
+                &self.vec_engine,
+                &self.registers.c,
+            ),
             Vssrlvx(args) => v::vssrl::vx(
                 args,
                 &mut self.registers.v,
                 &self.vec_engine,
                 &self.registers.x,
-                &self.registers.c
+                &self.registers.c,
             ),
-            Vssrlvi(args) => v::vssrl::vi(args, &mut self.registers.v, &self.vec_engine, &self.registers.c),
+            Vssrlvi(args) => v::vssrl::vi(
+                args,
+                &mut self.registers.v,
+                &self.vec_engine,
+                &self.registers.c,
+            ),
 
-            Vssravv(args) => v::vssra::vv(args, &mut self.registers.v, &self.vec_engine, &self.registers.c),
+            Vssravv(args) => v::vssra::vv(
+                args,
+                &mut self.registers.v,
+                &self.vec_engine,
+                &self.registers.c,
+            ),
             Vssravx(args) => v::vssra::vx(
                 args,
                 &mut self.registers.v,
                 &self.vec_engine,
                 &self.registers.x,
-                &self.registers.c
+                &self.registers.c,
             ),
-            Vssravi(args) => v::vssra::vi(args, &mut self.registers.v, &self.vec_engine,&self.registers.c),
+            Vssravi(args) => v::vssra::vi(
+                args,
+                &mut self.registers.v,
+                &self.vec_engine,
+                &self.registers.c,
+            ),
 
             Vnsrlwv(args) => v::vnsrl::wv(args, &mut self.registers.v, &self.vec_engine),
             Vnsrlwx(args) => v::vnsrl::wx(

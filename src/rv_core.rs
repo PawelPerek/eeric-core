@@ -96,6 +96,9 @@ mod tests {
     #[test]
     fn default_has_vector_registers() {
         let core = RvCore::default();
-        assert_eq!(core.registers.snapshot().v.len(), 32 * VLEN::V128.byte_length());
+        assert_eq!(
+            core.registers.snapshot().v.len(),
+            32 * VLEN::V128.byte_length()
+        );
     }
 }

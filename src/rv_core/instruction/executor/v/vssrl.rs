@@ -2,7 +2,12 @@ use crate::rv_core::instruction::executor::prelude::*;
 
 use super::utils::{rounding::Roundoff, shamt::shamt};
 
-pub fn vv(Opivv { vd, vs1, vs2, vm }: Opivv, v: &mut VectorRegisters, vec_engine: &VectorEngine, csr: &CsrRegisters) {
+pub fn vv(
+    Opivv { vd, vs1, vs2, vm }: Opivv,
+    v: &mut VectorRegisters,
+    vec_engine: &VectorEngine,
+    csr: &CsrRegisters,
+) {
     let roundoff_unsigned = Roundoff::new_unsigned(csr);
 
     let vreg = izip!(
@@ -24,7 +29,7 @@ pub fn vx(
     v: &mut VectorRegisters,
     vec_engine: &VectorEngine,
     x: &IntegerRegisters,
-    csr: &CsrRegisters
+    csr: &CsrRegisters,
 ) {
     let roundoff_unsigned = Roundoff::new_unsigned(csr);
 
@@ -41,7 +46,12 @@ pub fn vx(
     v.apply(vd, vreg, vec_engine);
 }
 
-pub fn vi(Opivi { vd, imm5, vs2, vm }: Opivi, v: &mut VectorRegisters, vec_engine: &VectorEngine, csr: &CsrRegisters) {
+pub fn vi(
+    Opivi { vd, imm5, vs2, vm }: Opivi,
+    v: &mut VectorRegisters,
+    vec_engine: &VectorEngine,
+    csr: &CsrRegisters,
+) {
     let roundoff_unsigned = Roundoff::new_unsigned(csr);
 
     let vreg = v

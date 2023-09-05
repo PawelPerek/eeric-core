@@ -16,7 +16,8 @@ pub fn v(
     let mut store = Vec::<u64>::with_capacity(element_amount);
 
     for offset in 0..element_amount {
-        let address = addr.wrapping_add(offset.wrapping_mul(stride).wrapping_mul(eew.byte_length()));
+        let address =
+            addr.wrapping_add(offset.wrapping_mul(stride).wrapping_mul(eew.byte_length()));
 
         let element: u64 = match eew {
             SEW::E8 => u8::from_le_bytes(mem.get(address)) as u64,

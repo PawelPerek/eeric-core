@@ -43,7 +43,7 @@ pub fn v(
             .collect_with_eew(vec_engine.sew.clone());
 
         v.apply(vd + segment, vreg, vec_engine);
-    };
+    }
 }
 
 #[cfg(test)]
@@ -58,15 +58,26 @@ mod tests {
 
         let mem = Memory::from(mem_content);
         let mut x = IntegerRegisters::default();
-        let vec_engine = VectorEngineBuilder::default()
-            .vlen(VLEN::V64)
-            .build();
-        let mut v = VectorRegisters::default(&vec_engine); 
+        let vec_engine = VectorEngineBuilder::default().vlen(VLEN::V64).build();
+        let mut v = VectorRegisters::default(&vec_engine);
 
-        x[5] = 0;  // base address
-        x[6] = 4;  // stride
+        x[5] = 0; // base address
+        x[6] = 4; // stride
 
-        super::v(Vls { vd: 0, rs1: 5, rs2: 6, vm: false }, SEW::E8, 2, &mut v, &vec_engine, &x, &mem);
+        super::v(
+            Vls {
+                vd: 0,
+                rs1: 5,
+                rs2: 6,
+                vm: false,
+            },
+            SEW::E8,
+            2,
+            &mut v,
+            &vec_engine,
+            &x,
+            &mem,
+        );
 
         let first_segment = v.get(0, &vec_engine).iter_eew().collect_vec();
         let second_segment = v.get(1, &vec_engine).iter_eew().collect_vec();
@@ -81,15 +92,26 @@ mod tests {
 
         let mem = Memory::from(mem_content);
         let mut x = IntegerRegisters::default();
-        let vec_engine = VectorEngineBuilder::default()
-            .vlen(VLEN::V64)
-            .build();
-        let mut v = VectorRegisters::default(&vec_engine); 
+        let vec_engine = VectorEngineBuilder::default().vlen(VLEN::V64).build();
+        let mut v = VectorRegisters::default(&vec_engine);
 
-        x[5] = 10;  // base address
-        x[6] = 0;  // stride
+        x[5] = 10; // base address
+        x[6] = 0; // stride
 
-        super::v(Vls { vd: 0, rs1: 5, rs2: 6, vm: false }, SEW::E8, 2, &mut v, &vec_engine, &x, &mem);
+        super::v(
+            Vls {
+                vd: 0,
+                rs1: 5,
+                rs2: 6,
+                vm: false,
+            },
+            SEW::E8,
+            2,
+            &mut v,
+            &vec_engine,
+            &x,
+            &mem,
+        );
 
         let first_segment = v.get(0, &vec_engine).iter_eew().collect_vec();
         let second_segment = v.get(1, &vec_engine).iter_eew().collect_vec();
@@ -104,15 +126,26 @@ mod tests {
 
         let mem = Memory::from(mem_content);
         let mut x = IntegerRegisters::default();
-        let vec_engine = VectorEngineBuilder::default()
-            .vlen(VLEN::V64)
-            .build();
-        let mut v = VectorRegisters::default(&vec_engine); 
+        let vec_engine = VectorEngineBuilder::default().vlen(VLEN::V64).build();
+        let mut v = VectorRegisters::default(&vec_engine);
 
-        x[5] = 20;  // base address
-        x[6] = -2_i64 as u64;  // stride
+        x[5] = 20; // base address
+        x[6] = -2_i64 as u64; // stride
 
-        super::v(Vls { vd: 0, rs1: 5, rs2: 6, vm: false }, SEW::E8, 2, &mut v, &vec_engine, &x, &mem);
+        super::v(
+            Vls {
+                vd: 0,
+                rs1: 5,
+                rs2: 6,
+                vm: false,
+            },
+            SEW::E8,
+            2,
+            &mut v,
+            &vec_engine,
+            &x,
+            &mem,
+        );
 
         let first_segment = v.get(0, &vec_engine).iter_eew().collect_vec();
         let second_segment = v.get(1, &vec_engine).iter_eew().collect_vec();

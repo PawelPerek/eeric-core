@@ -9,13 +9,5 @@ pub fn v(
     x: &IntegerRegisters,
     mem: &Memory,
 ) {
-    super::vloxseg::v(
-        vlx,
-        eew,
-        nf,
-        v,
-        vec_engine,
-        x,
-        mem
-    )
+    super::vloxseg::v(vlx, eew, nf, v, vec_engine, x, mem)
 }

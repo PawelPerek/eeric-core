@@ -57,16 +57,31 @@ mod tests {
 
         let mem = Memory::from(mem_content);
         let mut x = IntegerRegisters::default();
-        let vec_engine = VectorEngineBuilder::default()
-            .vlen(VLEN::V64)
-            .build();
+        let vec_engine = VectorEngineBuilder::default().vlen(VLEN::V64).build();
         let mut v = VectorRegisters::default(&vec_engine);
 
-        x[5] = 0;  // base address
+        x[5] = 0; // base address
 
-        v.apply(2, vec![0, 5, 2, 1, 4, 8, 12, 22].into_iter().collect(), &vec_engine);
+        v.apply(
+            2,
+            vec![0, 5, 2, 1, 4, 8, 12, 22].into_iter().collect(),
+            &vec_engine,
+        );
 
-        super::v(Vlx { vd: 0, rs1: 5, vs2: 2, vm: false }, SEW::E8, 2, &mut v, &vec_engine, &x, &mem);
+        super::v(
+            Vlx {
+                vd: 0,
+                rs1: 5,
+                vs2: 2,
+                vm: false,
+            },
+            SEW::E8,
+            2,
+            &mut v,
+            &vec_engine,
+            &x,
+            &mem,
+        );
 
         let first_segment = v.get(0, &vec_engine).iter_eew().collect_vec();
         let second_segment = v.get(1, &vec_engine).iter_eew().collect_vec();

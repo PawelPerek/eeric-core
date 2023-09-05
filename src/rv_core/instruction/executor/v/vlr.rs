@@ -17,23 +17,23 @@ pub fn v(
 
         for offset in 0..elements_amount {
             let address = addr
-                .wrapping_add(
-                    offset
-                        .wrapping_mul(nf)
-                        .wrapping_add(segment)
-                )
+                .wrapping_add(offset.wrapping_mul(nf).wrapping_add(segment))
                 .wrapping_mul(eew.byte_length());
-            
+
             let data = match eew {
                 SEW::E8 => u8::from_le_bytes(mem.get(address)) as u64,
                 SEW::E16 => u16::from_le_bytes(mem.get(address)) as u64,
                 SEW::E32 => u32::from_le_bytes(mem.get(address)) as u64,
                 SEW::E64 => u64::from_le_bytes(mem.get(address)),
-                _ => unimplemented!()
+                _ => unimplemented!(),
             };
 
             vreg_data.push(data);
         }
-        v.apply(vd + segment, vreg_data.into_iter().collect_with_eew(eew), &vec_engine);
+        v.apply(
+            vd + segment,
+            vreg_data.into_iter().collect_with_eew(eew),
+            &vec_engine,
+        );
     }
 }
