@@ -75,8 +75,7 @@ mod tests {
 
         let vec_engine = VectorEngineBuilder::default()
             .vlen(VLEN::V64)
-            .build()
-            .unwrap();
+            .build();
         let mut v = VectorRegisters::default(&vec_engine);
         let eew = SEW::E8;
         let nf = 3;
@@ -107,8 +106,7 @@ mod tests {
         let vec_engine = VectorEngineBuilder::default()
             .vlen(VLEN::V64)
             .sew(SEW::E32)
-            .build()
-            .unwrap();
+            .build();
         let mut v = VectorRegisters::default(&vec_engine);
         let eew = SEW::E32;
         let nf = 2;

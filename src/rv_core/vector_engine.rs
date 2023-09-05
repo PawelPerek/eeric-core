@@ -13,17 +13,13 @@ use super::snapshot::Snapshotable;
 
 #[derive(Builder, Clone, Copy, Default, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
+#[builder(build_fn(skip))]
 pub struct VectorEngine {
-    #[builder(default)]
     pub lmul: LMUL,
-    #[builder(default)]
     pub vlen: VLEN,
-    #[builder(default)]
     pub sew: SEW,
-    #[builder(default)]
     #[allow(dead_code)]
     pub tail_elements: MaskBehavior,
-    #[builder(default)]
     #[allow(dead_code)]
     pub inactive_elements: MaskBehavior,
 }
@@ -50,6 +46,18 @@ impl VectorEngine {
     }
 }
 
+impl VectorEngineBuilder {
+    pub fn build(&self) -> VectorEngine {
+        VectorEngine {
+            lmul: self.lmul.unwrap_or_default(),
+            vlen: self.vlen.unwrap_or_default(),
+            sew: self.sew.unwrap_or_default(),
+            tail_elements: self.tail_elements.unwrap_or_default(),
+            inactive_elements: self.inactive_elements.unwrap_or_default(),
+        }
+    }
+}
+
 impl Snapshotable for VectorEngine {
     type Snapshot = Self;
 
@@ -61,5 +69,15 @@ impl Snapshotable for VectorEngine {
             tail_elements: self.tail_elements.clone(),
             inactive_elements: self.inactive_elements.clone(),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn default_works() {
+        VectorEngineBuilder::default().build();
     }
 }

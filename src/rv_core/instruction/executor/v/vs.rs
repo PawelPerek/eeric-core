@@ -37,8 +37,7 @@ mod tests {
         let mut x = IntegerRegisters::default();
         let vec_engine = VectorEngineBuilder::default()
             .vlen(VLEN::V64)
-            .build()
-            .unwrap();
+            .build();
         let mut v = VectorRegisters::default(&vec_engine);
 
         let vs3 = 0;
