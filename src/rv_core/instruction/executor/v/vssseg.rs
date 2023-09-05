@@ -4,8 +4,7 @@ pub fn v(
     Vss { vs3, rs1, rs2, vm }: Vss,
     eew: SEW,
     nf: usize,
-    v: &VectorRegisters,
-    vec_engine: &VectorEngine,
+    v: &mut VectorContext<'_>,
     x: &IntegerRegisters,
     mem: &mut Memory,
 ) {
@@ -14,8 +13,8 @@ pub fn v(
 
     for segment in 0..nf {
         izip!(
-            v.get(vs3 + segment, vec_engine).iter_custom_eew(eew),
-            v.default_mask(vm, vec_engine)
+            v.get(vs3 + segment).iter_custom_eew(eew),
+            v.default_mask(vm)
         )
         .enumerate()
         .for_each(|(index, (value, mask))| {

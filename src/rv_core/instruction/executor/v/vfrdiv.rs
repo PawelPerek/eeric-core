@@ -1,20 +1,13 @@
 use crate::rv_core::instruction::executor::prelude::*;
 
-pub fn vf(
-    Opfvf { vd, rs1, vs2, vm }: Opfvf,
-    v: &mut VectorRegisters,
-    vec_engine: &VectorEngine,
-    f: &FloatRegisters,
-) {
+pub fn vf(Opfvf { vd, rs1, vs2, vm }: Opfvf, v: &mut VectorContext<'_>, f: &FloatRegisters) {
     let vreg = v
-        .get(vs2, vec_engine)
+        .get(vs2)
         .iter_fp()
-        .masked_map(
-            v.default_mask(vm, vec_engine),
-            v.get(vd, vec_engine).iter_fp(),
-            |vs2| ArbitraryFloat::copy_type(&vs2, f[rs1]) / vs2,
-        )
+        .masked_map(v.default_mask(vm), v.get(vd).iter_fp(), |vs2| {
+            ArbitraryFloat::copy_type(&vs2, f[rs1]) / vs2
+        })
         .collect_fp();
 
-    v.apply(vd, vreg, vec_engine);
+    v.apply(vd, vreg);
 }

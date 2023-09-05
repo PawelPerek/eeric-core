@@ -4,10 +4,9 @@ pub fn v(
     vlx: Vlx,
     eew: SEW,
     nf: usize,
-    v: &mut VectorRegisters,
-    vec_engine: &VectorEngine,
+    v: &mut VectorContext<'_>,
     x: &IntegerRegisters,
     mem: &Memory,
 ) {
-    super::vloxseg::v(vlx, eew, nf, v, vec_engine, x, mem)
+    super::vloxseg::v(vlx, eew, nf, v, x, mem)
 }

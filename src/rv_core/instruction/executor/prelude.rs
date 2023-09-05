@@ -6,7 +6,7 @@ pub use crate::extensions::{
 
 pub use crate::rv_core::{
     arbitrary_float::{compose, decompose, ArbitraryFloat, RoundingMode},
-    instruction::format::*,
+    instruction::{executor::VectorContext, format::*},
     memory::Memory,
     registers::{
         aliases::{csr::*, float::*, integer::*, vector::*},

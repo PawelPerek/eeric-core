@@ -7,17 +7,16 @@ pub fn vf(
         vs2: _,
         vm: _,
     }: Opfvf,
-    v: &mut VectorRegisters,
-    vec_engine: &VectorEngine,
+    v: &mut VectorContext<'_>,
     f: &FloatRegisters,
 ) {
     let vreg = v
-        .get(vd, vec_engine)
+        .get(vd)
         .iter_fp()
         .map(|vs2| ArbitraryFloat::copy_type(&vs2, f[rs1]))
         .collect_fp();
 
-    v.apply(vd, vreg, vec_engine);
+    v.apply(vd, vreg);
 }
 
 pub fn fs(
@@ -27,11 +26,10 @@ pub fn fs(
         vm: _,
         ..
     }: Vwfunary0,
-    v: &VectorRegisters,
-    vec_engine: &VectorEngine,
+    v: &mut VectorContext<'_>,
     f: &mut FloatRegisters,
 ) {
-    let first_value = v.get(vs2, vec_engine).iter_fp().next().unwrap();
+    let first_value = v.get(vs2).iter_fp().next().unwrap();
 
     let value = match first_value {
         ArbitraryFloat::F32(fp) => {
@@ -46,18 +44,17 @@ pub fn fs(
 
 pub fn sf(
     Vrfunary0 { vd, rs1, vm: _, .. }: Vrfunary0,
-    v: &mut VectorRegisters,
-    vec_engine: &VectorEngine,
+    v: &mut VectorContext<'_>,
     f: &FloatRegisters,
 ) {
     let first_value = f64::to_le_bytes(f[rs1]);
 
-    let vreg = v.get(vd, vec_engine);
+    let vreg = v.get(vd);
     let mut vreg_data = vreg.iter_byte().collect_vec();
 
-    for i in 0..vec_engine.sew.byte_length() {
+    for i in 0..v.vec_engine.sew.byte_length() {
         vreg_data[i] = first_value[i];
     }
 
-    v.apply(vd, vreg_data.into_iter().collect(), vec_engine);
+    v.apply(vd, vreg_data.into_iter().collect());
 }

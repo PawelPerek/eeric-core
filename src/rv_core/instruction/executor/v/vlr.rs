@@ -4,13 +4,12 @@ pub fn v(
     Vlr { vd, rs1 }: Vlr,
     eew: SEW,
     nf: usize,
-    v: &mut VectorRegisters,
-    vec_engine: &VectorEngine,
+    v: &mut VectorContext<'_>,
     x: &IntegerRegisters,
     mem: &Memory,
 ) {
     let addr = x[rs1] as usize;
-    let elements_amount = vec_engine.vlen.byte_length() / eew.byte_length();
+    let elements_amount = v.vec_engine.vlen.byte_length() / eew.byte_length();
 
     for segment in 0..nf {
         let mut vreg_data = Vec::new();
@@ -30,10 +29,6 @@ pub fn v(
 
             vreg_data.push(data);
         }
-        v.apply(
-            vd + segment,
-            vreg_data.into_iter().collect_with_eew(eew),
-            &vec_engine,
-        );
+        v.apply(vd + segment, vreg_data.into_iter().collect_with_eew(eew));
     }
 }

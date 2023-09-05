@@ -7,51 +7,34 @@ pub fn vv(
         vs2,
         vm,
     }: Opfvv,
-    v: &mut VectorRegisters,
-    vec_engine: &VectorEngine,
+    v: &mut VectorContext<'_>,
 ) {
-    let vreg = izip!(
-        v.get(vs2, vec_engine).iter_fp(),
-        v.get(vs1, vec_engine).iter_fp()
-    )
-    .masked_map(
-        v.default_mask(vm, vec_engine),
-        v.get(vd, vec_engine).iter_fp(),
-        |(vs2, vs1)| {
+    let vreg = izip!(v.get(vs2).iter_fp(), v.get(vs1).iter_fp())
+        .masked_map(v.default_mask(vm), v.get(vd).iter_fp(), |(vs2, vs1)| {
             if vs2 < vs1 {
                 vs2
             } else {
                 vs1
             }
-        },
-    )
-    .collect_fp();
-
-    v.apply(vd, vreg, vec_engine);
-}
-
-pub fn vf(
-    Opfvf { vd, rs1, vs2, vm }: Opfvf,
-    v: &mut VectorRegisters,
-    vec_engine: &VectorEngine,
-    f: &FloatRegisters,
-) {
-    let vreg = v
-        .get(vs2, vec_engine)
-        .iter_fp()
-        .masked_map(
-            v.default_mask(vm, vec_engine),
-            v.get(vd, vec_engine).iter_fp(),
-            |vs2| {
-                let rs1 = ArbitraryFloat::copy_type(&vs2, f[rs1]);
-                if vs2 < rs1 {
-                    vs2
-                } else {
-                    rs1
-                }
-            },
-        )
+        })
         .collect_fp();
 
-    v.apply(vd, vreg, vec_engine);
+    v.apply(vd, vreg);
+}
+
+pub fn vf(Opfvf { vd, rs1, vs2, vm }: Opfvf, v: &mut VectorContext<'_>, f: &FloatRegisters) {
+    let vreg = v
+        .get(vs2)
+        .iter_fp()
+        .masked_map(v.default_mask(vm), v.get(vd).iter_fp(), |vs2| {
+            let rs1 = ArbitraryFloat::copy_type(&vs2, f[rs1]);
+            if vs2 < rs1 {
+                vs2
+            } else {
+                rs1
+            }
+        })
+        .collect_fp();
+
+    v.apply(vd, vreg);
 }

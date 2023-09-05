@@ -7,21 +7,15 @@ pub fn vv(
         vs2,
         vm,
     }: Opmvv,
-    v: &mut VectorRegisters,
-    vec_engine: &VectorEngine,
+    v: &mut VectorContext<'_>,
 ) {
-    let vreg = izip!(
-        v.get(vs2, vec_engine).iter_eew(),
-        v.get(vs1, vec_engine).iter_eew()
-    )
-    .masked_map(
-        v.default_mask(vm, vec_engine),
-        v.get(vd, vec_engine).iter_eew(),
-        |(vs2, vs1)| vs2.wrapping_mul(vs1),
-    )
-    .collect_with_eew(vec_engine.sew.clone());
+    let vreg = izip!(v.get(vs2).iter_eew(), v.get(vs1).iter_eew())
+        .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |(vs2, vs1)| {
+            vs2.wrapping_mul(vs1)
+        })
+        .collect_with_eew(v.vec_engine.sew.clone());
 
-    v.apply(vd, vreg, vec_engine);
+    v.apply(vd, vreg);
 }
 
 pub fn vx(
@@ -31,19 +25,16 @@ pub fn vx(
         vs2,
         vm,
     }: Opmvx,
-    v: &mut VectorRegisters,
-    vec_engine: &VectorEngine,
+    v: &mut VectorContext<'_>,
     x: &IntegerRegisters,
 ) {
     let vreg = v
-        .get(vs2, vec_engine)
+        .get(vs2)
         .iter_eew()
-        .masked_map(
-            v.default_mask(vm, vec_engine),
-            v.get(vd, vec_engine).iter_eew(),
-            |vs2| vs2.wrapping_mul(x[rs1]),
-        )
-        .collect_with_eew(vec_engine.sew.clone());
+        .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| {
+            vs2.wrapping_mul(x[rs1])
+        })
+        .collect_with_eew(v.vec_engine.sew.clone());
 
-    v.apply(vd, vreg, vec_engine);
+    v.apply(vd, vreg);
 }

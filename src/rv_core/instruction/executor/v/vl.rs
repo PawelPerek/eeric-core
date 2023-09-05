@@ -4,13 +4,12 @@ pub fn v(
     Vl { vd, rs1, vm }: Vl,
     eew: SEW,
     x: &IntegerRegisters,
-    v: &mut VectorRegisters,
-    vec_engine: &VectorEngine,
+    v: &mut VectorContext<'_>,
     mem: &Memory,
 ) {
     let addr = x[rs1] as usize;
 
-    let element_amount = vec_engine.vlen.bit_length() / vec_engine.sew.bit_length();
+    let element_amount = v.vec_engine.vlen.bit_length() / v.vec_engine.sew.bit_length();
 
     let mut store = Vec::<u64>::with_capacity(element_amount);
 
@@ -27,15 +26,13 @@ pub fn v(
     }
 
     let vreg = v
-        .get(vd, vec_engine)
+        .get(vd)
         .iter_eew()
         .enumerate()
-        .masked_map(
-            v.default_mask(vm, vec_engine),
-            v.get(vd, vec_engine).iter_eew(),
-            |(index, _)| store[index],
-        )
-        .collect_with_eew(vec_engine.sew.clone());
+        .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |(index, _)| {
+            store[index]
+        })
+        .collect_with_eew(v.vec_engine.sew.clone());
 
-    v.apply(vd, vreg, vec_engine);
+    v.apply(vd, vreg);
 }
