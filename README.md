@@ -7,7 +7,7 @@ An Easily Embeddable RIsc-v Core
 eeric is a RV64I core with support for Zicsr, M, F, D and V extensions. I designed it with following design goals in mind:
 
 - It's designed with WASM compilation in mind (although any cdylib target should work as well)
-- It's doesn't support interrupts
+- It doesn't support interrupts
 - It's single threaded, hence no A extension support
 - It's not designed to be most performant emulator, but it should be reasonably fast
 - It's meant to be an abstract back-end machine, so it needs a front-end compiler or interpreter to work (see https://github.com/PawelPerek/eeric-interpreter)
@@ -90,10 +90,4 @@ fn main() {
 
 # Roadmap
 
-As for version 0.0.x, `eeric` doesn't support a few vector instructions and it not yet usable as RISC-V Virtual Machine. They need to be implemented before bump to version 0.1.0.
-Besides that, I keep an eye on following features:
- 
- - Document code with comment docs
- - Support for bitmanip extension
- - Support for signalling NaN
- - Overhaul of interrupt handling
+See https://github.com/PawelPerek/eeric/issues
