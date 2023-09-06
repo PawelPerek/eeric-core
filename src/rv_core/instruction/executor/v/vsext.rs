@@ -9,7 +9,7 @@ pub fn vf2(
     let vreg = v
         .get(vs2)
         .iter_eew_div_2()
-        .take(v.vec_engine.vlmax() / 2)
+        .take(v.vlmax() / 2)
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| {
             match v.vec_engine.sew.bit_length() {
                 16 => vs2 as i8 as u64,
@@ -34,7 +34,7 @@ pub fn vf4(
     let vreg = v
         .get(vs2)
         .iter_eew_div_4()
-        .take(v.vec_engine.vlmax() / 4)
+        .take(v.vlmax() / 4)
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| {
             match v.vec_engine.sew.bit_length() {
                 32 => vs2 as i8 as u64,
@@ -58,7 +58,7 @@ pub fn vf8(
     let vreg = v
         .get(vs2)
         .iter_eew_div_8()
-        .take(v.vec_engine.vlmax() / 8)
+        .take(v.vlmax() / 8)
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| {
             match v.vec_engine.sew.bit_length() {
                 64 => vs2 as i8 as u64,

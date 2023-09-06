@@ -40,10 +40,6 @@ impl VectorEngine {
             inactive_elements,
         }
     }
-
-    pub fn vlmax(&self) -> usize {
-        ((self.vlen.bit_length() / self.sew.bit_length()) as f32 * self.lmul.ratio()) as usize
-    }
 }
 
 impl VectorEngineBuilder {

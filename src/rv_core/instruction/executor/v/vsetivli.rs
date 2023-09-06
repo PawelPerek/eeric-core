@@ -5,5 +5,7 @@ pub fn vsetivli(
     x: &mut IntegerRegisters,
     v: &mut VectorContext<'_>,
 ) {
-    todo!()
+    v.set_csr(VTYPE, vtypei as u64);
+    v.set_csr(VL, uimm as u64);
+    x[rd] = uimm as u64;
 }

@@ -15,7 +15,7 @@ pub fn vx(
     let vreg_values: Vreg = v
         .get(vs2)
         .iter_byte()
-        .take(v.vec_engine.vlmax() - v.vec_engine.sew.byte_length())
+        .take(v.vlmax() - v.vec_engine.sew.byte_length())
         .chain(
             last_value[0..v.vec_engine.sew.byte_length()]
                 .into_iter()

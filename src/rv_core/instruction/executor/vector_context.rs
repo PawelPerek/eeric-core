@@ -82,9 +82,20 @@ impl VectorContext<'_> {
         }
     }
 
+    pub fn vlmax(&self) -> usize {
+        ((self.vec_engine.vlen.bit_length() / self.vec_engine.sew.bit_length()) as f32 * self.vec_engine.lmul.ratio()) as usize
+    }
+
     pub fn set_csr(&mut self, csr: usize, value: u64) {
         self.csr[csr] = value;
     }
+}
+
+struct RawVType {
+    vlmul: u8,
+    vsew: u8,
+    vta: bool,
+    vma: bool
 }
 
 pub enum MaskIterator {

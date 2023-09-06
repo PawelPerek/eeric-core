@@ -6,7 +6,7 @@ pub fn vf(Opfvf { vd, rs1, vs2, vm }: Opfvf, v: &mut VectorContext<'_>, f: &Floa
         .into_iter()
         .copied()
         .chain(v.get(vs2).iter_byte().skip(v.vec_engine.sew.byte_length()))
-        .take(v.vec_engine.vlmax())
+        .take(v.vlmax())
         .collect();
 
     let vreg = vreg_values

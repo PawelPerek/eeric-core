@@ -1,7 +1,7 @@
 use crate::rv_core::instruction::executor::prelude::*;
 
 pub fn vv(Opivv { vd, vs1, vs2, vm }: Opivv, v: &mut VectorContext<'_>) {
-    let vlmax = v.vec_engine.vlmax();
+    let vlmax = v.vlmax();
 
     let vs2_state = v.get(vs2).iter_eew().collect_vec();
 
@@ -21,7 +21,7 @@ pub fn vv(Opivv { vd, vs1, vs2, vm }: Opivv, v: &mut VectorContext<'_>) {
 }
 
 pub fn vx(Opivx { vd, rs1, vs2, vm }: Opivx, v: &mut VectorContext<'_>, x: &IntegerRegisters) {
-    let vlmax = v.vec_engine.vlmax();
+    let vlmax = v.vlmax();
     let index = x[rs1];
 
     let vs2_state = v.get(vs2).iter_eew().collect_vec();
@@ -42,7 +42,7 @@ pub fn vx(Opivx { vd, rs1, vs2, vm }: Opivx, v: &mut VectorContext<'_>, x: &Inte
 }
 
 pub fn vi(Opivi { vd, imm5, vs2, vm }: Opivi, v: &mut VectorContext<'_>) {
-    let vlmax = v.vec_engine.vlmax();
+    let vlmax = v.vlmax();
     let index = imm5;
 
     let vs2_state = v.get(vs2).iter_eew().collect_vec();
