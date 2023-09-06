@@ -39,7 +39,7 @@ pub fn v(
                 v.get(vd + segment).iter_eew(),
                 |(index, _)| vn[index],
             )
-            .collect_with_eew(v.vec_engine.sew.clone());
+            .collect_with_eew(v.vec_engine.sew);
 
         v.apply(vd + segment, vreg)
     }

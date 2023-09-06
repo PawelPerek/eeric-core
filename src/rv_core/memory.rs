@@ -16,9 +16,7 @@ impl Memory {
     pub fn get<const BYTES: usize>(&self, address: usize) -> [u8; BYTES] {
         let mut bytes = [0; BYTES];
 
-        for offset in 0..BYTES {
-            bytes[offset] = self.0[address + offset];
-        }
+        bytes[..BYTES].copy_from_slice(&self.0[address..(BYTES + address)]);
 
         bytes
     }
@@ -26,21 +24,19 @@ impl Memory {
     pub fn fallible_get<const BYTES: usize>(&self, address: usize) -> Option<[u8; BYTES]> {
         let mut bytes = [0; BYTES];
 
-        for offset in 0..BYTES {
+        for (offset, byte_element) in bytes.iter_mut().enumerate().take(BYTES) {
             let Some(byte) = self.0.get(address + offset).cloned() else {
                 return None;
             };
 
-            bytes[offset] = byte;
+            *byte_element = byte;
         }
 
         Some(bytes)
     }
 
     pub fn set<const BYTES: usize>(&mut self, address: usize, value: [u8; BYTES]) {
-        for offset in 0..BYTES {
-            self.0[address + offset] = value[offset];
-        }
+        self.0[address..(BYTES + address)].copy_from_slice(&value[..BYTES]);
     }
 }
 

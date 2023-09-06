@@ -26,14 +26,11 @@ impl VectorContext<'_> {
         let end = start
             + (self.vec_engine.vlen.byte_length() as f32 * self.vec_engine.lmul.ratio()) as usize;
 
-        self.v.0[start..end].into_iter().copied()
+        self.v.0[start..end].iter().copied()
     }
 
     pub fn get(&self, nth: usize) -> Vreg {
-        Vreg::new(
-            self.register_view(nth).collect(),
-            self.vec_engine.sew.clone(),
-        )
+        Vreg::new(self.register_view(nth).collect(), self.vec_engine.sew)
     }
 
     fn wide_register_view(&self, nth: usize) -> impl Iterator<Item = u8> + '_ {
@@ -43,16 +40,13 @@ impl VectorContext<'_> {
         // multiplying 2^n (vlenb) by 2^(-n) (lmul) will not create floating point errors
         let end = start
             + (self.vec_engine.vlen.byte_length() as f32
-                * self.vec_engine.lmul.clone().double().unwrap().ratio()) as usize;
+                * self.vec_engine.lmul.double().unwrap().ratio()) as usize;
 
-        self.v.0[start..end].into_iter().copied()
+        self.v.0[start..end].iter().copied()
     }
 
     pub fn get_wide(&self, nth: usize) -> WideVreg {
-        WideVreg::new(
-            self.wide_register_view(nth).collect(),
-            self.vec_engine.sew.clone(),
-        )
+        WideVreg::new(self.wide_register_view(nth).collect(), self.vec_engine.sew)
     }
 
     pub fn default_mask(&self, enabled: bool) -> MaskIterator {
@@ -83,19 +77,13 @@ impl VectorContext<'_> {
     }
 
     pub fn vlmax(&self) -> usize {
-        ((self.vec_engine.vlen.bit_length() / self.vec_engine.sew.bit_length()) as f32 * self.vec_engine.lmul.ratio()) as usize
+        ((self.vec_engine.vlen.bit_length() / self.vec_engine.sew.bit_length()) as f32
+            * self.vec_engine.lmul.ratio()) as usize
     }
 
     pub fn set_csr(&mut self, csr: usize, value: u64) {
         self.csr[csr] = value;
     }
-}
-
-struct RawVType {
-    vlmul: u8,
-    vsew: u8,
-    vta: bool,
-    vma: bool
 }
 
 pub enum MaskIterator {

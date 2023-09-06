@@ -14,7 +14,7 @@ pub fn v(
         .iter_eew()
         .enumerate()
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |(i, _)| i as u64)
-        .collect_with_eew(v.vec_engine.sew.clone());
+        .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }

@@ -14,7 +14,7 @@ pub fn xufv(
         .masked_map(v.default_mask(vm), v.get_wide(vd).iter_eew(), |vs2| {
             vs2.round().to_u128().unwrap()
         })
-        .collect_with_wide_eew(v.vec_engine.sew.clone());
+        .collect_with_wide_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }
@@ -31,7 +31,7 @@ pub fn xfv(
         .masked_map(v.default_mask(vm), v.get_wide(vd).iter_eew(), |vs2| {
             vs2.round().to_i128().unwrap() as u128
         })
-        .collect_with_wide_eew(v.vec_engine.sew.clone());
+        .collect_with_wide_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }
@@ -111,7 +111,7 @@ pub fn rtzxufv(
         .masked_map(v.default_mask(vm), v.get_wide(vd).iter_eew(), |vs2| {
             vs2.to_u128().unwrap()
         })
-        .collect_with_wide_eew(v.vec_engine.sew.clone());
+        .collect_with_wide_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }
@@ -128,7 +128,7 @@ pub fn rtzxfv(
         .masked_map(v.default_mask(vm), v.get_wide(vd).iter_eew(), |vs2| {
             vs2.to_i128().unwrap() as u128
         })
-        .collect_with_wide_eew(v.vec_engine.sew.clone());
+        .collect_with_wide_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }

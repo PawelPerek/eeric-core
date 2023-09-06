@@ -26,7 +26,7 @@ pub fn vvm(
             None => 0,
         })
     })
-    .collect_with_eew(v.vec_engine.sew.clone());
+    .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }
@@ -53,7 +53,7 @@ pub fn vxm(
             None => 0,
         })
     })
-    .collect_with_eew(v.vec_engine.sew.clone());
+    .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }
@@ -79,7 +79,7 @@ pub fn vv(
             None => 0,
         })
     })
-    .collect_with_eew(v.vec_engine.sew.clone());
+    .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }
@@ -102,7 +102,7 @@ pub fn vx(
                 None => 0,
             })
         })
-        .collect_with_eew(v.vec_engine.sew.clone());
+        .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }

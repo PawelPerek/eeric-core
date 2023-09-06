@@ -66,17 +66,17 @@ impl<'c> Executor<'c> {
             Srliw(args) => base::srliw(args, &mut self.registers.x),
             Srai(args) => base::srai(args, &mut self.registers.x),
             Sraiw(args) => base::sraiw(args, &mut self.registers.x),
-            Ld(args) => base::ld(args, &mut self.registers.x, &self.memory),
-            Lw(args) => base::lw(args, &mut self.registers.x, &self.memory),
-            Lwu(args) => base::lwu(args, &mut self.registers.x, &self.memory),
-            Lh(args) => base::lh(args, &mut self.registers.x, &self.memory),
-            Lhu(args) => base::lhu(args, &mut self.registers.x, &self.memory),
-            Lb(args) => base::lb(args, &mut self.registers.x, &self.memory),
-            Lbu(args) => base::lbu(args, &mut self.registers.x, &self.memory),
-            Sd(args) => base::sd(args, &self.registers.x, &mut self.memory),
-            Sw(args) => base::sw(args, &self.registers.x, &mut self.memory),
-            Sh(args) => base::sh(args, &self.registers.x, &mut self.memory),
-            Sb(args) => base::sb(args, &self.registers.x, &mut self.memory),
+            Ld(args) => base::ld(args, &mut self.registers.x, self.memory),
+            Lw(args) => base::lw(args, &mut self.registers.x, self.memory),
+            Lwu(args) => base::lwu(args, &mut self.registers.x, self.memory),
+            Lh(args) => base::lh(args, &mut self.registers.x, self.memory),
+            Lhu(args) => base::lhu(args, &mut self.registers.x, self.memory),
+            Lb(args) => base::lb(args, &mut self.registers.x, self.memory),
+            Lbu(args) => base::lbu(args, &mut self.registers.x, self.memory),
+            Sd(args) => base::sd(args, &self.registers.x, self.memory),
+            Sw(args) => base::sw(args, &self.registers.x, self.memory),
+            Sh(args) => base::sh(args, &self.registers.x, self.memory),
+            Sb(args) => base::sb(args, &self.registers.x, self.memory),
             Beq(args) => base::beq(args, &self.registers.x, &mut self.registers.pc),
             Bne(args) => base::bne(args, &self.registers.x, &mut self.registers.pc),
             Bge(args) => base::bge(args, &self.registers.x, &mut self.registers.pc),
@@ -107,8 +107,8 @@ impl<'c> Executor<'c> {
             Remw(args) => m::remw(args, &mut self.registers.x),
             Remuw(args) => m::remuw(args, &mut self.registers.x),
 
-            Flw(args) => f::flw(args, &self.registers.x, &mut self.registers.f, &self.memory),
-            Fsw(args) => f::fsw(args, &self.registers.x, &self.registers.f, &mut self.memory),
+            Flw(args) => f::flw(args, &self.registers.x, &mut self.registers.f, self.memory),
+            Fsw(args) => f::fsw(args, &self.registers.x, &self.registers.f, self.memory),
             Fmadds(args) => f::fmadd::s(args, &mut self.registers.f),
             Fmsubs(args) => f::fmsub::s(args, &mut self.registers.f),
             Fnmsubs(args) => f::fnmsub::s(args, &mut self.registers.f),
@@ -138,8 +138,8 @@ impl<'c> Executor<'c> {
             Fcvtsl(args) => f::fcvt::sl(args, &self.registers.x, &mut self.registers.f),
             Fcvtslu(args) => f::fcvt::slu(args, &self.registers.x, &mut self.registers.f),
 
-            Fld(args) => d::fld(args, &self.registers.x, &mut self.registers.f, &self.memory),
-            Fsd(args) => d::fsd(args, &self.registers.x, &self.registers.f, &mut self.memory),
+            Fld(args) => d::fld(args, &self.registers.x, &mut self.registers.f, self.memory),
+            Fsd(args) => d::fsd(args, &self.registers.x, &self.registers.f, self.memory),
             Fmaddd(args) => d::fmadd::d(args, &mut self.registers.f),
             Fmsubd(args) => d::fmsub::d(args, &mut self.registers.f),
             Fnmsubd(args) => d::fnmsub::d(args, &mut self.registers.f),
@@ -188,7 +188,7 @@ impl<'c> Executor<'c> {
         let mut vctx = VectorContext {
             v: &mut self.registers.v,
             csr: &mut self.registers.c,
-            vec_engine: &mut self.vec_engine,
+            vec_engine: self.vec_engine,
         };
 
         match input {
@@ -197,123 +197,84 @@ impl<'c> Executor<'c> {
             Vsetvl(args) => v::vsetvl(args, &mut self.registers.x, &mut vctx),
 
             Vlv { data: args, eew } => {
-                v::vl::v(args, eew, &self.registers.x, &mut vctx, &self.memory)
+                v::vl::v(args, eew, &self.registers.x, &mut vctx, self.memory)
             }
-            Vsv { data: args, eew } => {
-                v::vs::v(args, eew, &self.registers.x, &mut vctx, &mut self.memory)
-            }
+            Vsv { data: args, eew } => v::vs::v(args, eew, &self.registers.x, &vctx, self.memory),
 
-            Vlmv(args) => v::vlm::v(args, &mut vctx, &self.memory),
-            Vsmv(args) => v::vsm::v(args, &mut vctx, &mut self.memory),
+            Vlmv(args) => v::vlm::v(args, &mut vctx, self.memory),
+            Vsmv(args) => v::vsm::v(args, &mut vctx, self.memory),
 
             Vlsv { data: args, eew } => {
-                v::vls::v(args, eew, &self.registers.x, &mut vctx, &self.memory)
+                v::vls::v(args, eew, &self.registers.x, &mut vctx, self.memory)
             }
-            Vssv { data: args, eew } => {
-                v::vss::v(args, eew, &mut vctx, &self.registers.x, &mut self.memory)
-            }
+            Vssv { data: args, eew } => v::vss::v(args, eew, &vctx, &self.registers.x, self.memory),
 
             Vluxv { data: args, eew } => {
-                v::vlux::v(args, eew, &mut vctx, &self.registers.x, &self.memory)
+                v::vlux::v(args, eew, &mut vctx, &self.registers.x, self.memory)
             }
             Vloxv { data: args, eew } => {
-                v::vlox::v(args, eew, &mut vctx, &self.registers.x, &self.memory)
+                v::vlox::v(args, eew, &mut vctx, &self.registers.x, self.memory)
             }
             Vsuxv { data: args, eew } => {
-                v::vsux::v(args, eew, &mut vctx, &self.registers.x, &mut self.memory)
+                v::vsux::v(args, eew, &vctx, &self.registers.x, self.memory)
             }
             Vsoxv { data: args, eew } => {
-                v::vsox::v(args, eew, &mut vctx, &self.registers.x, &mut self.memory)
+                v::vsox::v(args, eew, &vctx, &self.registers.x, self.memory)
             }
 
             Vlffv { data: args, eew } => {
-                v::vlff::v(args, eew, &mut vctx, &self.registers.x, &self.memory)
+                v::vlff::v(args, eew, &mut vctx, &self.registers.x, self.memory)
             }
 
             Vlsegv {
                 data: args,
                 eew,
                 nf,
-            } => v::vlseg::v(args, eew, nf, &mut vctx, &self.registers.x, &self.memory),
+            } => v::vlseg::v(args, eew, nf, &mut vctx, &self.registers.x, self.memory),
             Vssegv {
                 data: args,
                 eew,
                 nf,
-            } => v::vsseg::v(
-                args,
-                eew,
-                nf,
-                &mut vctx,
-                &self.registers.x,
-                &mut self.memory,
-            ),
+            } => v::vsseg::v(args, eew, nf, &vctx, &self.registers.x, self.memory),
 
             Vlssegv {
                 data: args,
                 eew,
                 nf,
-            } => v::vlsseg::v(args, eew, nf, &mut vctx, &self.registers.x, &self.memory),
+            } => v::vlsseg::v(args, eew, nf, &mut vctx, &self.registers.x, self.memory),
             Vsssegv {
                 data: args,
                 eew,
                 nf,
-            } => v::vssseg::v(
-                args,
-                eew,
-                nf,
-                &mut vctx,
-                &self.registers.x,
-                &mut self.memory,
-            ),
+            } => v::vssseg::v(args, eew, nf, &vctx, &self.registers.x, self.memory),
 
             Vluxsegv {
                 data: args,
                 eew,
                 nf,
-            } => v::vluxseg::v(args, eew, nf, &mut vctx, &self.registers.x, &self.memory),
+            } => v::vluxseg::v(args, eew, nf, &mut vctx, &self.registers.x, self.memory),
             Vloxsegv {
                 data: args,
                 eew,
                 nf,
-            } => v::vloxseg::v(args, eew, nf, &mut vctx, &self.registers.x, &self.memory),
+            } => v::vloxseg::v(args, eew, nf, &mut vctx, &self.registers.x, self.memory),
             Vsuxsegv {
                 data: args,
                 eew,
                 nf,
-            } => v::vsuxseg::v(
-                args,
-                eew,
-                nf,
-                &mut vctx,
-                &self.registers.x,
-                &mut self.memory,
-            ),
+            } => v::vsuxseg::v(args, eew, nf, &vctx, &self.registers.x, self.memory),
             Vsoxsegv {
                 data: args,
                 eew,
                 nf,
-            } => v::vsoxseg::v(
-                args,
-                eew,
-                nf,
-                &mut vctx,
-                &self.registers.x,
-                &mut self.memory,
-            ),
+            } => v::vsoxseg::v(args, eew, nf, &vctx, &self.registers.x, self.memory),
 
             Vlrv {
                 data: args,
                 eew,
                 nf,
-            } => v::vlr::v(
-                args,
-                eew,
-                nf,
-                &mut vctx,
-                &mut self.registers.x,
-                &self.memory,
-            ),
-            Vsrv { data: args, nf } => v::vsr::v(args, nf, &mut vctx, &mut self.memory),
+            } => v::vlr::v(args, eew, nf, &mut vctx, &self.registers.x, self.memory),
+            Vsrv { data: args, nf } => v::vsr::v(args, nf, &mut vctx, self.memory),
 
             Vaddvv(args) => v::vadd::vv(args, &mut vctx),
             Vaddvx(args) => v::vadd::vx(args, &mut vctx, &self.registers.x),
@@ -504,9 +465,9 @@ impl<'c> Executor<'c> {
 
             Vslide1downvx(args) => v::vslide1down::vx(args, &mut vctx, &self.registers.x),
 
-            Vmvxs(args) => v::vmv::xs(args, &mut vctx, &mut self.registers.x),
-            Vcpopm(args) => v::vcpop::m(args, &mut vctx, &mut self.registers.x),
-            Vfirstm(args) => v::vfirst::m(args, &mut vctx, &mut self.registers.x),
+            Vmvxs(args) => v::vmv::xs(args, &vctx, &mut self.registers.x),
+            Vcpopm(args) => v::vcpop::m(args, &vctx, &mut self.registers.x),
+            Vfirstm(args) => v::vfirst::m(args, &vctx, &mut self.registers.x),
 
             Vmvsx(args) => v::vmv::sx(args, &mut vctx, &self.registers.x),
 
@@ -647,7 +608,7 @@ impl<'c> Executor<'c> {
 
             Vfslide1downvf(args) => v::vfslide1down::vf(args, &mut vctx, &self.registers.f),
 
-            Vfmvfs(args) => v::vfmv::fs(args, &mut vctx, &mut self.registers.f),
+            Vfmvfs(args) => v::vfmv::fs(args, &vctx, &mut self.registers.f),
 
             Vfmvsf(args) => v::vfmv::sf(args, &mut vctx, &self.registers.f),
 

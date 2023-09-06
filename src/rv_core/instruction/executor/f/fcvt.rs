@@ -45,5 +45,5 @@ pub fn sl(R { rd, rs1, rs2: _ }: R, x: &IntegerRegisters, f: &mut FloatRegisters
 pub fn slu(R { rd, rs1, rs2: _ }: R, x: &IntegerRegisters, f: &mut FloatRegisters) {
     let (_, rest) = decompose(f[rd]);
 
-    f[rd] = compose(x[rs1] as u64 as f32, rest);
+    f[rd] = compose(x[rs1] as f32, rest);
 }

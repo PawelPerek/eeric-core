@@ -18,7 +18,7 @@ pub fn m(
             }
             sum_snapshot
         })
-        .collect_with_eew(v.vec_engine.sew.clone());
+        .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }

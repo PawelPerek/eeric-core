@@ -4,7 +4,7 @@ pub fn v(
     Vss { vs3, rs1, rs2, vm }: Vss,
     eew: SEW,
     nf: usize,
-    v: &mut VectorContext<'_>,
+    v: &VectorContext<'_>,
     x: &IntegerRegisters,
     mem: &mut Memory,
 ) {
@@ -32,7 +32,7 @@ pub fn v(
                     SEW::E8 => mem.set(address, (value as u8).to_le_bytes()),
                     SEW::E16 => mem.set(address, (value as u16).to_le_bytes()),
                     SEW::E32 => mem.set(address, (value as u32).to_le_bytes()),
-                    SEW::E64 => mem.set(address, (value as u64).to_le_bytes()),
+                    SEW::E64 => mem.set(address, value.to_le_bytes()),
                     _ => unimplemented!(),
                 };
             }

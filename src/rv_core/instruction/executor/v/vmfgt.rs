@@ -11,7 +11,7 @@ pub fn vf(Opfvf { vd, rs1, vs2, vm }: Opfvf, v: &mut VectorContext<'_>, f: &Floa
                 0
             }
         })
-        .collect_with_eew(v.vec_engine.sew.clone());
+        .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }

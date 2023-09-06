@@ -16,7 +16,7 @@ pub fn vv(Opivv { vd, vs1, vs2, vm }: Opivv, v: &mut VectorContext<'_>) {
                 vs2_state[vindex as usize]
             }
         })
-        .collect_with_eew(v.vec_engine.sew.clone());
+        .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }

@@ -51,7 +51,7 @@ where
 
         self.mask.next().map(|m| {
             if m == 1 {
-                (&mut self.func)(iter_item)
+                (self.func)(iter_item)
             } else {
                 dest_item
             }

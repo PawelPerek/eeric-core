@@ -3,7 +3,7 @@ use crate::rv_core::instruction::executor::prelude::*;
 pub fn v(
     Vsx { vs3, rs1, vs2, vm }: Vsx,
     eew: SEW,
-    v: &mut VectorContext<'_>,
+    v: &VectorContext<'_>,
     x: &IntegerRegisters,
     mem: &mut Memory,
 ) {
@@ -11,7 +11,7 @@ pub fn v(
 
     izip!(
         v.get(vs3).iter_eew(),
-        v.get(vs2).iter_custom_eew(eew.clone()),
+        v.get(vs2).iter_custom_eew(eew),
         v.default_mask(vm)
     )
     .for_each(|(data, offset, mask)| {
@@ -21,7 +21,7 @@ pub fn v(
                 SEW::E8 => mem.set(address, (data as u8).to_le_bytes()),
                 SEW::E16 => mem.set(address, (data as u16).to_le_bytes()),
                 SEW::E32 => mem.set(address, (data as u32).to_le_bytes()),
-                SEW::E64 => mem.set(address, (data as u64).to_le_bytes()),
+                SEW::E64 => mem.set(address, data.to_le_bytes()),
                 SEW::E128 => unimplemented!(),
             }
         }

@@ -22,9 +22,7 @@ pub fn vs(
     let mut vd_data = v.get(vd).iter_eew().collect_vec();
     vd_data[0] = sum;
 
-    let vreg = vd_data
-        .into_iter()
-        .collect_with_eew(v.vec_engine.sew.clone());
+    let vreg = vd_data.into_iter().collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }

@@ -21,28 +21,28 @@ impl Vreg {
     pub fn iter_eew(&self) -> VregEEWIterator<'_> {
         VregEEWIterator {
             byte_iterator: self.iter_byte(),
-            eew: self.eew.clone(),
+            eew: self.eew,
         }
     }
 
     pub fn iter_eew_div_2(&self) -> VregEEWIterator<'_> {
         VregEEWIterator {
             byte_iterator: self.iter_byte(),
-            eew: self.eew.clone().half().unwrap(),
+            eew: self.eew.half().unwrap(),
         }
     }
 
     pub fn iter_eew_div_4(&self) -> VregEEWIterator<'_> {
         VregEEWIterator {
             byte_iterator: self.iter_byte(),
-            eew: self.eew.clone().fourth().unwrap(),
+            eew: self.eew.fourth().unwrap(),
         }
     }
 
     pub fn iter_eew_div_8(&self) -> VregEEWIterator<'_> {
         VregEEWIterator {
             byte_iterator: self.iter_byte(),
-            eew: self.eew.clone().eighth().unwrap(),
+            eew: self.eew.eighth().unwrap(),
         }
     }
 
@@ -63,7 +63,7 @@ impl Vreg {
     pub fn iter_fp(&self) -> VregFPIterator<'_> {
         VregFPIterator {
             byte_iterator: self.iter_byte(),
-            eew: self.eew.clone(),
+            eew: self.eew,
         }
     }
 }
@@ -113,18 +113,18 @@ impl<'a> Iterator for VregEEWIterator<'a> {
     type Item = u64;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.byte_iterator.len() <= 0 {
+        if self.byte_iterator.len() == 0 {
             return None;
         }
 
         let mut bytes = [0x00_u8; std::mem::size_of::<u64>()];
 
-        for i in 0..self.eew.byte_length() {
+        for byte_element in bytes.iter_mut().take(self.eew.byte_length()) {
             let byte = self
                 .byte_iterator
                 .next()
                 .expect("VregEEWIterator finished early, EEW is not divisible by VLEN*EMUL?");
-            bytes[i] = byte;
+            *byte_element = byte;
         }
 
         Some(u64::from_le_bytes(bytes))

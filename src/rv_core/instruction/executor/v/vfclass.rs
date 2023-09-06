@@ -27,7 +27,7 @@ pub fn v(
                 _ => 0,
             }
         })
-        .collect_with_eew(v.vec_engine.sew.clone());
+        .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }

@@ -21,14 +21,14 @@ impl WideVreg {
     pub fn iter_eew(&self) -> WideVregEEWIterator<'_> {
         WideVregEEWIterator {
             byte_iterator: self.iter_byte(),
-            eew: self.eew.clone(),
+            eew: self.eew,
         }
     }
 
     pub fn iter_fp(&self) -> WideVregFPIterator<'_> {
         WideVregFPIterator {
             byte_iterator: self.iter_byte(),
-            eew: self.eew.clone(),
+            eew: self.eew,
         }
     }
 }
@@ -78,18 +78,18 @@ impl<'a> Iterator for WideVregEEWIterator<'a> {
     type Item = u128;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.byte_iterator.len() <= 0 {
+        if self.byte_iterator.len() == 0 {
             return None;
         }
 
         let mut bytes = [0x00_u8; std::mem::size_of::<u128>()];
 
-        for i in 0..self.eew.byte_length() {
+        for byte_element in bytes.iter_mut().take(self.eew.byte_length()) {
             let byte = self
                 .byte_iterator
                 .next()
                 .expect("WideVregEEWIterator finished early, EEW is not divisible by VLEN*EMUL?");
-            bytes[i] = byte;
+            *byte_element = byte;
         }
 
         Some(u128::from_le_bytes(bytes))

@@ -213,10 +213,7 @@ impl ToPrimitive for ArbitraryFloat {
 
 impl NumCast for ArbitraryFloat {
     fn from<T: ToPrimitive>(n: T) -> Option<Self> {
-        match n.to_f64() {
-            Some(fp) => Some(Self::F64(fp)),
-            None => None,
-        }
+        n.to_f64().map(Self::F64)
     }
 }
 

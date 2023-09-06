@@ -10,9 +10,7 @@ pub fn vs(Opivv { vd, vs1, vs2, vm }: Opivv, v: &mut VectorContext<'_>) {
     let mut vd_data = v.get_wide(vd).iter_eew().collect_vec();
     vd_data[0] = sum;
 
-    let vreg = vd_data
-        .into_iter()
-        .collect_with_wide_eew(v.vec_engine.sew.clone());
+    let vreg = vd_data.into_iter().collect_with_wide_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }

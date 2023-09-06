@@ -15,7 +15,7 @@ pub fn mm(
         v.get(vs1).iter_mask(),
     )
     .map(|(vd, vs2, vs1)| vd.with_mask_bit(vs2 | !vs1))
-    .collect_with_eew(v.vec_engine.sew.clone());
+    .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }

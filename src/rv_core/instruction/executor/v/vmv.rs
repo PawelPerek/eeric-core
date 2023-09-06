@@ -9,11 +9,7 @@ pub fn vv(
     }: Opivv,
     v: &mut VectorContext<'_>,
 ) {
-    let vreg = v
-        .get(vs1)
-        .iter_eew()
-        .map(|vs1| vs1)
-        .collect_with_eew(v.vec_engine.sew.clone());
+    let vreg = v.get(vs1);
 
     v.apply(vd, vreg);
 }
@@ -32,7 +28,7 @@ pub fn vx(
         .get(vd)
         .iter_eew()
         .map(|_| x[rs1])
-        .collect_with_eew(v.vec_engine.sew.clone());
+        .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }
@@ -50,7 +46,7 @@ pub fn vi(
         .get(vd)
         .iter_eew()
         .map(|_| imm5 as u64)
-        .collect_with_eew(v.vec_engine.sew.clone());
+        .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }
@@ -62,7 +58,7 @@ pub fn xs(
         vm: _,
         ..
     }: Vwxunary0,
-    v: &mut VectorContext<'_>,
+    v: &VectorContext<'_>,
     x: &mut IntegerRegisters,
 ) {
     let first_value = v.get(vs2).iter_eew().next().unwrap();
@@ -85,9 +81,8 @@ pub fn sx(
     let vreg = v.get(vd);
     let mut vreg_data = vreg.iter_byte().collect_vec();
 
-    for i in 0..v.vec_engine.sew.byte_length() {
-        vreg_data[i] = first_value[i];
-    }
+    vreg_data[..v.vec_engine.sew.byte_length()]
+        .copy_from_slice(&first_value[..v.vec_engine.sew.byte_length()]);
 
     v.apply(vd, vreg_data.into_iter().collect());
 }

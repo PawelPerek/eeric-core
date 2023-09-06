@@ -17,7 +17,7 @@ pub fn vv(
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |(vs2, vs1)| {
             roundoff_unsigned((vs2 as u128).wrapping_sub(vs1 as u128), 1)
         })
-        .collect_with_eew(v.vec_engine.sew.clone());
+        .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }
@@ -40,7 +40,7 @@ pub fn vx(
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| {
             roundoff_unsigned((vs2 as u128).wrapping_sub(x[rs1] as u128), 1)
         })
-        .collect_with_eew(v.vec_engine.sew.clone());
+        .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }

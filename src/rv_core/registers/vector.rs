@@ -1,8 +1,6 @@
 mod vreg;
 mod wide_vreg;
 
-use std::collections::VecDeque;
-
 use crate::prelude::*;
 pub use vreg::Vreg;
 pub use wide_vreg::WideVreg;

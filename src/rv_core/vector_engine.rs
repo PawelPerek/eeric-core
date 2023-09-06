@@ -59,11 +59,11 @@ impl Snapshotable for VectorEngine {
 
     fn snapshot(&self) -> Self::Snapshot {
         Self {
-            lmul: self.lmul.clone(),
-            vlen: self.vlen.clone(),
-            sew: self.sew.clone(),
-            tail_elements: self.tail_elements.clone(),
-            inactive_elements: self.inactive_elements.clone(),
+            lmul: self.lmul,
+            vlen: self.vlen,
+            sew: self.sew,
+            tail_elements: self.tail_elements,
+            inactive_elements: self.inactive_elements,
         }
     }
 }

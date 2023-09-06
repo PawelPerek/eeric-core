@@ -19,7 +19,7 @@ pub fn vv(
         v.get(vd).iter_eew(),
         |(vd, vs2, vs1)| vs2.wrapping_sub(vs1.wrapping_mul(vd)),
     )
-    .collect_with_eew(v.vec_engine.sew.clone());
+    .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }
@@ -38,7 +38,7 @@ pub fn vx(
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |(vd, vs2)| {
             vs2.wrapping_sub(x[rs1].wrapping_mul(vd))
         })
-        .collect_with_eew(v.vec_engine.sew.clone());
+        .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }

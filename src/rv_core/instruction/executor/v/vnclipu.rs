@@ -8,7 +8,7 @@ pub fn wv(Opivv { vd, vs1, vs2, vm }: Opivv, v: &mut VectorContext<'_>) {
     let uint_max = u64::MAX >> (64 - v.vec_engine.sew.bit_length());
     let sign_mask = u64::MIN << v.vec_engine.sew.bit_length();
 
-    let vec_engine = v.vec_engine.clone();
+    let vec_engine = *v.vec_engine;
 
     let vreg = izip!(v.get(vs2).iter_eew(), v.get(vs1).iter_eew())
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |(vs2, vs1)| {
@@ -19,7 +19,7 @@ pub fn wv(Opivv { vd, vs1, vs2, vm }: Opivv, v: &mut VectorContext<'_>) {
 
             if sign_mask & result != 0 {
                 v.set_csr(VXSAT, 1);
-                uint_max as u64
+                uint_max
             } else {
                 result
             }
@@ -35,7 +35,7 @@ pub fn wx(Opivx { vd, rs1, vs2, vm }: Opivx, v: &mut VectorContext<'_>, x: &Inte
     let uint_max = u64::MAX >> (64 - v.vec_engine.sew.bit_length());
     let sign_mask = u64::MIN << v.vec_engine.sew.bit_length();
 
-    let vec_engine = v.vec_engine.clone();
+    let vec_engine = *v.vec_engine;
 
     let vreg = v
         .get(vs2)
@@ -48,7 +48,7 @@ pub fn wx(Opivx { vd, rs1, vs2, vm }: Opivx, v: &mut VectorContext<'_>, x: &Inte
 
             if sign_mask & result != 0 {
                 v.set_csr(VXSAT, 1);
-                uint_max as u64
+                uint_max
             } else {
                 result
             }
@@ -64,7 +64,7 @@ pub fn wi(Opivi { vd, imm5, vs2, vm }: Opivi, v: &mut VectorContext<'_>) {
     let uint_max = u64::MAX >> (64 - v.vec_engine.sew.bit_length());
     let sign_mask = u64::MIN << v.vec_engine.sew.bit_length();
 
-    let vec_engine = v.vec_engine.clone();
+    let vec_engine = *v.vec_engine;
 
     let vreg = v
         .get(vs2)
@@ -77,7 +77,7 @@ pub fn wi(Opivi { vd, imm5, vs2, vm }: Opivi, v: &mut VectorContext<'_>) {
 
             if sign_mask & result != 0 {
                 v.set_csr(VXSAT, 1);
-                uint_max as u64
+                uint_max
             } else {
                 result
             }

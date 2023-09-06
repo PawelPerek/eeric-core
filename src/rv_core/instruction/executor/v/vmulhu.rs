@@ -11,9 +11,9 @@ pub fn vv(
 ) {
     let vreg = izip!(v.get(vs2).iter_eew(), v.get(vs1).iter_eew())
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |(vs2, vs1)| {
-            (vs2 as u128 * vs1 as u128 >> v.vec_engine.sew.bit_length()) as u64
+            ((vs2 as u128 * vs1 as u128) >> v.vec_engine.sew.bit_length()) as u64
         })
-        .collect_with_eew(v.vec_engine.sew.clone());
+        .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }
@@ -32,9 +32,9 @@ pub fn vx(
         .get(vs2)
         .iter_eew()
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| {
-            (vs2 as u128 * x[rs1] as u128 >> v.vec_engine.sew.bit_length()) as u64
+            ((vs2 as u128 * x[rs1] as u128) >> v.vec_engine.sew.bit_length()) as u64
         })
-        .collect_with_eew(v.vec_engine.sew.clone());
+        .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }

@@ -4,12 +4,12 @@ pub fn v(
     Vs { vs3, rs1, vm }: Vs,
     eew: SEW,
     x: &IntegerRegisters,
-    v: &mut VectorContext<'_>,
+    v: &VectorContext<'_>,
     mem: &mut Memory,
 ) {
     let addr = x[rs1] as usize;
 
-    izip!(v.get(vs3).iter_custom_eew(eew.clone()), v.default_mask(vm))
+    izip!(v.get(vs3).iter_custom_eew(eew), v.default_mask(vm))
         .enumerate()
         .for_each(|(index, (vs3, mask))| {
             let address = addr.wrapping_add(index.wrapping_mul(eew.byte_length()));

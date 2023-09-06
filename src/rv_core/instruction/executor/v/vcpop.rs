@@ -4,7 +4,7 @@ pub fn m(
     Vwxunary0 {
         dest: rd, vs2, vm, ..
     }: Vwxunary0,
-    v: &mut VectorContext<'_>,
+    v: &VectorContext<'_>,
     x: &mut IntegerRegisters,
 ) {
     let mask_count = izip!(v.default_mask(vm), v.get(vs2).iter_mask())

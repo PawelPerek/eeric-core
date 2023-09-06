@@ -23,7 +23,7 @@ pub fn vv(
                 .wrapping_add(vd)
         },
     )
-    .collect_with_wide_eew(v.vec_engine.sew.clone());
+    .collect_with_wide_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }
@@ -48,7 +48,7 @@ pub fn vx(
                     .wrapping_add(vd)
             },
         )
-        .collect_with_wide_eew(v.vec_engine.sew.clone());
+        .collect_with_wide_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }

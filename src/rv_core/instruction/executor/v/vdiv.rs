@@ -21,7 +21,7 @@ pub fn vv(
                 }
             },
         )
-        .collect_with_eew(v.vec_engine.sew.clone());
+        .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }
@@ -48,7 +48,7 @@ pub fn vx(
                 ((dividend as i64) / (divisor as i64)) as u64
             }
         })
-        .collect_with_eew(v.vec_engine.sew.clone());
+        .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }

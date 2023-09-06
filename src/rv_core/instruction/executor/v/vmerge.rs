@@ -15,7 +15,7 @@ pub fn vvm(
         v.get(vs1).iter_eew(),
     )
     .map(|(mask, vs2, vs1)| if mask == 1 { vs1 } else { vs2 })
-    .collect_with_eew(v.vec_engine.sew.clone());
+    .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }
@@ -32,7 +32,7 @@ pub fn vxm(
 ) {
     let vreg = izip!(v.default_mask(true), v.get(vs2).iter_eew(),)
         .map(|(mask, vs2)| if mask == 1 { x[rs1] } else { vs2 })
-        .collect_with_eew(v.vec_engine.sew.clone());
+        .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }
@@ -48,7 +48,7 @@ pub fn vim(
 ) {
     let vreg = izip!(v.default_mask(true), v.get(vs2).iter_eew(),)
         .map(|(mask, vs2)| if mask == 1 { imm5 as u64 } else { vs2 })
-        .collect_with_eew(v.vec_engine.sew.clone());
+        .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }

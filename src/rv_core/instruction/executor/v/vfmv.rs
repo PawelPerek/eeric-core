@@ -26,7 +26,7 @@ pub fn fs(
         vm: _,
         ..
     }: Vwfunary0,
-    v: &mut VectorContext<'_>,
+    v: &VectorContext<'_>,
     f: &mut FloatRegisters,
 ) {
     let first_value = v.get(vs2).iter_fp().next().unwrap();
@@ -52,9 +52,8 @@ pub fn sf(
     let vreg = v.get(vd);
     let mut vreg_data = vreg.iter_byte().collect_vec();
 
-    for i in 0..v.vec_engine.sew.byte_length() {
-        vreg_data[i] = first_value[i];
-    }
+    vreg_data[..v.vec_engine.sew.byte_length()]
+        .copy_from_slice(&first_value[..v.vec_engine.sew.byte_length()]);
 
     v.apply(vd, vreg_data.into_iter().collect());
 }

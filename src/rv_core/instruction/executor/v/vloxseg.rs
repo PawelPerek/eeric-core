@@ -16,9 +16,8 @@ pub fn v(
     for segment in 0..nf {
         let mut store = Vec::with_capacity(element_amount);
 
-        for offset in 0..element_amount {
-            let offset = vs2[offset] as usize;
-            let address = addr.wrapping_add(offset).wrapping_add(segment);
+        for offset in vs2.iter().take(element_amount) {
+            let address = addr.wrapping_add(*offset as usize).wrapping_add(segment);
 
             let element: u64 = match v.vec_engine.sew {
                 SEW::E8 => u8::from_le_bytes(mem.get(address)) as u64,
@@ -40,7 +39,7 @@ pub fn v(
                 v.get(vd + segment).iter_eew(),
                 |(index, _)| store[index],
             )
-            .collect_with_eew(v.vec_engine.sew.clone());
+            .collect_with_eew(v.vec_engine.sew);
 
         v.apply(vd + segment, vreg)
     }

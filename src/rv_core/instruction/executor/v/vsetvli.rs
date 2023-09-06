@@ -10,7 +10,7 @@ pub fn vsetvli(
     let avl = match (rd, rs1) {
         (ZERO, ZERO) => v.csr[VL],
         (_, ZERO) => v.vlmax() as u64,
-        (_, rs1) => x[rs1].min(v.vlmax() as u64)
+        (_, rs1) => x[rs1].min(v.vlmax() as u64),
     };
 
     v.set_csr(VL, avl);

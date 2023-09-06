@@ -12,7 +12,7 @@ pub fn vx(Opivx { vd, rs1, vs2, vm }: Opivx, v: &mut VectorContext<'_>, x: &Inte
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |(index, _)| {
             vs2_snapshot.get(index + offset).copied().unwrap_or(0)
         })
-        .collect_with_eew(v.vec_engine.sew.clone());
+        .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }
@@ -29,7 +29,7 @@ pub fn vi(Opivi { vd, imm5, vs2, vm }: Opivi, v: &mut VectorContext<'_>) {
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |(index, _)| {
             vs2_snapshot.get(index + offset).copied().unwrap_or(0)
         })
-        .collect_with_eew(v.vec_engine.sew.clone());
+        .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }

@@ -18,7 +18,7 @@ pub fn vx(
         .take(v.vlmax() - v.vec_engine.sew.byte_length())
         .chain(
             last_value[0..v.vec_engine.sew.byte_length()]
-                .into_iter()
+                .iter()
                 .copied(),
         )
         .collect();
@@ -26,7 +26,7 @@ pub fn vx(
     let vreg = vreg_values
         .iter_eew()
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vd| vd)
-        .collect_with_eew(v.vec_engine.sew.clone());
+        .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }

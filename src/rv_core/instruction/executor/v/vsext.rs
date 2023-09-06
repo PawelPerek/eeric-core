@@ -20,7 +20,7 @@ pub fn vf2(
                 _ => unreachable!(),
             }
         })
-        .collect_with_eew(v.vec_engine.sew.clone());
+        .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }
@@ -44,7 +44,7 @@ pub fn vf4(
                 _ => unreachable!(),
             }
         })
-        .collect_with_eew(v.vec_engine.sew.clone());
+        .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }
@@ -67,7 +67,7 @@ pub fn vf8(
                 _ => unreachable!(),
             }
         })
-        .collect_with_eew(v.vec_engine.sew.clone());
+        .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }

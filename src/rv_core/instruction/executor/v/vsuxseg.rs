@@ -4,7 +4,7 @@ pub fn v(
     vsx: Vsx,
     eew: SEW,
     nf: usize,
-    v: &mut VectorContext<'_>,
+    v: &VectorContext<'_>,
     x: &IntegerRegisters,
     mem: &mut Memory,
 ) {

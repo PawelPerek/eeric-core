@@ -36,7 +36,7 @@ pub fn v(
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |(index, _)| {
             store[index]
         })
-        .collect_with_eew(v.vec_engine.sew.clone());
+        .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
 }
