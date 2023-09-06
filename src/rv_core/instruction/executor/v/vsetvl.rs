@@ -5,7 +5,7 @@ pub fn vsetvl(
     x: &mut IntegerRegisters,
     v: &mut VectorContext<'_>,
 ) {
-    v.set_csr(VTYPE, x[rs2]);
+    v.set_vtype(x[rs2]).unwrap();
 
     let avl = match (rd, rs1) {
         (ZERO, ZERO) => v.csr[VL],

@@ -5,7 +5,7 @@ use crate::rv_core::{
     vector_engine::VectorEngine,
 };
 
-use super::prelude::vector::{Vreg, WideVreg};
+use super::prelude::{vector::{Vreg, WideVreg}, aliases::csr::VTYPE};
 
 pub struct VectorContext<'c> {
     pub v: &'c mut VectorRegisters,
@@ -84,6 +84,62 @@ impl VectorContext<'_> {
     pub fn set_csr(&mut self, csr: usize, value: u64) {
         self.csr[csr] = value;
     }
+
+    fn decompose_vtype(vtype: u64) -> Result<RawVType, String> {
+        let vlmul = (vtype & 0b111) as u8;
+        let vsew = ((vtype >> 3) & 0b111) as u8;
+        let vta = (vtype >> 6) & 0b1 == 1;
+        let vma = (vtype >> 7) & 0b1 == 1;
+
+        let reserved = (vtype << 1) >> 8;
+        if reserved != 0 {
+            return Err(format!("vtype[XLEN-2:8] other than 0 is reserved, got {}", reserved));
+        }
+
+        Ok(RawVType { vlmul, vsew, vta, vma })
+    }
+
+    pub fn set_vtype(&mut self, value: u64) -> Result<(), String> {
+        self.csr[VTYPE] = value;
+
+        let raw_vtype = Self::decompose_vtype(value)?;
+
+        use super::prelude::LMUL;
+        self.vec_engine.lmul = match raw_vtype.vlmul {
+            0b100 => return Err(String::from("vlmul=100 is reserved")),
+            0b101 => LMUL::MF8,
+            0b110 => LMUL::MF4,
+            0b111 => LMUL::MF2,
+            0b000 => LMUL::M1,
+            0b001 => LMUL::M2,
+            0b010 => LMUL::M4,
+            0b011 => LMUL::M8,
+            _ => unreachable!()
+        };
+
+        use super::prelude::SEW;
+        self.vec_engine.sew = match raw_vtype.vsew {
+            0b000 => SEW::E8,
+            0b001 => SEW::E16,
+            0b010 => SEW::E32,
+            0b011 => SEW::E64,
+            0b100 ..= 0b111 => return Err(String::from("vsew=1xx is reserved")),
+            _ => unreachable!()
+        };
+
+        use super::prelude::MaskBehavior::*;
+        self.vec_engine.tail_elements = if raw_vtype.vta { Agnostic } else { Undisturbed };
+        self.vec_engine.inactive_elements = if raw_vtype.vma { Agnostic } else { Undisturbed };
+
+        Ok(())
+    }
+}
+
+struct RawVType {
+    pub vlmul: u8,
+    pub vsew: u8,
+    pub vta: bool,
+    pub vma: bool
 }
 
 pub enum MaskIterator {
