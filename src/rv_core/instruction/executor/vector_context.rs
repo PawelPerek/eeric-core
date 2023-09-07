@@ -5,7 +5,10 @@ use crate::rv_core::{
     vector_engine::VectorEngine,
 };
 
-use super::prelude::{vector::{Vreg, WideVreg}, aliases::csr::VTYPE};
+use super::prelude::{
+    aliases::csr::VTYPE,
+    vector::{Vreg, WideVreg},
+};
 
 pub struct VectorContext<'c> {
     pub v: &'c mut VectorRegisters,
@@ -91,12 +94,20 @@ impl VectorContext<'_> {
         let vta = (vtype >> 6) & 0b1 == 1;
         let vma = (vtype >> 7) & 0b1 == 1;
 
-        let reserved = (vtype << 1) >> 8;
+        let reserved = (vtype << 1) >> 9;
         if reserved != 0 {
-            return Err(format!("vtype[XLEN-2:8] other than 0 is reserved, got {}", reserved));
+            return Err(format!(
+                "vtype[XLEN-2:8] other than 0 is reserved, got {}",
+                reserved
+            ));
         }
 
-        Ok(RawVType { vlmul, vsew, vta, vma })
+        Ok(RawVType {
+            vlmul,
+            vsew,
+            vta,
+            vma,
+        })
     }
 
     pub fn set_vtype(&mut self, value: u64) -> Result<(), String> {
@@ -114,7 +125,7 @@ impl VectorContext<'_> {
             0b001 => LMUL::M2,
             0b010 => LMUL::M4,
             0b011 => LMUL::M8,
-            _ => unreachable!()
+            _ => unreachable!(),
         };
 
         use super::prelude::SEW;
@@ -123,8 +134,8 @@ impl VectorContext<'_> {
             0b001 => SEW::E16,
             0b010 => SEW::E32,
             0b011 => SEW::E64,
-            0b100 ..= 0b111 => return Err(String::from("vsew=1xx is reserved")),
-            _ => unreachable!()
+            0b100..=0b111 => return Err(String::from("vsew=1xx is reserved")),
+            _ => unreachable!(),
         };
 
         use super::prelude::MaskBehavior::*;
@@ -135,11 +146,12 @@ impl VectorContext<'_> {
     }
 }
 
+#[derive(Debug, PartialEq)]
 struct RawVType {
     pub vlmul: u8,
     pub vsew: u8,
     pub vta: bool,
-    pub vma: bool
+    pub vma: bool,
 }
 
 pub enum MaskIterator {
@@ -155,5 +167,27 @@ impl Iterator for MaskIterator {
             Self::Exact(vec) => vec.pop_front(),
             Self::Infinite(iter) => iter.next(),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{RawVType, VectorContext};
+
+    #[test]
+    fn vtype_parsing() {
+        let vtype = 193;
+
+        let raw_vtype = VectorContext::decompose_vtype(vtype);
+
+        assert_eq!(
+            raw_vtype,
+            Ok(RawVType {
+                vlmul: 0b001,
+                vsew: 0b000,
+                vta: true,
+                vma: true
+            })
+        )
     }
 }

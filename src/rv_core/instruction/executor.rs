@@ -729,3 +729,158 @@ impl<'c> Executor<'c> {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::rv_core::{instruction::format, RvCoreBuilder};
+
+    use super::*;
+
+    #[test]
+    fn integration() {
+        use Instruction::*;
+
+        let instructions = vec![
+            Addi(I {
+                rd: 1,
+                rs1: 0,
+                imm12: 1,
+            }),
+            Addi(I {
+                rd: 2,
+                rs1: 0,
+                imm12: 1024,
+            }),
+            Add(R {
+                rd: 1,
+                rs1: 1,
+                rs2: 1,
+            }),
+            Vsetvli(format::Vsetvli {
+                rd: 0,
+                rs1: 0,
+                vtypei: 0b0_0_001_001,
+            }),
+            Bne(S {
+                rs1: 1,
+                rs2: 2,
+                imm12: -12,
+            }),
+        ];
+
+        let mut core = RvCoreBuilder::default().instructions(instructions).build();
+
+        for _ in core.run() {}
+    }
+
+    #[test]
+    fn integration_2() {
+        use Instruction::*;
+        let instructions = vec![
+            Addi(I {
+                rd: 6,
+                rs1: 0,
+                imm12: 0,
+            }),
+            Vsetvli(format::Vsetvli {
+                rd: 5,
+                rs1: 0,
+                vtypei: 193,
+            }),
+            Add(R {
+                rd: 10,
+                rs1: 10,
+                rs2: 6,
+            }),
+            Vlffv {
+                data: Vl {
+                    vd: 8,
+                    rs1: 10,
+                    vm: false,
+                },
+                eew: SEW::E8,
+            },
+            Add(R {
+                rd: 11,
+                rs1: 11,
+                rs2: 6,
+            }),
+            Vlffv {
+                data: Vl {
+                    vd: 16,
+                    rs1: 11,
+                    vm: false,
+                },
+                eew: SEW::E8,
+            },
+            Vmseqvi(Opivi {
+                vd: 0,
+                imm5: 0,
+                vs2: 8,
+                vm: false,
+            }),
+            Vmsnevv(Opivv {
+                vd: 1,
+                vs1: 16,
+                vs2: 8,
+                vm: false,
+            }),
+            Vmormm(Opmvv {
+                dest: 0,
+                vs1: 1,
+                vs2: 0,
+                vm: false,
+            }),
+            Vfirstm(Opmvv {
+                dest: 12,
+                vs1: 0,
+                vs2: 0,
+                vm: false,
+            }),
+            Csrrs(Csrr {
+                rd: 6,
+                rs1: 0,
+                csr: 3104,
+            }),
+            Blt(S {
+                rs1: 12,
+                rs2: 0,
+                imm12: -44,
+            }),
+            Add(R {
+                rd: 10,
+                rs1: 10,
+                rs2: 12,
+            }),
+            Lbu(I {
+                rd: 13,
+                rs1: 10,
+                imm12: 0,
+            }),
+            Add(R {
+                rd: 11,
+                rs1: 11,
+                rs2: 12,
+            }),
+            Lbu(I {
+                rd: 14,
+                rs1: 11,
+                imm12: 0,
+            }),
+            Sub(R {
+                rd: 10,
+                rs1: 13,
+                rs2: 14,
+            }),
+            Jalr(I {
+                rd: 0,
+                rs1: 1,
+                imm12: 0,
+            }),
+        ];
+
+        let mut core = RvCoreBuilder::default().instructions(instructions).build();
+
+        for _ in core.run() {}
+    }
+}
