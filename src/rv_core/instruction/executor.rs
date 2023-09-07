@@ -737,7 +737,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn integration() {
+    fn integration_add() {
         use Instruction::*;
 
         let instructions = vec![
@@ -774,7 +774,7 @@ mod tests {
     }
 
     #[test]
-    fn integration_2() {
+    fn integration_strcpy() {
         use Instruction::*;
         let instructions = vec![
             Addi(I {
@@ -881,6 +881,29 @@ mod tests {
 
         let mut core = RvCoreBuilder::default().instructions(instructions).build();
 
-        for _ in core.run() {}
+        // for _ in core.run() {}
+    }
+
+    #[test]
+    fn integration_memcpy() {
+        use Instruction::*;
+        let instructions = vec![
+            Addi(I { rd: 10, rs1: 0, imm12: 400 }), // dest 
+            Addi(I { rd: 11, rs1: 0, imm12: 0 }),   // src 
+            Addi(I { rd: 12, rs1: 0, imm12: 128 }), // n 
+            Addi(I { rd: 13, rs1: 10, imm12: 0 }), 
+            Vsetvli(format::Vsetvli { rd: 5, rs1: 12, vtypei: 195 }), 
+            Vlv { data: Vl { vd: 0, rs1: 11, vm: false }, eew: SEW::E8 }, 
+            Add(R { rd: 11, rs1: 11, rs2: 5 }), 
+            Sub(R { rd: 12, rs1: 12, rs2: 5 }), 
+            Vsv { data: Vs { vs3: 0, rs1: 13, vm: false }, eew: SEW::E8 }, 
+            Add(R { rd: 13, rs1: 13, rs2: 5 }), 
+            Bne(S { rs1: 12, rs2: 0, imm12: -28 }), 
+            Jalr(I { rd: 0, rs1: 1, imm12: 0 })
+        ];
+
+        let mut core = RvCoreBuilder::default().instructions(instructions).build();
+
+        // for _ in core.run() {}
     }
 }

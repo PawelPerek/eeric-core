@@ -25,7 +25,7 @@ impl VectorContext<'_> {
         let start = self.start_ptr(nth);
 
         // Note: Since we are working on multiples of two
-        // multiplying 2^n (vlenb) by 2^(-n) (lmul) will not create floating point errors
+        // multiplying 2^n (vlenb) by 2^(+-n) (lmul) will not create floating point errors
         let end = start
             + (self.vec_engine.vlen.byte_length() as f32 * self.vec_engine.lmul.ratio()) as usize;
 

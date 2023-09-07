@@ -9,7 +9,7 @@ pub fn v(
     mem: &Memory,
 ) {
     let addr = x[rs1] as usize;
-    let element_amount = v.vec_engine.vlen.bit_length() / v.vec_engine.sew.bit_length();
+    let element_amount = v.vlmax();
 
     for segment in 0..nf {
         let mut vn = Vec::new();

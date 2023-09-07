@@ -11,7 +11,7 @@ pub fn v(
     let addr = x[rs1] as usize;
     let vs2 = v.get(vs2).iter_custom_eew(eew).collect_vec();
 
-    let element_amount = v.vec_engine.vlen.bit_length() / v.vec_engine.sew.bit_length();
+    let element_amount = v.vlmax();
 
     for segment in 0..nf {
         let mut store = Vec::with_capacity(element_amount);
