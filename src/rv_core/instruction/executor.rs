@@ -35,6 +35,8 @@ impl<'c> Executor<'c> {
     pub fn execute(&mut self, input: Instruction) -> Result<(), String> {
         use Instruction::*;
 
+        self.registers.pc = self.registers.pc.wrapping_add(4);
+
         let result = match input {
             Add(args) => base::add(args, &mut self.registers.x),
             Addw(args) => base::addw(args, &mut self.registers.x),
@@ -178,8 +180,6 @@ impl<'c> Executor<'c> {
 
             _ => self.vector_execute(input)?,
         };
-
-        self.registers.pc = self.registers.pc.wrapping_add(4);
 
         Ok(result)
     }
