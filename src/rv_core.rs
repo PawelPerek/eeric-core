@@ -25,7 +25,7 @@ pub struct RvCore {
 }
 
 impl RvCore {
-    pub fn step(&mut self) -> Option<()> {
+    pub fn step(&mut self) -> Option<Result<(), String>> {
         self.run().next()
     }
 
@@ -68,7 +68,7 @@ pub struct RunningRvCore<'core> {
 }
 
 impl Iterator for RunningRvCore<'_> {
-    type Item = ();
+    type Item = Result<(), String>;
 
     fn next(&mut self) -> Option<Self::Item> {
         let instruction_pointer = self.core.registers.pc / 4;
@@ -77,13 +77,12 @@ impl Iterator for RunningRvCore<'_> {
             .instructions
             .get(instruction_pointer as usize)?
             .clone();
-        Executor::new(
+        
+        Some(Executor::new(
             &mut self.core.registers,
             &mut self.core.memory,
             &mut self.core.vec_engine,
-        )
-        .execute(instruction);
-        Some(())
+        ).execute(instruction))
     }
 }
 

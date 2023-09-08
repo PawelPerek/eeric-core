@@ -32,10 +32,10 @@ impl<'c> Executor<'c> {
         }
     }
 
-    pub fn execute(&mut self, input: Instruction) {
+    pub fn execute(&mut self, input: Instruction) -> Result<(), String> {
         use Instruction::*;
 
-        match input {
+        let result = match input {
             Add(args) => base::add(args, &mut self.registers.x),
             Addw(args) => base::addw(args, &mut self.registers.x),
             Sub(args) => base::sub(args, &mut self.registers.x),
@@ -172,17 +172,19 @@ impl<'c> Executor<'c> {
             Fmvdx(args) => d::fmv::dx(args, &self.registers.x, &mut self.registers.f),
 
             Fusion(first, second) => {
-                self.execute(*first);
-                self.execute(*second);
+                self.execute(*first)?;
+                self.execute(*second)?;
             }
 
-            _ => self.vector_execute(input),
-        }
+            _ => self.vector_execute(input)?,
+        };
 
         self.registers.pc += 4;
+
+        Ok(result)
     }
 
-    fn vector_execute(&mut self, input: Instruction) {
+    fn vector_execute(&mut self, input: Instruction) -> Result<(), String> {
         use Instruction::*;
 
         let mut vctx = VectorContext {
@@ -191,7 +193,7 @@ impl<'c> Executor<'c> {
             vec_engine: self.vec_engine,
         };
 
-        match input {
+        let result = match input {
             Vsetvli(args) => v::vsetvli(args, &mut self.registers.x, &mut vctx),
             Vsetivli(args) => v::vsetivli(args, &mut self.registers.x, &mut vctx),
             Vsetvl(args) => v::vsetvl(args, &mut self.registers.x, &mut vctx),
@@ -726,7 +728,9 @@ impl<'c> Executor<'c> {
             Vfwnmsacvf(args) => v::vfwnmsac::vf(args, &mut vctx, &self.registers.f),
 
             _ => unreachable!(),
-        }
+        };
+
+        Ok(result)
     }
 }
 
@@ -774,7 +778,7 @@ mod tests {
     }
 
     #[test]
-    fn integration_strcpy() {
+    fn integration_strcmp() {
         use Instruction::*;
         let instructions = vec![
             Addi(I {

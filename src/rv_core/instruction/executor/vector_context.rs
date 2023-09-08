@@ -6,8 +6,8 @@ use crate::rv_core::{
 };
 
 use super::prelude::{
-    aliases::csr::VTYPE,
-    vector::{Vreg, WideVreg},
+    aliases::csr::{VTYPE, VL},
+    vector::{Vreg, WideVreg}, LMUL,
 };
 
 pub struct VectorContext<'c> {
@@ -21,15 +21,20 @@ impl VectorContext<'_> {
         nth * self.vec_engine.vlen.byte_length()
     }
 
-    fn register_view(&self, nth: usize) -> impl Iterator<Item = u8> + '_ {
+    fn register_view_with_lmul(&self, nth: usize, lmul: LMUL) -> impl Iterator<Item = u8> + '_ {
         let start = self.start_ptr(nth);
 
         // Note: Since we are working on multiples of two
-        // multiplying 2^n (vlenb) by 2^(+-n) (lmul) will not create floating point errors
-        let end = start
-            + (self.vec_engine.vlen.byte_length() as f32 * self.vec_engine.lmul.ratio()) as usize;
+        // multiplying 2^n (vlenb) by 2^(±n) (lmul) will not create floating point errors
+        let vlmax = (self.vec_engine.vlen.byte_length() as f32 * lmul.ratio()) as usize;
 
-        self.v.0[start..end].iter().copied()
+        let vl = self.csr[VL];
+
+        self.v.0[start..start + vlmax.min(vl as usize)].iter().copied()
+    }
+
+    fn register_view(&self, nth: usize) -> impl Iterator<Item = u8> + '_ {
+        self.register_view_with_lmul(nth, self.vec_engine.lmul)
     }
 
     pub fn get(&self, nth: usize) -> Vreg {
@@ -37,15 +42,7 @@ impl VectorContext<'_> {
     }
 
     fn wide_register_view(&self, nth: usize) -> impl Iterator<Item = u8> + '_ {
-        let start = self.start_ptr(nth);
-
-        // Note: Since we are working on multiples of two
-        // multiplying 2^n (vlenb) by 2^(-n) (lmul) will not create floating point errors
-        let end = start
-            + (self.vec_engine.vlen.byte_length() as f32
-                * self.vec_engine.lmul.double().unwrap().ratio()) as usize;
-
-        self.v.0[start..end].iter().copied()
+        self.register_view_with_lmul(nth, self.vec_engine.lmul.double().unwrap())
     }
 
     pub fn get_wide(&self, nth: usize) -> WideVreg {
