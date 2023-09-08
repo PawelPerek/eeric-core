@@ -179,7 +179,7 @@ impl<'c> Executor<'c> {
             _ => self.vector_execute(input)?,
         };
 
-        self.registers.pc += 4;
+        self.registers.pc = self.registers.pc.wrapping_add(4);
 
         Ok(result)
     }
@@ -910,4 +910,19 @@ mod tests {
 
         // for _ in core.run() {}
     }
+
+    #[test]
+    fn integration_first_label() {
+        use Instruction::*;
+        let instructions = vec![
+            Addi(I { rd: 1, rs1: 0, imm12: 1 }), 
+            Add(R { rd: 1, rs1: 1, rs2: 1 }), 
+            Beq(S { rs1: 0, rs2: 0, imm12: -12 })
+        ];
+
+        let mut core = RvCoreBuilder::default().instructions(instructions).build();
+
+        for _ in core.run() {}
+    }
+
 }
