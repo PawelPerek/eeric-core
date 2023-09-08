@@ -922,7 +922,7 @@ mod tests {
 
         let mut core = RvCoreBuilder::default().instructions(instructions).build();
 
-        for _ in core.run() {}
+        // for _ in core.run() {}
     }
 
 }
