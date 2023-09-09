@@ -15,7 +15,7 @@ pub fn v(
 
     for offset in 0..element_amount {
         let address = addr.wrapping_add(offset.wrapping_mul(eew.byte_length()));
-        
+
         let result = match eew {
             SEW::E8 => mem
                 .fallible_get(address)
@@ -37,7 +37,7 @@ pub fn v(
             Some(element) => store.push(element),
             None => {
                 if offset == 0 {
-                    return Err(String::from("Fault-Only-First Load trap"))
+                    return Err(String::from("Fault-Only-First Load trap"));
                 } else {
                     v.set_csr(csr::VL, offset as u64);
                 }

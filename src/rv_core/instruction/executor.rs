@@ -35,9 +35,7 @@ impl<'c> Executor<'c> {
     pub fn execute(&mut self, input: Instruction) -> Result<(), String> {
         use Instruction::*;
 
-        self.registers.pc = self.registers.pc.wrapping_add(4);
-
-        let result = match input {
+        match input {
             Add(args) => base::add(args, &mut self.registers.x),
             Addw(args) => base::addw(args, &mut self.registers.x),
             Sub(args) => base::sub(args, &mut self.registers.x),
@@ -181,7 +179,9 @@ impl<'c> Executor<'c> {
             _ => self.vector_execute(input)?,
         };
 
-        Ok(result)
+        self.registers.pc = self.registers.pc.wrapping_add(4);
+
+        Ok(())
     }
 
     fn vector_execute(&mut self, input: Instruction) -> Result<(), String> {
@@ -193,7 +193,7 @@ impl<'c> Executor<'c> {
             vec_engine: self.vec_engine,
         };
 
-        let result = match input {
+        match input {
             Vsetvli(args) => v::vsetvli(args, &mut self.registers.x, &mut vctx),
             Vsetivli(args) => v::vsetivli(args, &mut self.registers.x, &mut vctx),
             Vsetvl(args) => v::vsetvl(args, &mut self.registers.x, &mut vctx),
@@ -204,7 +204,7 @@ impl<'c> Executor<'c> {
             Vsv { data: args, eew } => v::vs::v(args, eew, &self.registers.x, &vctx, self.memory),
 
             Vlmv(args) => v::vlm::v(args, &mut vctx, &self.registers.x, self.memory),
-            Vsmv(args) => v::vsm::v(args, &mut vctx, &self.registers.x, self.memory),
+            Vsmv(args) => v::vsm::v(args, &vctx, &self.registers.x, self.memory),
 
             Vlsv { data: args, eew } => {
                 v::vls::v(args, eew, &self.registers.x, &mut vctx, self.memory)
@@ -276,7 +276,9 @@ impl<'c> Executor<'c> {
                 eew: _,
                 nf,
             } => v::vlr::v(args, nf, &mut vctx, &self.registers.x, self.memory),
-            Vsrv { data: args, nf } => v::vsr::v(args, nf, &mut vctx, &self.registers.x, self.memory),
+            Vsrv { data: args, nf } => {
+                v::vsr::v(args, nf, &vctx, &self.registers.x, self.memory)
+            }
 
             Vaddvv(args) => v::vadd::vv(args, &mut vctx),
             Vaddvx(args) => v::vadd::vx(args, &mut vctx, &self.registers.x),
@@ -730,7 +732,7 @@ impl<'c> Executor<'c> {
             _ => unreachable!(),
         };
 
-        Ok(result)
+        Ok(())
     }
 }
 
@@ -892,18 +894,72 @@ mod tests {
     fn integration_memcpy() {
         use Instruction::*;
         let instructions = vec![
-            Addi(I { rd: 10, rs1: 0, imm12: 400 }), // dest 
-            Addi(I { rd: 11, rs1: 0, imm12: 0 }),   // src 
-            Addi(I { rd: 12, rs1: 0, imm12: 128 }), // n 
-            Addi(I { rd: 13, rs1: 10, imm12: 0 }), 
-            Vsetvli(format::Vsetvli { rd: 5, rs1: 12, vtypei: 195 }), 
-            Vlv { data: Vl { vd: 0, rs1: 11, vm: false }, eew: SEW::E8 }, 
-            Add(R { rd: 11, rs1: 11, rs2: 5 }), 
-            Sub(R { rd: 12, rs1: 12, rs2: 5 }), 
-            Vsv { data: Vs { vs3: 0, rs1: 13, vm: false }, eew: SEW::E8 }, 
-            Add(R { rd: 13, rs1: 13, rs2: 5 }), 
-            Bne(S { rs1: 12, rs2: 0, imm12: -28 }), 
-            Jalr(I { rd: 0, rs1: 1, imm12: 0 })
+            Addi(I {
+                rd: 10,
+                rs1: 0,
+                imm12: 400,
+            }), // dest
+            Addi(I {
+                rd: 11,
+                rs1: 0,
+                imm12: 0,
+            }), // src
+            Addi(I {
+                rd: 12,
+                rs1: 0,
+                imm12: 128,
+            }), // n
+            Addi(I {
+                rd: 13,
+                rs1: 10,
+                imm12: 0,
+            }),
+            Vsetvli(format::Vsetvli {
+                rd: 5,
+                rs1: 12,
+                vtypei: 195,
+            }),
+            Vlv {
+                data: Vl {
+                    vd: 0,
+                    rs1: 11,
+                    vm: false,
+                },
+                eew: SEW::E8,
+            },
+            Add(R {
+                rd: 11,
+                rs1: 11,
+                rs2: 5,
+            }),
+            Sub(R {
+                rd: 12,
+                rs1: 12,
+                rs2: 5,
+            }),
+            Vsv {
+                data: Vs {
+                    vs3: 0,
+                    rs1: 13,
+                    vm: false,
+                },
+                eew: SEW::E8,
+            },
+            Add(R {
+                rd: 13,
+                rs1: 13,
+                rs2: 5,
+            }),
+            Bne(S {
+                rs1: 12,
+                rs2: 0,
+                imm12: -28,
+            }),
+            Jalr(I {
+                rd: 0,
+                rs1: 1,
+                imm12: 0,
+            }),
         ];
 
         let _core = RvCoreBuilder::default().instructions(instructions).build();
@@ -915,9 +971,21 @@ mod tests {
     fn integration_first_label() {
         use Instruction::*;
         let instructions = vec![
-            Addi(I { rd: 1, rs1: 0, imm12: 1 }), 
-            Add(R { rd: 1, rs1: 1, rs2: 1 }), 
-            Beq(S { rs1: 0, rs2: 0, imm12: -12 })
+            Addi(I {
+                rd: 1,
+                rs1: 0,
+                imm12: 1,
+            }),
+            Add(R {
+                rd: 1,
+                rs1: 1,
+                rs2: 1,
+            }),
+            Beq(S {
+                rs1: 0,
+                rs2: 0,
+                imm12: -12,
+            }),
         ];
 
         let _core = RvCoreBuilder::default().instructions(instructions).build();
@@ -929,11 +997,31 @@ mod tests {
     fn integration_graceful_finish() {
         use Instruction::*;
         let instructions = vec![
-            Addi(I { rd: 1, rs1: 0, imm12: 1 }), 
-            Addi(I { rd: 1, rs1: 0, imm12: 1 }), 
-            Addi(I { rd: 1, rs1: 0, imm12: 1 }), 
-            Addi(I { rd: 1, rs1: 0, imm12: 1 }), 
-            Addi(I { rd: 1, rs1: 0, imm12: 1 }), 
+            Addi(I {
+                rd: 1,
+                rs1: 0,
+                imm12: 1,
+            }),
+            Addi(I {
+                rd: 1,
+                rs1: 0,
+                imm12: 1,
+            }),
+            Addi(I {
+                rd: 1,
+                rs1: 0,
+                imm12: 1,
+            }),
+            Addi(I {
+                rd: 1,
+                rs1: 0,
+                imm12: 1,
+            }),
+            Addi(I {
+                rd: 1,
+                rs1: 0,
+                imm12: 1,
+            }),
         ];
 
         let mut core = RvCoreBuilder::default().instructions(instructions).build();
@@ -944,8 +1032,5 @@ mod tests {
         println!("{:?}", core.step());
         println!("{:?}", core.step());
         println!("{:?}", core.step());
-
-
     }
-
 }

@@ -77,12 +77,15 @@ impl Iterator for RunningRvCore<'_> {
             .instructions
             .get(instruction_pointer as usize)?
             .clone();
-        
-        Some(Executor::new(
-            &mut self.core.registers,
-            &mut self.core.memory,
-            &mut self.core.vec_engine,
-        ).execute(instruction))
+
+        Some(
+            Executor::new(
+                &mut self.core.registers,
+                &mut self.core.memory,
+                &mut self.core.vec_engine,
+            )
+            .execute(instruction),
+        )
     }
 }
 

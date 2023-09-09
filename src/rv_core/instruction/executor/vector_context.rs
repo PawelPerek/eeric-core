@@ -6,9 +6,9 @@ use crate::rv_core::{
 };
 
 use super::prelude::{
-    aliases::csr::{VTYPE, VL},
+    aliases::csr::{VL, VTYPE},
     vector::{Vreg, WideVreg},
-    LMUL, SEW
+    LMUL, SEW,
 };
 
 pub struct VectorContext<'c> {
@@ -31,7 +31,9 @@ impl VectorContext<'_> {
 
         let vl = self.csr[VL];
 
-        self.v.0[start..start + vlmax.min(vl as usize)].iter().copied()
+        self.v.0[start..start + vlmax.min(vl as usize)]
+            .iter()
+            .copied()
     }
 
     fn register_view(&self, nth: usize) -> impl Iterator<Item = u8> + '_ {
@@ -55,7 +57,10 @@ impl VectorContext<'_> {
     }
 
     pub fn get_single(&self, nth: usize) -> Vreg {
-        Vreg::new(self.single_register_view(nth).collect(), self.vec_engine.sew)
+        Vreg::new(
+            self.single_register_view(nth).collect(),
+            self.vec_engine.sew,
+        )
     }
 
     pub fn default_mask(&self, enabled: bool) -> MaskIterator {
