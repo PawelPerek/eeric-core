@@ -3,8 +3,7 @@ use crate::rv_core::instruction::executor::prelude::*;
 pub fn v(Vs { vs3, rs1, vm: _ }: Vs, v: &mut VectorContext<'_>, x: &IntegerRegisters, mem: &mut Memory) {
     let addr = x[rs1] as usize;
 
-    v.get(vs3).iter_byte()
-        .take(v.vec_engine.vlen.byte_length())
+    v.get_single(vs3).iter_byte()
         .enumerate()
         .for_each(|(index, vs3)| {
             let address = addr.wrapping_add(index);

@@ -276,7 +276,7 @@ impl<'c> Executor<'c> {
                 eew: _,
                 nf,
             } => v::vlr::v(args, nf, &mut vctx, &self.registers.x, self.memory),
-            Vsrv { data: args, nf } => v::vsr::v(args, nf, &mut vctx, self.memory),
+            Vsrv { data: args, nf } => v::vsr::v(args, nf, &mut vctx, &self.registers.x, self.memory),
 
             Vaddvv(args) => v::vadd::vv(args, &mut vctx),
             Vaddvx(args) => v::vadd::vx(args, &mut vctx, &self.registers.x),

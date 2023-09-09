@@ -50,6 +50,14 @@ impl VectorContext<'_> {
         WideVreg::new(self.wide_register_view(nth).collect(), self.vec_engine.sew)
     }
 
+    fn single_register_view(&self, nth: usize) -> impl Iterator<Item = u8> + '_ {
+        self.register_view_with_lmul(nth, LMUL::M1)
+    }
+
+    pub fn get_single(&self, nth: usize) -> Vreg {
+        Vreg::new(self.single_register_view(nth).collect(), self.vec_engine.sew)
+    }
+
     pub fn default_mask(&self, enabled: bool) -> MaskIterator {
         if enabled {
             MaskIterator::Exact(self.get(0).iter_mask().collect())
