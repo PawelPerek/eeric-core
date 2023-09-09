@@ -203,8 +203,8 @@ impl<'c> Executor<'c> {
             }
             Vsv { data: args, eew } => v::vs::v(args, eew, &self.registers.x, &vctx, self.memory),
 
-            Vlmv(args) => v::vlm::v(args, &mut vctx, self.memory),
-            Vsmv(args) => v::vsm::v(args, &mut vctx, self.memory),
+            Vlmv(args) => v::vlm::v(args, &mut vctx, &self.registers.x, self.memory),
+            Vsmv(args) => v::vsm::v(args, &mut vctx, &self.registers.x, self.memory),
 
             Vlsv { data: args, eew } => {
                 v::vls::v(args, eew, &self.registers.x, &mut vctx, self.memory)
@@ -923,6 +923,29 @@ mod tests {
         let mut core = RvCoreBuilder::default().instructions(instructions).build();
 
         // for _ in core.run() {}
+    }
+
+    #[test]
+    fn integration_graceful_finish() {
+        use Instruction::*;
+        let instructions = vec![
+            Addi(I { rd: 1, rs1: 0, imm12: 1 }), 
+            Addi(I { rd: 1, rs1: 0, imm12: 1 }), 
+            Addi(I { rd: 1, rs1: 0, imm12: 1 }), 
+            Addi(I { rd: 1, rs1: 0, imm12: 1 }), 
+            Addi(I { rd: 1, rs1: 0, imm12: 1 }), 
+        ];
+
+        let mut core = RvCoreBuilder::default().instructions(instructions).build();
+
+        println!("{:?}", core.step());
+        println!("{:?}", core.step());
+        println!("{:?}", core.step());
+        println!("{:?}", core.step());
+        println!("{:?}", core.step());
+        println!("{:?}", core.step());
+
+
     }
 
 }
