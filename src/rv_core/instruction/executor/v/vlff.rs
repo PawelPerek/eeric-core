@@ -6,7 +6,7 @@ pub fn v(
     v: &mut VectorContext<'_>,
     x: &IntegerRegisters,
     mem: &Memory,
-) {
+) -> Result<(), String> {
     let addr = x[rs1] as usize;
 
     let element_amount = v.vlmax();
@@ -14,20 +14,22 @@ pub fn v(
     let mut store = Vec::<u64>::with_capacity(element_amount);
 
     for offset in 0..element_amount {
-        let result = match eew.byte_length() {
-            1 => mem
-                .fallible_get(addr + offset)
+        let address = addr.wrapping_add(offset.wrapping_mul(eew.byte_length()));
+        
+        let result = match eew {
+            SEW::E8 => mem
+                .fallible_get(address)
                 .map(u8::from_le_bytes)
                 .map(Into::into),
-            2 => mem
-                .fallible_get(addr + offset * 2)
+            SEW::E16 => mem
+                .fallible_get(address)
                 .map(u16::from_le_bytes)
                 .map(Into::into),
-            4 => mem
-                .fallible_get(addr + offset * 4)
+            SEW::E32 => mem
+                .fallible_get(address)
                 .map(u32::from_le_bytes)
                 .map(Into::into),
-            8 => mem.fallible_get(addr + offset * 8).map(u64::from_le_bytes),
+            SEW::E64 => mem.fallible_get(address).map(u64::from_le_bytes),
             _ => unimplemented!(),
         };
 
@@ -35,7 +37,7 @@ pub fn v(
             Some(element) => store.push(element),
             None => {
                 if offset == 0 {
-                    unimplemented!() // trap not implemented
+                    return Err(String::from("Fault-Only-First Load trap"))
                 } else {
                     v.set_csr(csr::VL, offset as u64);
                 }
@@ -52,5 +54,6 @@ pub fn v(
         })
         .collect_with_eew(v.vec_engine.sew);
 
-    v.apply(vd, vreg)
+    v.apply(vd, vreg);
+    Ok(())
 }

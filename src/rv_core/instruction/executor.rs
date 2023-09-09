@@ -225,7 +225,7 @@ impl<'c> Executor<'c> {
             }
 
             Vlffv { data: args, eew } => {
-                v::vlff::v(args, eew, &mut vctx, &self.registers.x, self.memory)
+                v::vlff::v(args, eew, &mut vctx, &self.registers.x, self.memory)?
             }
 
             Vlsegv {
@@ -273,9 +273,9 @@ impl<'c> Executor<'c> {
 
             Vlrv {
                 data: args,
-                eew,
+                eew: _,
                 nf,
-            } => v::vlr::v(args, eew, nf, &mut vctx, &self.registers.x, self.memory),
+            } => v::vlr::v(args, nf, &mut vctx, &self.registers.x, self.memory),
             Vsrv { data: args, nf } => v::vsr::v(args, nf, &mut vctx, self.memory),
 
             Vaddvv(args) => v::vadd::vv(args, &mut vctx),
@@ -883,7 +883,7 @@ mod tests {
             }),
         ];
 
-        let mut core = RvCoreBuilder::default().instructions(instructions).build();
+        let _core = RvCoreBuilder::default().instructions(instructions).build();
 
         // for _ in core.run() {}
     }
@@ -906,7 +906,7 @@ mod tests {
             Jalr(I { rd: 0, rs1: 1, imm12: 0 })
         ];
 
-        let mut core = RvCoreBuilder::default().instructions(instructions).build();
+        let _core = RvCoreBuilder::default().instructions(instructions).build();
 
         // for _ in core.run() {}
     }
@@ -920,7 +920,7 @@ mod tests {
             Beq(S { rs1: 0, rs2: 0, imm12: -12 })
         ];
 
-        let mut core = RvCoreBuilder::default().instructions(instructions).build();
+        let _core = RvCoreBuilder::default().instructions(instructions).build();
 
         // for _ in core.run() {}
     }

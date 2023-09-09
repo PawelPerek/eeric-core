@@ -14,11 +14,13 @@ pub fn v(
     let mut store = Vec::<u64>::with_capacity(element_amount);
 
     for offset in 0..element_amount {
-        let element: u64 = match eew.byte_length() {
-            1 => u8::from_le_bytes(mem.get(addr + offset)) as u64,
-            2 => u16::from_le_bytes(mem.get(addr + offset * 2)) as u64,
-            4 => u32::from_le_bytes(mem.get(addr + offset * 4)) as u64,
-            8 => u64::from_le_bytes(mem.get(addr + offset * 8)),
+        let address = addr.wrapping_add(offset.wrapping_mul(eew.byte_length()));
+
+        let element = match eew {
+            SEW::E8 => u8::from_le_bytes(mem.get(address)) as u64,
+            SEW::E16 => u16::from_le_bytes(mem.get(address)) as u64,
+            SEW::E32 => u32::from_le_bytes(mem.get(address)) as u64,
+            SEW::E64 => u64::from_le_bytes(mem.get(address)),
             _ => unimplemented!(),
         };
 

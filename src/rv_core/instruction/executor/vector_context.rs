@@ -7,7 +7,8 @@ use crate::rv_core::{
 
 use super::prelude::{
     aliases::csr::{VTYPE, VL},
-    vector::{Vreg, WideVreg}, LMUL,
+    vector::{Vreg, WideVreg},
+    LMUL, SEW
 };
 
 pub struct VectorContext<'c> {
@@ -112,7 +113,6 @@ impl VectorContext<'_> {
 
         let raw_vtype = Self::decompose_vtype(value)?;
 
-        use super::prelude::LMUL;
         self.vec_engine.lmul = match raw_vtype.vlmul {
             0b100 => return Err(String::from("vlmul=100 is reserved")),
             0b101 => LMUL::MF8,
@@ -125,7 +125,6 @@ impl VectorContext<'_> {
             _ => unreachable!(),
         };
 
-        use super::prelude::SEW;
         self.vec_engine.sew = match raw_vtype.vsew {
             0b000 => SEW::E8,
             0b001 => SEW::E16,
