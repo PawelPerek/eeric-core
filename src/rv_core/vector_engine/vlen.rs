@@ -1,7 +1,7 @@
 /// Vector unit size of microarchitecture
 #[derive(Clone, Copy, Default, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
-pub enum VLEN {
+pub enum Vlen {
     V64,
     #[default]
     V128,
@@ -9,7 +9,7 @@ pub enum VLEN {
     V512,
 }
 
-impl VLEN {
+impl Vlen {
     pub fn bit_length(&self) -> usize {
         match self {
             Self::V64 => 64,

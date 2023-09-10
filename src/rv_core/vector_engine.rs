@@ -4,11 +4,11 @@ pub mod sew;
 mod vlen;
 
 use derive_builder::Builder;
-pub use lmul::LMUL;
 pub use mask_behaviour::MaskBehavior;
-pub use vlen::VLEN;
 
-use self::sew::BaseSew;
+pub use lmul::Lmul;
+use sew::BaseSew;
+pub use vlen::Vlen;
 
 use super::snapshot::Snapshotable;
 
@@ -16,8 +16,8 @@ use super::snapshot::Snapshotable;
 #[cfg_attr(debug_assertions, derive(Debug))]
 #[builder(build_fn(skip))]
 pub struct VectorEngine {
-    pub lmul: LMUL,
-    pub vlen: VLEN,
+    pub lmul: Lmul,
+    pub vlen: Vlen,
     pub sew: BaseSew,
     #[allow(dead_code)]
     pub tail_elements: MaskBehavior,
@@ -27,8 +27,8 @@ pub struct VectorEngine {
 
 impl VectorEngine {
     pub fn new(
-        lmul: LMUL,
-        vlen: VLEN,
+        lmul: Lmul,
+        vlen: Vlen,
         sew: BaseSew,
         tail_elements: MaskBehavior,
         inactive_elements: MaskBehavior,

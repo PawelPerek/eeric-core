@@ -5,7 +5,7 @@ pub use crate::rv_core::{
     snapshot::Snapshotable,
     vector_engine::{
         sew::{BaseSew, Sew},
-        MaskBehavior, VectorEngine, VectorEngineBuilder, LMUL, VLEN,
+        Lmul, MaskBehavior, VectorEngine, VectorEngineBuilder, Vlen,
     },
     RvCore, RvCoreBuilder,
 };

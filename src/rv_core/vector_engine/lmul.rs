@@ -1,7 +1,7 @@
 /// Vector length multiplier
 #[derive(Clone, Copy, Default, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
-pub enum LMUL {
+pub enum Lmul {
     // Fractional multipliers
     MF8,
     MF4,
@@ -15,7 +15,7 @@ pub enum LMUL {
     M8,
 }
 
-impl LMUL {
+impl Lmul {
     pub fn ratio(&self) -> f32 {
         match self {
             Self::MF8 => 0.125,
@@ -43,24 +43,24 @@ impl LMUL {
     }
 }
 
-impl TryFrom<f32> for LMUL {
+impl TryFrom<f32> for Lmul {
     type Error = String;
 
     fn try_from(value: f32) -> Result<Self, Self::Error> {
         let lmul = if value == 0.125 {
-            LMUL::MF8
+            Lmul::MF8
         } else if value == 0.25 {
-            LMUL::MF4
+            Lmul::MF4
         } else if value == 0.5 {
-            LMUL::MF2
+            Lmul::MF2
         } else if value == 1.0 {
-            LMUL::M1
+            Lmul::M1
         } else if value == 2.0 {
-            LMUL::M2
+            Lmul::M2
         } else if value == 4.0 {
-            LMUL::M4
+            Lmul::M4
         } else if value == 8.0 {
-            LMUL::M8
+            Lmul::M8
         } else {
             return Err(format!("Cannot parse {} into LMUL", value));
         };

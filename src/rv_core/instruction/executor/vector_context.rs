@@ -8,7 +8,7 @@ use crate::rv_core::{
 use super::prelude::{
     aliases::csr::{VL, VTYPE},
     vector::{Vreg, WideVreg},
-    BaseSew, Sew, LMUL,
+    BaseSew, Lmul, Sew,
 };
 
 pub struct VectorContext<'c> {
@@ -22,7 +22,7 @@ impl VectorContext<'_> {
         nth * self.vec_engine.vlen.byte_length()
     }
 
-    fn register_view_with_lmul(&self, nth: usize, lmul: LMUL) -> impl Iterator<Item = u8> + '_ {
+    fn register_view_with_lmul(&self, nth: usize, lmul: Lmul) -> impl Iterator<Item = u8> + '_ {
         let start = self.start_ptr(nth);
 
         // Note: Since we are working on multiples of two
@@ -56,7 +56,7 @@ impl VectorContext<'_> {
     }
 
     fn single_register_view(&self, nth: usize) -> impl Iterator<Item = u8> + '_ {
-        self.register_view_with_lmul(nth, LMUL::M1)
+        self.register_view_with_lmul(nth, Lmul::M1)
     }
 
     pub fn get_single(&self, nth: usize) -> Vreg {
@@ -98,7 +98,7 @@ impl VectorContext<'_> {
             * self.vec_engine.lmul.ratio()) as usize
     }
 
-    pub fn vlmax_custom_emul(&self, emul: LMUL) -> usize {
+    pub fn vlmax_custom_emul(&self, emul: Lmul) -> usize {
         ((self.vec_engine.vlen.byte_length() / self.vec_engine.sew.byte_length()) as f32
             * emul.ratio()) as usize
     }
@@ -136,13 +136,13 @@ impl VectorContext<'_> {
 
         self.vec_engine.lmul = match raw_vtype.vlmul {
             0b100 => return Err(String::from("vlmul=100 is reserved")),
-            0b101 => LMUL::MF8,
-            0b110 => LMUL::MF4,
-            0b111 => LMUL::MF2,
-            0b000 => LMUL::M1,
-            0b001 => LMUL::M2,
-            0b010 => LMUL::M4,
-            0b011 => LMUL::M8,
+            0b101 => Lmul::MF8,
+            0b110 => Lmul::MF4,
+            0b111 => Lmul::MF2,
+            0b000 => Lmul::M1,
+            0b001 => Lmul::M2,
+            0b010 => Lmul::M4,
+            0b011 => Lmul::M8,
             _ => unreachable!(),
         };
 

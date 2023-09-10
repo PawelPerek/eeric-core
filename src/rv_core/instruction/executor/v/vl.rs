@@ -21,10 +21,10 @@ pub fn v(
         ));
     }
 
-    let element_amount = v.vlmax_custom_emul(LMUL::try_from(emul)?);
+    let element_amount = v.vlmax_custom_emul(Lmul::try_from(emul)?);
 
     let vreg = (0..element_amount)
-        .map(|offset| addr.wrapping_add(offset.wrapping_mul(eew.byte_length())))
+        .map(|offset: usize| addr.wrapping_add(offset.wrapping_mul(eew.byte_length())))
         .map(|address| match eew {
             BaseSew::E8 => u8::from_le_bytes(mem.get(address)) as u64,
             BaseSew::E16 => u16::from_le_bytes(mem.get(address)) as u64,

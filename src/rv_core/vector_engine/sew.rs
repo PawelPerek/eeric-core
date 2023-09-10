@@ -126,10 +126,12 @@ impl DoubleSew {
     pub fn fp(self) -> Result<DoubleFpSew, String> {
         let fp_sew = match self {
             Self::E64 => DoubleFpSew::E64,
-            _ => return Err(format!(
+            _ => {
+                return Err(format!(
                 "Expected double SEW = 64 (SEW = 32) for wide FP operations, got double SEW = {}",
                 self.bit_length()
-            )),
+            ))
+            }
         };
 
         Ok(fp_sew)

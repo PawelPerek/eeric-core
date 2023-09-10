@@ -15,7 +15,7 @@ pub use crate::rv_core::{
     },
     vector_engine::{
         sew::{BaseSew, DoubleFpSew, DoubleSew, EighthSew, FourthSew, FpSew, HalfSew, Sew},
-        MaskBehavior, VectorEngine, VectorEngineBuilder, LMUL, VLEN,
+        Lmul, MaskBehavior, VectorEngine, VectorEngineBuilder, Vlen,
     },
 };
 

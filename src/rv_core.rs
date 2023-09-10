@@ -91,7 +91,7 @@ impl Iterator for RunningRvCore<'_> {
 
 #[cfg(test)]
 mod tests {
-    use crate::rv_core::{snapshot::Snapshotable, vector_engine::VLEN};
+    use crate::rv_core::{snapshot::Snapshotable, vector_engine::Vlen};
 
     use super::*;
 
@@ -100,7 +100,7 @@ mod tests {
         let core = RvCore::default();
         assert_eq!(
             core.registers.snapshot().v.len(),
-            32 * VLEN::V128.byte_length()
+            32 * Vlen::V128.byte_length()
         );
     }
 }
