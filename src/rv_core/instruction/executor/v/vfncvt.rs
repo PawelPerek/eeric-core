@@ -7,9 +7,9 @@ pub fn xufw(
         dest: vd, vs2, vm, ..
     }: Vfunary0,
     v: &mut VectorContext<'_>,
-) {
+) -> Result<(), String> {
     let vreg = v
-        .get_wide(vs2)
+        .get_wide(vs2)?
         .iter_fp()
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| {
             vs2.round().to_u64().unwrap()
@@ -17,6 +17,8 @@ pub fn xufw(
         .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
+    
+    Ok(())
 }
 
 pub fn xfw(
@@ -24,9 +26,9 @@ pub fn xfw(
         dest: vd, vs2, vm, ..
     }: Vfunary0,
     v: &mut VectorContext<'_>,
-) {
+) -> Result<(), String> {
     let vreg = v
-        .get_wide(vs2)
+        .get_wide(vs2)?
         .iter_fp()
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| {
             vs2.round().to_i64().unwrap() as u64
@@ -34,6 +36,8 @@ pub fn xfw(
         .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
+
+    Ok(())
 }
 
 pub fn fxuw(
@@ -41,9 +45,9 @@ pub fn fxuw(
         dest: vd, vs2, vm, ..
     }: Vfunary0,
     v: &mut VectorContext<'_>,
-) {
+) -> Result<(), String> {
     let vreg = v
-        .get_wide(vs2)
+        .get_wide(vs2)?
         .iter_eew()
         .masked_map(v.default_mask(vm), v.get(vd).iter_fp(), |vs2| {
             match v.vec_engine.sew.bit_length() {
@@ -55,6 +59,8 @@ pub fn fxuw(
         .collect_fp();
 
     v.apply(vd, vreg);
+
+    Ok(())
 }
 
 pub fn fxw(
@@ -62,9 +68,9 @@ pub fn fxw(
         dest: vd, vs2, vm, ..
     }: Vfunary0,
     v: &mut VectorContext<'_>,
-) {
+) -> Result<(), String> {
     let vreg = v
-        .get_wide(vs2)
+        .get_wide(vs2)?
         .iter_eew()
         .masked_map(v.default_mask(vm), v.get(vd).iter_fp(), |vs2| {
             match v.vec_engine.sew.bit_length() {
@@ -76,6 +82,8 @@ pub fn fxw(
         .collect_fp();
 
     v.apply(vd, vreg);
+
+    Ok(())
 }
 
 pub fn ffw(
@@ -83,9 +91,9 @@ pub fn ffw(
         dest: vd, vs2, vm, ..
     }: Vfunary0,
     v: &mut VectorContext<'_>,
-) {
+) -> Result<(), String> {
     let vreg = v
-        .get_wide(vs2)
+        .get_wide(vs2)?
         .iter_fp()
         .masked_map(v.default_mask(vm), v.get(vd).iter_fp(), |vs2| {
             vs2.half_precision(RoundingMode::Nearest)
@@ -93,6 +101,8 @@ pub fn ffw(
         .collect_fp();
 
     v.apply(vd, vreg);
+
+    Ok(())
 }
 
 pub fn rodffw(
@@ -100,9 +110,9 @@ pub fn rodffw(
         dest: vd, vs2, vm, ..
     }: Vfunary0,
     v: &mut VectorContext<'_>,
-) {
+) -> Result<(), String> {
     let vreg = v
-        .get_wide(vs2)
+        .get_wide(vs2)?
         .iter_fp()
         .masked_map(v.default_mask(vm), v.get(vd).iter_fp(), |vs2| {
             vs2.half_precision(RoundingMode::TowardsOdd)
@@ -110,6 +120,8 @@ pub fn rodffw(
         .collect_fp();
 
     v.apply(vd, vreg);
+
+    Ok(())
 }
 
 pub fn rtzxufw(
@@ -117,9 +129,9 @@ pub fn rtzxufw(
         dest: vd, vs2, vm, ..
     }: Vfunary0,
     v: &mut VectorContext<'_>,
-) {
+) -> Result<(), String> {
     let vreg = v
-        .get_wide(vs2)
+        .get_wide(vs2)?
         .iter_fp()
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| {
             vs2.to_u64().unwrap()
@@ -127,6 +139,8 @@ pub fn rtzxufw(
         .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
+
+    Ok(())
 }
 
 pub fn rtzxfw(
@@ -134,9 +148,9 @@ pub fn rtzxfw(
         dest: vd, vs2, vm, ..
     }: Vfunary0,
     v: &mut VectorContext<'_>,
-) {
+) -> Result<(), String> {
     let vreg = v
-        .get_wide(vs2)
+        .get_wide(vs2)?
         .iter_fp()
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| {
             vs2.to_i64().unwrap() as u64
@@ -144,4 +158,6 @@ pub fn rtzxfw(
         .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
+
+    Ok(())
 }

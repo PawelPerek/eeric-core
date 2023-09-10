@@ -8,8 +8,8 @@ pub fn vs(
         vm,
     }: Opfvv,
     v: &mut VectorContext<'_>,
-) {
-    let initial_value = v.get_wide(vs1).iter_fp().next().unwrap();
+) -> Result<(), String> {
+    let initial_value = v.get_wide(vs1)?.iter_fp().next().unwrap();
     let sum =
         izip!(v.get(vs2).iter_fp(), v.default_mask(vm)).fold(initial_value, |acc, (vs2, mask)| {
             if mask == 1 {
@@ -25,4 +25,6 @@ pub fn vs(
     let vreg = vd_snapshot.into_iter().collect_fp();
 
     v.apply(vd, vreg);
+
+    Ok(())
 }

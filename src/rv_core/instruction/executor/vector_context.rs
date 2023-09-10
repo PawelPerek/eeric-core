@@ -44,12 +44,12 @@ impl VectorContext<'_> {
         Vreg::new(self.register_view(nth).collect(), self.vec_engine.sew)
     }
 
-    fn wide_register_view(&self, nth: usize) -> impl Iterator<Item = u8> + '_ {
-        self.register_view_with_lmul(nth, self.vec_engine.lmul.double().unwrap())
+    fn wide_register_view(&self, nth: usize) -> Result<impl Iterator<Item = u8> + '_, String> {
+        Ok(self.register_view_with_lmul(nth, self.vec_engine.lmul.double()?))
     }
 
-    pub fn get_wide(&self, nth: usize) -> WideVreg {
-        WideVreg::new(self.wide_register_view(nth).collect(), self.vec_engine.sew)
+    pub fn get_wide(&self, nth: usize) -> Result<WideVreg, String> {
+        Ok(WideVreg::new(self.wide_register_view(nth)?.collect(), self.vec_engine.sew))
     }
 
     fn single_register_view(&self, nth: usize) -> impl Iterator<Item = u8> + '_ {
@@ -91,8 +91,13 @@ impl VectorContext<'_> {
     }
 
     pub fn vlmax(&self) -> usize {
-        ((self.vec_engine.vlen.bit_length() / self.vec_engine.sew.bit_length()) as f32
+        ((self.vec_engine.vlen.byte_length() / self.vec_engine.sew.byte_length()) as f32
             * self.vec_engine.lmul.ratio()) as usize
+    }
+
+    pub fn vlmax_custom_emul(&self, emul: LMUL) -> usize {
+        ((self.vec_engine.vlen.byte_length() / self.vec_engine.sew.byte_length()) as f32
+            * emul.ratio()) as usize
     }
 
     pub fn set_csr(&mut self, csr: usize, value: u64) {

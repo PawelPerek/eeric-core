@@ -49,6 +49,7 @@ pub mod vfwmacc;
 pub mod vfwmsac;
 pub mod vfwnmacc;
 pub mod vfwnmsac;
+pub mod vfwmul;
 pub mod vfwredosum;
 pub mod vfwredusum;
 pub mod vfwsub;

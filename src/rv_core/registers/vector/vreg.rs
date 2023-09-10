@@ -4,8 +4,6 @@ use crate::rv_core::{arbitrary_float::ArbitraryFloat, vector_engine::SEW};
 // A wrapper over vector unit raw data
 pub struct Vreg {
     pub raw: Vec<u8>,
-
-    // There are instructions that double SEW independently on SEW value from vector unit
     pub eew: SEW,
 }
 

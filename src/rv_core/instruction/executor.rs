@@ -199,7 +199,7 @@ impl<'c> Executor<'c> {
             Vsetvl(args) => v::vsetvl(args, &mut self.registers.x, &mut vctx),
 
             Vlv { data: args, eew } => {
-                v::vl::v(args, eew, &self.registers.x, &mut vctx, self.memory)
+                v::vl::v(args, eew, &self.registers.x, &mut vctx, self.memory)?
             }
             Vsv { data: args, eew } => v::vs::v(args, eew, &self.registers.x, &vctx, self.memory),
 
@@ -425,13 +425,13 @@ impl<'c> Executor<'c> {
             Vssravx(args) => v::vssra::vx(args, &mut vctx, &self.registers.x),
             Vssravi(args) => v::vssra::vi(args, &mut vctx),
 
-            Vnsrlwv(args) => v::vnsrl::wv(args, &mut vctx),
-            Vnsrlwx(args) => v::vnsrl::wx(args, &mut vctx, &self.registers.x),
-            Vnsrlwi(args) => v::vnsrl::wi(args, &mut vctx),
+            Vnsrlwv(args) => v::vnsrl::wv(args, &mut vctx)?,
+            Vnsrlwx(args) => v::vnsrl::wx(args, &mut vctx, &self.registers.x)?,
+            Vnsrlwi(args) => v::vnsrl::wi(args, &mut vctx)?,
 
-            Vnsrawv(args) => v::vnsra::wv(args, &mut vctx),
-            Vnsrawx(args) => v::vnsra::wx(args, &mut vctx, &self.registers.x),
-            Vnsrawi(args) => v::vnsra::wi(args, &mut vctx),
+            Vnsrawv(args) => v::vnsra::wv(args, &mut vctx)?,
+            Vnsrawx(args) => v::vnsra::wx(args, &mut vctx, &self.registers.x)?,
+            Vnsrawi(args) => v::vnsra::wi(args, &mut vctx)?,
 
             Vnclipuwv(args) => v::vnclipu::wv(args, &mut vctx),
             Vnclipuwx(args) => v::vnclipu::wx(args, &mut vctx, &self.registers.x),
@@ -441,8 +441,8 @@ impl<'c> Executor<'c> {
             Vnclipwx(args) => v::vnclip::wx(args, &mut vctx, &self.registers.x),
             Vnclipwi(args) => v::vnclip::wi(args, &mut vctx),
 
-            Vwredsumuvs(args) => v::vwredsumu::vs(args, &mut vctx),
-            Vwredsumvs(args) => v::vwredsum::vs(args, &mut vctx),
+            Vwredsumuvs(args) => v::vwredsumu::vs(args, &mut vctx)?,
+            Vwredsumvs(args) => v::vwredsum::vs(args, &mut vctx)?,
 
             Vredsumvs(args) => v::vredsum::vs(args, &mut vctx),
             Vredandvs(args) => v::vredand::vs(args, &mut vctx),
@@ -535,49 +535,49 @@ impl<'c> Executor<'c> {
             Vnmsacvv(args) => v::vnmsac::vv(args, &mut vctx),
             Vnmsacvx(args) => v::vnmsac::vx(args, &mut vctx, &self.registers.x),
 
-            Vwadduvv(args) => v::vwaddu::vv(args, &mut vctx),
-            Vwadduvx(args) => v::vwaddu::vx(args, &mut vctx, &self.registers.x),
+            Vwadduvv(args) => v::vwaddu::vv(args, &mut vctx)?,
+            Vwadduvx(args) => v::vwaddu::vx(args, &mut vctx, &self.registers.x)?,
 
-            Vwaddvv(args) => v::vwadd::vv(args, &mut vctx),
-            Vwaddvx(args) => v::vwadd::vx(args, &mut vctx, &self.registers.x),
+            Vwaddvv(args) => v::vwadd::vv(args, &mut vctx)?,
+            Vwaddvx(args) => v::vwadd::vx(args, &mut vctx, &self.registers.x)?,
 
-            Vwsubuvv(args) => v::vwsubu::vv(args, &mut vctx),
-            Vwsubuvx(args) => v::vwsubu::vx(args, &mut vctx, &self.registers.x),
+            Vwsubuvv(args) => v::vwsubu::vv(args, &mut vctx)?,
+            Vwsubuvx(args) => v::vwsubu::vx(args, &mut vctx, &self.registers.x)?,
 
-            Vwsubvv(args) => v::vwsub::vv(args, &mut vctx),
-            Vwsubvx(args) => v::vwsub::vx(args, &mut vctx, &self.registers.x),
+            Vwsubvv(args) => v::vwsub::vv(args, &mut vctx)?,
+            Vwsubvx(args) => v::vwsub::vx(args, &mut vctx, &self.registers.x)?,
 
-            Vwadduwv(args) => v::vwaddu::wv(args, &mut vctx),
-            Vwadduwx(args) => v::vwaddu::wx(args, &mut vctx, &self.registers.x),
+            Vwadduwv(args) => v::vwaddu::wv(args, &mut vctx)?,
+            Vwadduwx(args) => v::vwaddu::wx(args, &mut vctx, &self.registers.x)?,
 
-            Vwaddwv(args) => v::vwadd::wv(args, &mut vctx),
-            Vwaddwx(args) => v::vwadd::wx(args, &mut vctx, &self.registers.x),
+            Vwaddwv(args) => v::vwadd::wv(args, &mut vctx)?,
+            Vwaddwx(args) => v::vwadd::wx(args, &mut vctx, &self.registers.x)?,
 
-            Vwsubuwv(args) => v::vwsubu::wv(args, &mut vctx),
-            Vwsubuwx(args) => v::vwsubu::wx(args, &mut vctx, &self.registers.x),
+            Vwsubuwv(args) => v::vwsubu::wv(args, &mut vctx)?,
+            Vwsubuwx(args) => v::vwsubu::wx(args, &mut vctx, &self.registers.x)?,
 
-            Vwsubwv(args) => v::vwsub::wv(args, &mut vctx),
-            Vwsubwx(args) => v::vwsub::wx(args, &mut vctx, &self.registers.x),
+            Vwsubwv(args) => v::vwsub::wv(args, &mut vctx)?,
+            Vwsubwx(args) => v::vwsub::wx(args, &mut vctx, &self.registers.x)?,
 
-            Vwmuluvv(args) => v::vwmulu::vv(args, &mut vctx),
-            Vwmuluvx(args) => v::vwmulu::vx(args, &mut vctx, &self.registers.x),
+            Vwmuluvv(args) => v::vwmulu::vv(args, &mut vctx)?,
+            Vwmuluvx(args) => v::vwmulu::vx(args, &mut vctx, &self.registers.x)?,
 
-            Vwmulsuvv(args) => v::vwmulsu::vv(args, &mut vctx),
-            Vwmulsuvx(args) => v::vwmulsu::vx(args, &mut vctx, &self.registers.x),
+            Vwmulsuvv(args) => v::vwmulsu::vv(args, &mut vctx)?,
+            Vwmulsuvx(args) => v::vwmulsu::vx(args, &mut vctx, &self.registers.x)?,
 
-            Vwmulvv(args) => v::vwmul::vv(args, &mut vctx),
-            Vwmulvx(args) => v::vwmul::vx(args, &mut vctx, &self.registers.x),
+            Vwmulvv(args) => v::vwmul::vv(args, &mut vctx)?,
+            Vwmulvx(args) => v::vwmul::vx(args, &mut vctx, &self.registers.x)?,
 
-            Vwmaccuvv(args) => v::vwmaccu::vv(args, &mut vctx),
-            Vwmaccuvx(args) => v::vwmaccu::vx(args, &mut vctx, &self.registers.x),
+            Vwmaccuvv(args) => v::vwmaccu::vv(args, &mut vctx)?,
+            Vwmaccuvx(args) => v::vwmaccu::vx(args, &mut vctx, &self.registers.x)?,
 
-            Vwmaccvv(args) => v::vwmacc::vv(args, &mut vctx),
-            Vwmaccvx(args) => v::vwmacc::vx(args, &mut vctx, &self.registers.x),
+            Vwmaccvv(args) => v::vwmacc::vv(args, &mut vctx)?,
+            Vwmaccvx(args) => v::vwmacc::vx(args, &mut vctx, &self.registers.x)?,
 
-            Vwmaccusvx(args) => v::vwmaccus::vx(args, &mut vctx, &self.registers.x),
+            Vwmaccusvx(args) => v::vwmaccus::vx(args, &mut vctx, &self.registers.x)?,
 
-            Vwmaccsuvv(args) => v::vwmaccsu::vv(args, &mut vctx),
-            Vwmaccsuvx(args) => v::vwmaccsu::vx(args, &mut vctx, &self.registers.x),
+            Vwmaccsuvv(args) => v::vwmaccsu::vv(args, &mut vctx)?,
+            Vwmaccsuvx(args) => v::vwmaccsu::vx(args, &mut vctx, &self.registers.x)?,
 
             Vfaddvv(args) => v::vfadd::vv(args, &mut vctx),
             Vfaddvf(args) => v::vfadd::vf(args, &mut vctx, &self.registers.f),
@@ -623,22 +623,22 @@ impl<'c> Executor<'c> {
             VfcvtRtzxufv(args) => v::vfcvt::rtzxufv(args, &mut vctx),
             VfcvtRtzxfv(args) => v::vfcvt::rtzxfv(args, &mut vctx),
 
-            Vfwcvtxufv(args) => v::vfwcvt::xufv(args, &mut vctx),
-            Vfwcvtxfv(args) => v::vfwcvt::xfv(args, &mut vctx),
-            Vfwcvtfxuv(args) => v::vfwcvt::fxuv(args, &mut vctx),
-            Vfwcvtfxv(args) => v::vfwcvt::fxv(args, &mut vctx),
-            Vfwcvtffv(args) => v::vfwcvt::ffv(args, &mut vctx),
-            VfwcvtRtzxufv(args) => v::vfwcvt::rtzxufv(args, &mut vctx),
-            VfwcvtRtzxfv(args) => v::vfwcvt::rtzxfv(args, &mut vctx),
+            Vfwcvtxufv(args) => v::vfwcvt::xufv(args, &mut vctx)?,
+            Vfwcvtxfv(args) => v::vfwcvt::xfv(args, &mut vctx)?,
+            Vfwcvtfxuv(args) => v::vfwcvt::fxuv(args, &mut vctx)?,
+            Vfwcvtfxv(args) => v::vfwcvt::fxv(args, &mut vctx)?,
+            Vfwcvtffv(args) => v::vfwcvt::ffv(args, &mut vctx)?,
+            VfwcvtRtzxufv(args) => v::vfwcvt::rtzxufv(args, &mut vctx)?,
+            VfwcvtRtzxfv(args) => v::vfwcvt::rtzxfv(args, &mut vctx)?,
 
-            Vfncvtxufw(args) => v::vfncvt::xufw(args, &mut vctx),
-            Vfncvtxfw(args) => v::vfncvt::xfw(args, &mut vctx),
-            Vfncvtfxuw(args) => v::vfncvt::fxuw(args, &mut vctx),
-            Vfncvtfxw(args) => v::vfncvt::fxw(args, &mut vctx),
-            Vfncvtffw(args) => v::vfncvt::ffw(args, &mut vctx),
-            VfncvtRodffw(args) => v::vfncvt::rodffw(args, &mut vctx),
-            VfncvtRtzxufw(args) => v::vfncvt::rtzxufw(args, &mut vctx),
-            VfncvtRtzxfw(args) => v::vfncvt::rtzxfw(args, &mut vctx),
+            Vfncvtxufw(args) => v::vfncvt::xufw(args, &mut vctx)?,
+            Vfncvtxfw(args) => v::vfncvt::xfw(args, &mut vctx)?,
+            Vfncvtfxuw(args) => v::vfncvt::fxuw(args, &mut vctx)?,
+            Vfncvtfxw(args) => v::vfncvt::fxw(args, &mut vctx)?,
+            Vfncvtffw(args) => v::vfncvt::ffw(args, &mut vctx)?,
+            VfncvtRodffw(args) => v::vfncvt::rodffw(args, &mut vctx)?,
+            VfncvtRtzxufw(args) => v::vfncvt::rtzxufw(args, &mut vctx)?,
+            VfncvtRtzxfw(args) => v::vfncvt::rtzxfw(args, &mut vctx)?,
 
             Vfsqrtv(args) => v::vfsqrt::v(args, &mut vctx),
             Vfrsqrt7v(args) => v::vfrsqrt7::v(args, &mut vctx),
@@ -698,36 +698,36 @@ impl<'c> Executor<'c> {
             Vfnmsacvv(args) => v::vfnmsac::vv(args, &mut vctx),
             Vfnmsacvf(args) => v::vfnmsac::vf(args, &mut vctx, &self.registers.f),
 
-            Vfwaddvv(args) => v::vfwadd::vv(args, &mut vctx),
-            Vfwaddvf(args) => v::vfwadd::vf(args, &mut vctx, &self.registers.f),
+            Vfwaddvv(args) => v::vfwadd::vv(args, &mut vctx)?,
+            Vfwaddvf(args) => v::vfwadd::vf(args, &mut vctx, &self.registers.f)?,
 
-            Vfwredusumvs(args) => v::vfwredusum::vs(args, &mut vctx),
+            Vfwredusumvs(args) => v::vfwredusum::vs(args, &mut vctx)?,
 
-            Vfwsubvv(args) => v::vfwsub::vv(args, &mut vctx),
-            Vfwsubvf(args) => v::vfwsub::vf(args, &mut vctx, &self.registers.f),
+            Vfwsubvv(args) => v::vfwsub::vv(args, &mut vctx)?,
+            Vfwsubvf(args) => v::vfwsub::vf(args, &mut vctx, &self.registers.f)?,
 
-            Vfwredosumvs(args) => v::vfwredosum::vs(args, &mut vctx),
+            Vfwredosumvs(args) => v::vfwredosum::vs(args, &mut vctx)?,
 
-            Vfwaddwv(args) => v::vfwadd::wv(args, &mut vctx),
-            Vfwaddwf(args) => v::vfwadd::wf(args, &mut vctx, &self.registers.f),
+            Vfwaddwv(args) => v::vfwadd::wv(args, &mut vctx)?,
+            Vfwaddwf(args) => v::vfwadd::wf(args, &mut vctx, &self.registers.f)?,
 
-            Vfwsubwv(args) => v::vfwsub::wv(args, &mut vctx),
-            Vfwsubwf(args) => v::vfwsub::wf(args, &mut vctx, &self.registers.f),
+            Vfwsubwv(args) => v::vfwsub::wv(args, &mut vctx)?,
+            Vfwsubwf(args) => v::vfwsub::wf(args, &mut vctx, &self.registers.f)?,
 
-            Vfwmulvv(args) => v::vfmul::vv(args, &mut vctx),
-            Vfwmulvf(args) => v::vfmul::vf(args, &mut vctx, &self.registers.f),
+            Vfwmulvv(args) => v::vfwmul::vv(args, &mut vctx)?,
+            Vfwmulvf(args) => v::vfwmul::vf(args, &mut vctx, &self.registers.f)?,
 
-            Vfwmaccvv(args) => v::vfwmacc::vv(args, &mut vctx),
-            Vfwmaccvf(args) => v::vfwmacc::vf(args, &mut vctx, &self.registers.f),
+            Vfwmaccvv(args) => v::vfwmacc::vv(args, &mut vctx)?,
+            Vfwmaccvf(args) => v::vfwmacc::vf(args, &mut vctx, &self.registers.f)?,
 
-            Vfwnmaccvv(args) => v::vfwnmacc::vv(args, &mut vctx),
-            Vfwnmaccvf(args) => v::vfwnmacc::vf(args, &mut vctx, &self.registers.f),
+            Vfwnmaccvv(args) => v::vfwnmacc::vv(args, &mut vctx)?,
+            Vfwnmaccvf(args) => v::vfwnmacc::vf(args, &mut vctx, &self.registers.f)?,
 
-            Vfwmsacvv(args) => v::vfwmsac::vv(args, &mut vctx),
-            Vfwmsacvf(args) => v::vfwmsac::vf(args, &mut vctx, &self.registers.f),
+            Vfwmsacvv(args) => v::vfwmsac::vv(args, &mut vctx)?,
+            Vfwmsacvf(args) => v::vfwmsac::vf(args, &mut vctx, &self.registers.f)?,
 
-            Vfwnmsacvv(args) => v::vfwnmsac::vv(args, &mut vctx),
-            Vfwnmsacvf(args) => v::vfwnmsac::vf(args, &mut vctx, &self.registers.f),
+            Vfwnmsacvv(args) => v::vfwnmsac::vv(args, &mut vctx)?,
+            Vfwnmsacvf(args) => v::vfwnmsac::vf(args, &mut vctx, &self.registers.f)?,
 
             _ => unreachable!(),
         };
@@ -1033,4 +1033,35 @@ mod tests {
         println!("{:?}", core.step());
         println!("{:?}", core.step());
     }
+
+    #[test]
+    fn integration_load() {
+        use Instruction::*;
+        let instructions = vec![
+            Addi(I { rd: 10, rs1: 0, imm12: 10 }), 
+            Vsetvli(format::Vsetvli { rd: 14, rs1: 10, vtypei: 211 }), 
+            Vlv { data: Vl { vd: 0, rs1: 11, vm: false }, eew: SEW::E32 }, 
+            Sub(R { rd: 10, rs1: 10, rs2: 14 }), 
+            Slli(I { rd: 14, rs1: 14, imm12: 2 }), 
+            Add(R { rd: 11, rs1: 11, rs2: 14 }), 
+            Vlv { data: Vl { vd: 8, rs1: 12, vm: false }, eew: SEW::E32 }, 
+            Vfmaccvf(Opfvf { vd: 8, rs1: 10, vs2: 0, vm: false }), 
+            Vsv { data: Vs { vs3: 8, rs1: 12, vm: false }, eew: SEW::E32 }, 
+            Add(R { rd: 12, rs1: 12, rs2: 14 }), 
+            Bne(S { rs1: 10, rs2: 0, imm12: -40 }), 
+            Jalr(I { rd: 0, rs1: 1, imm12: 0 })
+        ];
+
+        let mut core = RvCoreBuilder::default().instructions(instructions).build();
+
+        println!("{:?}", core.step());
+        println!("{:?}", core.step());
+        println!("{:?}", core.step());
+        println!("{:?}", core.step());
+        println!("{:?}", core.step());
+        println!("{:?}", core.step());
+    }
+
+
+    
 }
