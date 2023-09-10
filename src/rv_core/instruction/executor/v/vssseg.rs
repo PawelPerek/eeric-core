@@ -2,7 +2,7 @@ use crate::rv_core::instruction::executor::prelude::*;
 
 pub fn v(
     Vss { vs3, rs1, rs2, vm }: Vss,
-    eew: SEW,
+    eew: BaseSew,
     nf: usize,
     v: &VectorContext<'_>,
     x: &IntegerRegisters,
@@ -29,11 +29,10 @@ pub fn v(
             let address = addr.wrapping_add(offset);
             if mask == 1 {
                 match eew {
-                    SEW::E8 => mem.set(address, (value as u8).to_le_bytes()),
-                    SEW::E16 => mem.set(address, (value as u16).to_le_bytes()),
-                    SEW::E32 => mem.set(address, (value as u32).to_le_bytes()),
-                    SEW::E64 => mem.set(address, value.to_le_bytes()),
-                    _ => unimplemented!(),
+                    BaseSew::E8 => mem.set(address, (value as u8).to_le_bytes()),
+                    BaseSew::E16 => mem.set(address, (value as u16).to_le_bytes()),
+                    BaseSew::E32 => mem.set(address, (value as u32).to_le_bytes()),
+                    BaseSew::E64 => mem.set(address, value.to_le_bytes()),
                 };
             }
         });

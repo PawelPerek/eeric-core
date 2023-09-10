@@ -8,8 +8,8 @@ pub fn vv(
         vm,
     }: Opfvv,
     v: &mut VectorContext<'_>,
-) {
-    let vreg = izip!(v.get(vs2).iter_fp(), v.get(vs1).iter_fp())
+) -> Result<(), String> {
+    let vreg = izip!(v.get(vs2).iter_fp()?, v.get(vs1).iter_fp()?)
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |(vs2, vs1)| {
             if vs2 <= vs1 {
                 1
@@ -20,12 +20,18 @@ pub fn vv(
         .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
+
+    Ok(())
 }
 
-pub fn vf(Opfvf { vd, rs1, vs2, vm }: Opfvf, v: &mut VectorContext<'_>, f: &FloatRegisters) {
+pub fn vf(
+    Opfvf { vd, rs1, vs2, vm }: Opfvf,
+    v: &mut VectorContext<'_>,
+    f: &FloatRegisters,
+) -> Result<(), String> {
     let vreg = v
         .get(vs2)
-        .iter_fp()
+        .iter_fp()?
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| {
             if vs2 <= ArbitraryFloat::copy_type(&vs2, f[rs1]) {
                 1
@@ -36,4 +42,6 @@ pub fn vf(Opfvf { vd, rs1, vs2, vm }: Opfvf, v: &mut VectorContext<'_>, f: &Floa
         .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
+
+    Ok(())
 }

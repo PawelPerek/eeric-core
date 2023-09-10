@@ -5,15 +5,19 @@ pub fn vf2(
         dest: vd, vs2, vm, ..
     }: Vxunary0,
     v: &mut VectorContext<'_>,
-) {
+) -> Result<(), String> {
+    let half_sew = v.vec_engine.sew.half()?;
+
     let vreg = v
         .get(vs2)
-        .iter_eew_div_2()
+        .iter_custom_eew(half_sew)
         .take(v.vlmax() / 2)
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| vs2)
         .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
+
+    Ok(())
 }
 
 pub fn vf4(
@@ -21,15 +25,19 @@ pub fn vf4(
         dest: vd, vs2, vm, ..
     }: Vxunary0,
     v: &mut VectorContext<'_>,
-) {
+) -> Result<(), String> {
+    let fourth_sew = v.vec_engine.sew.fourth()?;
+
     let vreg = v
         .get(vs2)
-        .iter_eew_div_4()
+        .iter_custom_eew(fourth_sew)
         .take(v.vlmax() / 4)
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| vs2)
         .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
+
+    Ok(())
 }
 
 pub fn vf8(
@@ -37,13 +45,17 @@ pub fn vf8(
         dest: vd, vs2, vm, ..
     }: Vxunary0,
     v: &mut VectorContext<'_>,
-) {
+) -> Result<(), String> {
+    let eighth = v.vec_engine.sew.eighth()?;
+
     let vreg = v
         .get(vs2)
-        .iter_eew_div_8()
+        .iter_custom_eew(eighth)
         .take(v.vlmax() / 8)
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| vs2)
         .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
+
+    Ok(())
 }

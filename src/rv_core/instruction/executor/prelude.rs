@@ -13,7 +13,10 @@ pub use crate::rv_core::{
         vector::{Vreg, WideVreg},
         *,
     },
-    vector_engine::{MaskBehavior, VectorEngine, VectorEngineBuilder, LMUL, SEW, VLEN},
+    vector_engine::{
+        sew::{BaseSew, DoubleFpSew, DoubleSew, EighthSew, FourthSew, FpSew, HalfSew, Sew},
+        MaskBehavior, VectorEngine, VectorEngineBuilder, LMUL, VLEN,
+    },
 };
 
 pub use itertools::{izip, Itertools};

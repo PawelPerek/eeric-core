@@ -1,17 +1,17 @@
-use crate::rv_core::{arbitrary_float::ArbitraryFloat, vector_engine::SEW};
+use crate::rv_core::{
+    arbitrary_float::ArbitraryFloat,
+    vector_engine::sew::{DoubleFpSew, DoubleSew, Sew},
+};
 
 #[derive(Clone)]
 pub struct WideVreg {
     pub raw: Vec<u8>,
-    pub eew: SEW,
+    pub eew: DoubleSew,
 }
 
 impl WideVreg {
-    pub fn new(raw: Vec<u8>, eew: SEW) -> Self {
-        Self {
-            raw,
-            eew: eew.double().unwrap(),
-        }
+    pub fn new(raw: Vec<u8>, eew: DoubleSew) -> Self {
+        Self { raw, eew }
     }
 
     pub fn iter_byte(&self) -> WideVregByteIterator<'_> {
@@ -25,20 +25,11 @@ impl WideVreg {
         }
     }
 
-    pub fn iter_fp(&self) -> WideVregFPIterator<'_> {
-        WideVregFPIterator {
+    pub fn iter_fp(&self) -> Result<WideVregFPIterator<'_>, String> {
+        Ok(WideVregFPIterator {
             byte_iterator: self.iter_byte(),
-            eew: self.eew,
-        }
-    }
-}
-
-impl FromIterator<u8> for WideVreg {
-    fn from_iter<T: IntoIterator<Item = u8>>(iter: T) -> Self {
-        let mut raw = Vec::new();
-        raw.extend(iter);
-
-        WideVreg { raw, eew: SEW::E8 }
+            eew: self.eew.fp()?,
+        })
     }
 }
 
@@ -71,7 +62,7 @@ impl<'a> ExactSizeIterator for WideVregByteIterator<'a> {
 
 pub struct WideVregEEWIterator<'a> {
     byte_iterator: WideVregByteIterator<'a>,
-    eew: SEW,
+    eew: DoubleSew,
 }
 
 impl<'a> Iterator for WideVregEEWIterator<'a> {
@@ -100,23 +91,20 @@ impl<'a> Iterator for WideVregEEWIterator<'a> {
 
 pub struct WideVregFPIterator<'a> {
     byte_iterator: WideVregByteIterator<'a>,
-    eew: SEW,
+    eew: DoubleFpSew,
 }
-
-// Note: yeah, 32b SEW is only supported byte length for wide vreg in RVV 1.0 :/
 
 impl<'a> Iterator for WideVregFPIterator<'a> {
     type Item = ArbitraryFloat;
 
     fn next(&mut self) -> Option<Self::Item> {
-        match self.eew.byte_length() {
-            4 => self
+        match self.eew {
+            DoubleFpSew::E64 => self
                 .byte_iterator
                 .next_chunk()
                 .map(f64::from_le_bytes)
                 .map(ArbitraryFloat::F64)
                 .ok(),
-            _ => panic!("Invalid SEW for wide floating point"),
         }
     }
 }

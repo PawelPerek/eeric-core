@@ -1,17 +1,22 @@
+pub trait Sew {
+    fn bit_length(&self) -> usize;
+    fn byte_length(&self) -> usize {
+        self.bit_length() / 8
+    }
+}
+
 #[derive(Clone, Copy, Default, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
-pub enum SEW {
+pub enum BaseSew {
     #[default]
     E8,
     E16,
     E32,
     E64,
-    // Only for widening instructions
-    E128,
 }
 
-impl TryFrom<usize> for SEW {
-    type Error = &'static str;
+impl TryFrom<usize> for BaseSew {
+    type Error = String;
 
     fn try_from(value: usize) -> Result<Self, Self::Error> {
         let sew = match value {
@@ -19,73 +24,203 @@ impl TryFrom<usize> for SEW {
             16 => Self::E16,
             32 => Self::E32,
             64 => Self::E64,
-            _ => return Err("Incorrect SEW (should be 8b, 16b, 32b or 64b)"),
+            _ => return Err(format!("Expected SEW= 8 | 16 | 32 | 64, got SEW={}", value)),
         };
 
         Ok(sew)
     }
 }
 
-impl SEW {
-    pub fn double(self) -> Result<Self, &'static str> {
-        let doubled = match self {
-            Self::E8 => Self::E16,
-            Self::E16 => Self::E32,
-            Self::E32 => Self::E64,
-            Self::E64 => Self::E128,
-            Self::E128 => return Err("Doubing 128-bit SEW is not defined"),
-        };
-
-        Ok(doubled)
+impl BaseSew {
+    pub fn double(self) -> DoubleSew {
+        match self {
+            Self::E8 => DoubleSew::E16,
+            Self::E16 => DoubleSew::E32,
+            Self::E32 => DoubleSew::E64,
+            Self::E64 => DoubleSew::E128,
+        }
     }
 
-    pub fn half(self) -> Result<Self, &'static str> {
+    pub fn half(self) -> Result<HalfSew, String> {
         let halved = match self {
-            Self::E128 => Self::E64,
-            Self::E64 => Self::E32,
-            Self::E32 => Self::E16,
-            Self::E16 => Self::E8,
-            Self::E8 => return Err("Halving 8-bit SEW is not defined"),
+            Self::E64 => HalfSew::E32,
+            Self::E32 => HalfSew::E16,
+            Self::E16 => HalfSew::E8,
+            _ => {
+                return Err(format!(
+                    "Expected SEW = 16 | 32 | 64 to half, got SEW = {}",
+                    self.bit_length()
+                ))
+            }
         };
 
         Ok(halved)
     }
 
-    pub fn fourth(self) -> Result<Self, &'static str> {
+    pub fn fourth(self) -> Result<FourthSew, String> {
         let fourthed = match self {
-            Self::E128 => Self::E32,
-            Self::E64 => Self::E16,
-            Self::E32 => Self::E8,
-            Self::E16 => return Err("Fourthing 16-bit SEW is not defined"),
-            Self::E8 => return Err("Fourthing 8-bit SEW is not defined"),
+            Self::E64 => FourthSew::E16,
+            Self::E32 => FourthSew::E8,
+            _ => {
+                return Err(format!(
+                    "Expected SEW = 32 | 64 to fourth, got SEW = {}",
+                    self.bit_length()
+                ))
+            }
         };
 
         Ok(fourthed)
     }
 
-    pub fn eighth(self) -> Result<Self, &'static str> {
+    pub fn eighth(self) -> Result<EighthSew, String> {
         let eighted = match self {
-            Self::E128 => Self::E16,
-            Self::E64 => Self::E8,
-            Self::E32 => return Err("Eighting 32-bit SEW is not defined"),
-            Self::E16 => return Err("Eighting 16-bit SEW is not defined"),
-            Self::E8 => return Err("Eighting 8-bit SEW is not defined"),
+            Self::E64 => EighthSew::E8,
+            _ => {
+                return Err(format!(
+                    "Expected SEW = 64 to eighth, got SEW = {}",
+                    self.bit_length()
+                ))
+            }
         };
 
         Ok(eighted)
     }
 
-    pub fn bit_length(&self) -> usize {
+    pub fn fp(self) -> Result<FpSew, String> {
+        let fp_sew = match self {
+            Self::E32 => FpSew::E32,
+            Self::E64 => FpSew::E64,
+            _ => {
+                return Err(format!(
+                    "Expected SEW = 32 | 64 to FP, got SEW = {}",
+                    self.bit_length()
+                ))
+            }
+        };
+
+        Ok(fp_sew)
+    }
+}
+
+impl Sew for BaseSew {
+    fn bit_length(&self) -> usize {
         match self {
             Self::E8 => 8,
+            Self::E16 => 16,
+            Self::E32 => 32,
+            Self::E64 => 64,
+        }
+    }
+}
+
+#[derive(Clone, Copy, PartialEq)]
+#[cfg_attr(debug_assertions, derive(Debug))]
+pub enum DoubleSew {
+    E16,
+    E32,
+    E64,
+    E128,
+}
+
+impl DoubleSew {
+    pub fn fp(self) -> Result<DoubleFpSew, String> {
+        let fp_sew = match self {
+            Self::E64 => DoubleFpSew::E64,
+            _ => return Err(format!(
+                "Expected double SEW = 64 (SEW = 32) for wide FP operations, got double SEW = {}",
+                self.bit_length()
+            )),
+        };
+
+        Ok(fp_sew)
+    }
+}
+
+impl Sew for DoubleSew {
+    fn bit_length(&self) -> usize {
+        match self {
             Self::E16 => 16,
             Self::E32 => 32,
             Self::E64 => 64,
             Self::E128 => 128,
         }
     }
+}
 
-    pub fn byte_length(&self) -> usize {
-        self.bit_length() / 8
+#[derive(Clone, Copy, PartialEq)]
+#[cfg_attr(debug_assertions, derive(Debug))]
+pub enum HalfSew {
+    E8,
+    E16,
+    E32,
+}
+
+impl Sew for HalfSew {
+    fn bit_length(&self) -> usize {
+        match self {
+            Self::E8 => 8,
+            Self::E16 => 16,
+            Self::E32 => 32,
+        }
+    }
+}
+
+#[derive(Clone, Copy, PartialEq)]
+#[cfg_attr(debug_assertions, derive(Debug))]
+pub enum FourthSew {
+    E8,
+    E16,
+}
+
+impl Sew for FourthSew {
+    fn bit_length(&self) -> usize {
+        match self {
+            Self::E8 => 8,
+            Self::E16 => 16,
+        }
+    }
+}
+
+#[derive(Clone, Copy, PartialEq)]
+#[cfg_attr(debug_assertions, derive(Debug))]
+pub enum EighthSew {
+    E8,
+}
+
+impl Sew for EighthSew {
+    fn bit_length(&self) -> usize {
+        match self {
+            Self::E8 => 8,
+        }
+    }
+}
+
+#[derive(Clone, Copy, PartialEq)]
+#[cfg_attr(debug_assertions, derive(Debug))]
+pub enum FpSew {
+    E32,
+    E64,
+}
+
+impl Sew for FpSew {
+    fn bit_length(&self) -> usize {
+        match self {
+            Self::E32 => 32,
+            Self::E64 => 64,
+        }
+    }
+}
+
+#[derive(Clone, Copy, PartialEq)]
+#[cfg_attr(debug_assertions, derive(Debug))]
+pub enum DoubleFpSew {
+    E64,
+}
+
+impl Sew for DoubleFpSew {
+    fn bit_length(&self) -> usize {
+        match self {
+            Self::E64 => 64,
+        }
     }
 }

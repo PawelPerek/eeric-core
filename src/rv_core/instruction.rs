@@ -3,7 +3,7 @@ pub mod format;
 
 use format::*;
 
-use super::vector_engine::SEW;
+use super::vector_engine::sew::BaseSew;
 
 #[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
@@ -174,11 +174,11 @@ pub enum Instruction {
     // VMEM
     Vlv {
         data: Vl,
-        eew: SEW,
+        eew: BaseSew,
     },
     Vsv {
         data: Vs,
-        eew: SEW,
+        eew: BaseSew,
     },
 
     Vlmv(Vl),
@@ -186,81 +186,81 @@ pub enum Instruction {
 
     Vlsv {
         data: Vls,
-        eew: SEW,
+        eew: BaseSew,
     },
     Vssv {
         data: Vss,
-        eew: SEW,
+        eew: BaseSew,
     },
 
     Vluxv {
         data: Vlx,
-        eew: SEW,
+        eew: BaseSew,
     },
     Vloxv {
         data: Vlx,
-        eew: SEW,
+        eew: BaseSew,
     },
     Vsuxv {
         data: Vsx,
-        eew: SEW,
+        eew: BaseSew,
     },
     Vsoxv {
         data: Vsx,
-        eew: SEW,
+        eew: BaseSew,
     },
 
     Vlffv {
         data: Vl,
-        eew: SEW,
+        eew: BaseSew,
     },
 
     Vlsegv {
         data: Vl,
-        eew: SEW,
+        eew: BaseSew,
         nf: usize,
     },
     Vssegv {
         data: Vs,
-        eew: SEW,
+        eew: BaseSew,
         nf: usize,
     },
 
     Vlssegv {
         data: Vls,
-        eew: SEW,
+        eew: BaseSew,
         nf: usize,
     },
     Vsssegv {
         data: Vss,
-        eew: SEW,
+        eew: BaseSew,
         nf: usize,
     },
 
     Vluxsegv {
         data: Vlx,
-        eew: SEW,
+        eew: BaseSew,
         nf: usize,
     },
     Vloxsegv {
         data: Vlx,
-        eew: SEW,
+        eew: BaseSew,
         nf: usize,
     },
     Vsuxsegv {
         data: Vsx,
-        eew: SEW,
+        eew: BaseSew,
         nf: usize,
     },
     Vsoxsegv {
         data: Vsx,
-        eew: SEW,
+        eew: BaseSew,
         nf: usize,
     },
 
     Vlrv {
         data: Vlr,
-        eew: SEW,
+        eew: BaseSew,
         nf: usize,
     },
     Vsrv {

@@ -2,7 +2,7 @@ use crate::rv_core::instruction::executor::prelude::*;
 
 pub fn v(
     Vlx { vd, rs1, vs2, vm }: Vlx,
-    eew: SEW,
+    eew: BaseSew,
     nf: usize,
     v: &mut VectorContext<'_>,
     x: &IntegerRegisters,
@@ -20,11 +20,10 @@ pub fn v(
             let address = addr.wrapping_add(*offset as usize).wrapping_add(segment);
 
             let element: u64 = match v.vec_engine.sew {
-                SEW::E8 => u8::from_le_bytes(mem.get(address)) as u64,
-                SEW::E16 => u16::from_le_bytes(mem.get(address)) as u64,
-                SEW::E32 => u32::from_le_bytes(mem.get(address)) as u64,
-                SEW::E64 => u64::from_le_bytes(mem.get(address)),
-                _ => unimplemented!(),
+                BaseSew::E8 => u8::from_le_bytes(mem.get(address)) as u64,
+                BaseSew::E16 => u16::from_le_bytes(mem.get(address)) as u64,
+                BaseSew::E32 => u32::from_le_bytes(mem.get(address)) as u64,
+                BaseSew::E64 => u64::from_le_bytes(mem.get(address)),
             };
 
             store.push(element);

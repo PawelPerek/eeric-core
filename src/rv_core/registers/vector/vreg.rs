@@ -1,14 +1,17 @@
-use crate::rv_core::{arbitrary_float::ArbitraryFloat, vector_engine::SEW};
+use crate::rv_core::{
+    arbitrary_float::ArbitraryFloat,
+    vector_engine::sew::{BaseSew, FpSew, Sew},
+};
 
 #[derive(Clone)]
 // A wrapper over vector unit raw data
 pub struct Vreg {
     pub raw: Vec<u8>,
-    pub eew: SEW,
+    pub eew: BaseSew,
 }
 
 impl Vreg {
-    pub fn new(raw: Vec<u8>, eew: SEW) -> Vreg {
+    pub fn new(raw: Vec<u8>, eew: BaseSew) -> Vreg {
         Vreg { raw, eew }
     }
 
@@ -16,35 +19,14 @@ impl Vreg {
         VregByteIterator { vreg: self, ptr: 0 }
     }
 
-    pub fn iter_eew(&self) -> VregEEWIterator<'_> {
+    pub fn iter_eew(&self) -> VregEEWIterator<'_, BaseSew> {
         VregEEWIterator {
             byte_iterator: self.iter_byte(),
             eew: self.eew,
         }
     }
 
-    pub fn iter_eew_div_2(&self) -> VregEEWIterator<'_> {
-        VregEEWIterator {
-            byte_iterator: self.iter_byte(),
-            eew: self.eew.half().unwrap(),
-        }
-    }
-
-    pub fn iter_eew_div_4(&self) -> VregEEWIterator<'_> {
-        VregEEWIterator {
-            byte_iterator: self.iter_byte(),
-            eew: self.eew.fourth().unwrap(),
-        }
-    }
-
-    pub fn iter_eew_div_8(&self) -> VregEEWIterator<'_> {
-        VregEEWIterator {
-            byte_iterator: self.iter_byte(),
-            eew: self.eew.eighth().unwrap(),
-        }
-    }
-
-    pub fn iter_custom_eew(&self, eew: SEW) -> VregEEWIterator<'_> {
+    pub fn iter_custom_eew<S: Sew>(&self, eew: S) -> VregEEWIterator<'_, S> {
         VregEEWIterator {
             byte_iterator: self.iter_byte(),
             eew,
@@ -58,11 +40,11 @@ impl Vreg {
         }
     }
 
-    pub fn iter_fp(&self) -> VregFPIterator<'_> {
-        VregFPIterator {
+    pub fn iter_fp(&self) -> Result<VregFPIterator<'_>, String> {
+        Ok(VregFPIterator {
             byte_iterator: self.iter_byte(),
-            eew: self.eew,
-        }
+            eew: self.eew.fp()?,
+        })
     }
 }
 
@@ -71,7 +53,10 @@ impl FromIterator<u8> for Vreg {
         let mut raw = Vec::new();
         raw.extend(iter);
 
-        Vreg { raw, eew: SEW::E8 }
+        Vreg {
+            raw,
+            eew: BaseSew::E8,
+        }
     }
 }
 
@@ -102,12 +87,12 @@ impl<'a> ExactSizeIterator for VregByteIterator<'a> {
 
 // Integer EEW
 
-pub struct VregEEWIterator<'a> {
+pub struct VregEEWIterator<'a, S: Sew> {
     byte_iterator: VregByteIterator<'a>,
-    eew: SEW,
+    eew: S,
 }
 
-impl<'a> Iterator for VregEEWIterator<'a> {
+impl<'a, S: Sew> Iterator for VregEEWIterator<'a, S> {
     type Item = u64;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -151,27 +136,26 @@ impl<'a> Iterator for VregMaskIterator<'a> {
 
 pub struct VregFPIterator<'a> {
     byte_iterator: VregByteIterator<'a>,
-    eew: SEW,
+    eew: FpSew,
 }
 
 impl<'a> Iterator for VregFPIterator<'a> {
     type Item = ArbitraryFloat;
 
     fn next(&mut self) -> Option<Self::Item> {
-        match self.eew.byte_length() {
-            4 => self
+        match self.eew {
+            FpSew::E32 => self
                 .byte_iterator
                 .next_chunk()
                 .map(f32::from_le_bytes)
                 .map(ArbitraryFloat::F32)
                 .ok(),
-            8 => self
+            FpSew::E64 => self
                 .byte_iterator
                 .next_chunk()
                 .map(f64::from_le_bytes)
                 .map(ArbitraryFloat::F64)
                 .ok(),
-            _ => panic!("Invalid SEW for floating point"),
         }
     }
 }
@@ -184,7 +168,7 @@ mod tests {
     fn e8() {
         let vector_data = vec![0xef, 0xcd, 0xab, 0x89, 0x67, 0x45, 0x23, 0x01];
 
-        let vreg = Vreg::new(vector_data, SEW::E8);
+        let vreg = Vreg::new(vector_data, BaseSew::E8);
 
         let mut iter = vreg.iter_eew();
 
@@ -203,7 +187,7 @@ mod tests {
     fn e16() {
         let vector_data = vec![0xef, 0xcd, 0xab, 0x89, 0x67, 0x45, 0x23, 0x01];
 
-        let vreg = Vreg::new(vector_data, SEW::E16);
+        let vreg = Vreg::new(vector_data, BaseSew::E16);
 
         let mut iter = vreg.iter_eew();
 
@@ -218,7 +202,7 @@ mod tests {
     fn e32() {
         let vector_data = vec![0xef, 0xcd, 0xab, 0x89, 0x67, 0x45, 0x23, 0x01];
 
-        let vreg = Vreg::new(vector_data, SEW::E32);
+        let vreg = Vreg::new(vector_data, BaseSew::E32);
 
         let mut iter = vreg.iter_eew();
 
@@ -231,7 +215,7 @@ mod tests {
     fn e64() {
         let vector_data = vec![0xef, 0xcd, 0xab, 0x89, 0x67, 0x45, 0x23, 0x01];
 
-        let vreg = Vreg::new(vector_data, SEW::E64);
+        let vreg = Vreg::new(vector_data, BaseSew::E64);
 
         let mut iter = vreg.iter_eew();
 

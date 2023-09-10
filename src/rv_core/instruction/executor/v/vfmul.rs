@@ -8,24 +8,32 @@ pub fn vv(
         vm,
     }: Opfvv,
     v: &mut VectorContext<'_>,
-) {
-    let vreg = izip!(v.get(vs2).iter_fp(), v.get(vs1).iter_fp())
-        .masked_map(v.default_mask(vm), v.get(vd).iter_fp(), |(vs2, vs1)| {
+) -> Result<(), String> {
+    let vreg = izip!(v.get(vs2).iter_fp()?, v.get(vs1).iter_fp()?)
+        .masked_map(v.default_mask(vm), v.get(vd).iter_fp()?, |(vs2, vs1)| {
             vs2 * vs1
         })
         .collect_fp();
 
     v.apply(vd, vreg);
+
+    Ok(())
 }
 
-pub fn vf(Opfvf { vd, rs1, vs2, vm }: Opfvf, v: &mut VectorContext<'_>, f: &FloatRegisters) {
+pub fn vf(
+    Opfvf { vd, rs1, vs2, vm }: Opfvf,
+    v: &mut VectorContext<'_>,
+    f: &FloatRegisters,
+) -> Result<(), String> {
     let vreg = v
         .get(vs2)
-        .iter_fp()
-        .masked_map(v.default_mask(vm), v.get(vd).iter_fp(), |vs2| {
+        .iter_fp()?
+        .masked_map(v.default_mask(vm), v.get(vd).iter_fp()?, |vs2| {
             vs2 * ArbitraryFloat::copy_type(&vs2, f[rs1])
         })
         .collect_fp();
 
     v.apply(vd, vreg);
+
+    Ok(())
 }

@@ -10,7 +10,7 @@ pub fn xufv(
 ) -> Result<(), String> {
     let vreg = v
         .get(vs2)
-        .iter_fp()
+        .iter_fp()?
         .masked_map(v.default_mask(vm), v.get_wide(vd)?.iter_eew(), |vs2| {
             vs2.round().to_u128().unwrap()
         })
@@ -29,7 +29,7 @@ pub fn xfv(
 ) -> Result<(), String> {
     let vreg = v
         .get(vs2)
-        .iter_fp()
+        .iter_fp()?
         .masked_map(v.default_mask(vm), v.get_wide(vd)?.iter_eew(), |vs2| {
             vs2.round().to_i128().unwrap() as u128
         })
@@ -48,19 +48,18 @@ pub fn fxuv(
 ) -> Result<(), String> {
     let sew = v.vec_engine.sew;
 
-    if sew != SEW::E16 || sew != SEW::E32 {
-        return Err(format!("Widening conversion of floating point numbers is supported only for SEW=16 or SEW=32, got SEW={}", v.vec_engine.sew.byte_length()))
-    }
-
     let vreg = v
         .get(vs2)
         .iter_eew()
-        .masked_map(v.default_mask(vm), v.get_wide(vd)?.iter_fp(), |vs2| match sew
-        {
-            SEW::E16 => ArbitraryFloat::F32(vs2 as u16 as f32),
-            SEW::E32 => ArbitraryFloat::F64(vs2 as u32 as f64),
-            _ => unreachable!(),
-        })
+        .masked_map(
+            v.default_mask(vm),
+            v.get_wide(vd)?.iter_fp()?,
+            |vs2| match sew {
+                BaseSew::E16 => ArbitraryFloat::F32(vs2 as u16 as f32),
+                BaseSew::E32 => ArbitraryFloat::F64(vs2 as u32 as f64),
+                _ => unreachable!(),
+            },
+        )
         .collect_fp();
 
     v.apply(vd, vreg);
@@ -75,20 +74,19 @@ pub fn fxv(
     v: &mut VectorContext<'_>,
 ) -> Result<(), String> {
     let sew = v.vec_engine.sew;
-   
-    if sew != SEW::E16 || sew != SEW::E32 {
-        return Err(format!("Widening conversion of floating point numbers is supported only for SEW=16 or SEW=32, got SEW={}", v.vec_engine.sew.byte_length()))
-    }
 
     let vreg = v
         .get(vs2)
         .iter_eew()
-        .masked_map(v.default_mask(vm), v.get_wide(vd)?.iter_fp(), |vs2| match sew
-        {
-            SEW::E16 => ArbitraryFloat::F32(vs2 as i16 as f32),
-            SEW::E32 => ArbitraryFloat::F64(vs2 as i32 as f64),
-            _ => unreachable!(),
-        })
+        .masked_map(
+            v.default_mask(vm),
+            v.get_wide(vd)?.iter_fp()?,
+            |vs2| match sew {
+                BaseSew::E16 => ArbitraryFloat::F32(vs2 as i16 as f32),
+                BaseSew::E32 => ArbitraryFloat::F64(vs2 as i32 as f64),
+                _ => unreachable!(),
+            },
+        )
         .collect_fp();
 
     v.apply(vd, vreg);
@@ -104,8 +102,8 @@ pub fn ffv(
 ) -> Result<(), String> {
     let vreg = v
         .get_wide(vs2)?
-        .iter_fp()
-        .masked_map(v.default_mask(vm), v.get(vd).iter_fp(), |vs2| {
+        .iter_fp()?
+        .masked_map(v.default_mask(vm), v.get(vd).iter_fp()?, |vs2| {
             vs2.double_precision()
         })
         .collect_fp();
@@ -123,7 +121,7 @@ pub fn rtzxufv(
 ) -> Result<(), String> {
     let vreg = v
         .get(vs2)
-        .iter_fp()
+        .iter_fp()?
         .masked_map(v.default_mask(vm), v.get_wide(vd)?.iter_eew(), |vs2| {
             vs2.to_u128().unwrap()
         })
@@ -142,7 +140,7 @@ pub fn rtzxfv(
 ) -> Result<(), String> {
     let vreg = v
         .get(vs2)
-        .iter_fp()
+        .iter_fp()?
         .masked_map(v.default_mask(vm), v.get_wide(vd)?.iter_eew(), |vs2| {
             vs2.to_i128().unwrap() as u128
         })

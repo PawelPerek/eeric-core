@@ -9,10 +9,10 @@ pub fn v(
         dest: vd, vs2, vm, ..
     }: Vfunary1,
     v: &mut VectorContext<'_>,
-) {
+) -> Result<(), String> {
     let vreg = v
         .get(vs2)
-        .iter_fp()
+        .iter_fp()?
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vs2| {
             match vs2.classify() {
                 FpCategory::Infinite if vs2 < ArbitraryFloat::zero() => 1 << 0,
@@ -30,4 +30,6 @@ pub fn v(
         .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
+
+    Ok(())
 }

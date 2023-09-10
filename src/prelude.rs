@@ -3,7 +3,10 @@ pub use crate::rv_core::{
     memory::Memory,
     registers::{Registers, RegistersSnapshot},
     snapshot::Snapshotable,
-    vector_engine::{MaskBehavior, VectorEngine, VectorEngineBuilder, LMUL, SEW, VLEN},
+    vector_engine::{
+        sew::{BaseSew, Sew},
+        MaskBehavior, VectorEngine, VectorEngineBuilder, LMUL, VLEN,
+    },
     RvCore, RvCoreBuilder,
 };
 

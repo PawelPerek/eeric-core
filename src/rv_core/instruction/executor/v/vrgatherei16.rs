@@ -7,7 +7,7 @@ pub fn vv(Opivv { vd, vs1, vs2, vm }: Opivv, v: &mut VectorContext<'_>) {
 
     let vreg = v
         .get(vs1)
-        .iter_custom_eew(SEW::E16)
+        .iter_custom_eew(BaseSew::E16)
         .take(vlmax)
         .masked_map(v.default_mask(vm), v.get(vd).iter_eew(), |vindex| {
             if vindex as usize >= vlmax {

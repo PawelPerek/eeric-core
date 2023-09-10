@@ -9,14 +9,16 @@ pub fn vf(
     }: Opfvf,
     v: &mut VectorContext<'_>,
     f: &FloatRegisters,
-) {
+) -> Result<(), String> {
     let vreg = v
         .get(vd)
-        .iter_fp()
+        .iter_fp()?
         .map(|vs2| ArbitraryFloat::copy_type(&vs2, f[rs1]))
         .collect_fp();
 
     v.apply(vd, vreg);
+
+    Ok(())
 }
 
 pub fn fs(
@@ -28,8 +30,8 @@ pub fn fs(
     }: Vwfunary0,
     v: &VectorContext<'_>,
     f: &mut FloatRegisters,
-) {
-    let first_value = v.get(vs2).iter_fp().next().unwrap();
+) -> Result<(), String> {
+    let first_value = v.get(vs2).iter_fp()?.next().unwrap();
 
     let value = match first_value {
         ArbitraryFloat::F32(fp) => {
@@ -40,20 +42,24 @@ pub fn fs(
     };
 
     f[rd] = value;
+
+    Ok(())
 }
 
 pub fn sf(
     Vrfunary0 { vd, rs1, vm: _, .. }: Vrfunary0,
     v: &mut VectorContext<'_>,
     f: &FloatRegisters,
-) {
+) -> Result<(), String> {
     let first_value = f64::to_le_bytes(f[rs1]);
 
     let vreg = v.get(vd);
     let mut vreg_data = vreg.iter_byte().collect_vec();
 
-    vreg_data[..v.vec_engine.sew.byte_length()]
+    vreg_data[..v.vec_engine.sew.fp()?.byte_length()]
         .copy_from_slice(&first_value[..v.vec_engine.sew.byte_length()]);
 
     v.apply(vd, vreg_data.into_iter().collect());
+
+    Ok(())
 }

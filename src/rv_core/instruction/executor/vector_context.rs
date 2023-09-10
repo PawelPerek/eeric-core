@@ -8,7 +8,7 @@ use crate::rv_core::{
 use super::prelude::{
     aliases::csr::{VL, VTYPE},
     vector::{Vreg, WideVreg},
-    LMUL, SEW,
+    BaseSew, Sew, LMUL,
 };
 
 pub struct VectorContext<'c> {
@@ -49,7 +49,10 @@ impl VectorContext<'_> {
     }
 
     pub fn get_wide(&self, nth: usize) -> Result<WideVreg, String> {
-        Ok(WideVreg::new(self.wide_register_view(nth)?.collect(), self.vec_engine.sew))
+        Ok(WideVreg::new(
+            self.wide_register_view(nth)?.collect(),
+            self.vec_engine.sew.double(),
+        ))
     }
 
     fn single_register_view(&self, nth: usize) -> impl Iterator<Item = u8> + '_ {
@@ -144,10 +147,10 @@ impl VectorContext<'_> {
         };
 
         self.vec_engine.sew = match raw_vtype.vsew {
-            0b000 => SEW::E8,
-            0b001 => SEW::E16,
-            0b010 => SEW::E32,
-            0b011 => SEW::E64,
+            0b000 => BaseSew::E8,
+            0b001 => BaseSew::E16,
+            0b010 => BaseSew::E32,
+            0b011 => BaseSew::E64,
             0b100..=0b111 => return Err(String::from("vsew=1xx is reserved")),
             _ => unreachable!(),
         };

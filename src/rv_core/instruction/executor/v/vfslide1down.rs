@@ -1,6 +1,10 @@
 use crate::rv_core::instruction::executor::prelude::*;
 
-pub fn vf(Opfvf { vd, rs1, vs2, vm }: Opfvf, v: &mut VectorContext<'_>, f: &FloatRegisters) {
+pub fn vf(
+    Opfvf { vd, rs1, vs2, vm }: Opfvf,
+    v: &mut VectorContext<'_>,
+    f: &FloatRegisters,
+) -> Result<(), String> {
     let last_value = f64::to_le_bytes(f[rs1]);
 
     let vreg_values: Vreg = v
@@ -8,7 +12,7 @@ pub fn vf(Opfvf { vd, rs1, vs2, vm }: Opfvf, v: &mut VectorContext<'_>, f: &Floa
         .iter_byte()
         .take(v.vlmax() - v.vec_engine.sew.byte_length())
         .chain(
-            last_value[0..v.vec_engine.sew.byte_length()]
+            last_value[0..v.vec_engine.sew.fp()?.byte_length()]
                 .iter()
                 .copied(),
         )
@@ -20,4 +24,6 @@ pub fn vf(Opfvf { vd, rs1, vs2, vm }: Opfvf, v: &mut VectorContext<'_>, f: &Floa
         .collect_with_eew(v.vec_engine.sew);
 
     v.apply(vd, vreg);
+
+    Ok(())
 }

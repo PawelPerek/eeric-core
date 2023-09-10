@@ -2,7 +2,7 @@ use crate::rv_core::instruction::executor::prelude::*;
 
 pub fn v(
     vsx: Vsx,
-    eew: SEW,
+    eew: BaseSew,
     nf: usize,
     v: &VectorContext<'_>,
     x: &IntegerRegisters,

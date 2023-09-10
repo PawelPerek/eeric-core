@@ -24,7 +24,7 @@ impl LMUL {
             Self::M1 => 1.,
             Self::M2 => 2.,
             Self::M4 => 4.,
-            Self::M8 => 8.
+            Self::M8 => 8.,
         }
     }
 
@@ -47,16 +47,23 @@ impl TryFrom<f32> for LMUL {
     type Error = String;
 
     fn try_from(value: f32) -> Result<Self, Self::Error> {
-        let lmul = if value == 0.125 { LMUL::MF8 }
-            else if value == 0.25 { LMUL::MF4 }
-            else if value == 0.5 { LMUL::MF2 }
-            else if value == 1.0 { LMUL::M1 }
-            else if value == 2.0 { LMUL::M2 }
-            else if value == 4.0 { LMUL::M4 }
-            else if value == 8.0 { LMUL::M8 }
-            else { 
-                return Err(format!("Cannot parse {} into LMUL", value)) 
-            };
+        let lmul = if value == 0.125 {
+            LMUL::MF8
+        } else if value == 0.25 {
+            LMUL::MF4
+        } else if value == 0.5 {
+            LMUL::MF2
+        } else if value == 1.0 {
+            LMUL::M1
+        } else if value == 2.0 {
+            LMUL::M2
+        } else if value == 4.0 {
+            LMUL::M4
+        } else if value == 8.0 {
+            LMUL::M8
+        } else {
+            return Err(format!("Cannot parse {} into LMUL", value));
+        };
 
         Ok(lmul)
     }

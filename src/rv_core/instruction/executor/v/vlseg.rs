@@ -2,7 +2,7 @@ use crate::rv_core::instruction::executor::prelude::*;
 
 pub fn v(
     Vl { vd, rs1, vm }: Vl,
-    eew: SEW,
+    eew: BaseSew,
     nf: usize,
     v: &mut VectorContext<'_>,
     x: &IntegerRegisters,
@@ -20,11 +20,10 @@ pub fn v(
                 .wrapping_mul(eew.byte_length());
 
             let element: u64 = match eew {
-                SEW::E8 => u8::from_le_bytes(mem.get(address)) as u64,
-                SEW::E16 => u16::from_le_bytes(mem.get(address)) as u64,
-                SEW::E32 => u32::from_le_bytes(mem.get(address)) as u64,
-                SEW::E64 => u64::from_le_bytes(mem.get(address)),
-                _ => unimplemented!(),
+                BaseSew::E8 => u8::from_le_bytes(mem.get(address)) as u64,
+                BaseSew::E16 => u16::from_le_bytes(mem.get(address)) as u64,
+                BaseSew::E32 => u32::from_le_bytes(mem.get(address)) as u64,
+                BaseSew::E64 => u64::from_le_bytes(mem.get(address)),
             };
 
             vn.push(element);

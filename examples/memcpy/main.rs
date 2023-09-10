@@ -29,7 +29,7 @@ fn main() {
                 vtypei: 0b_1_1_000_011,
             }),
             I::Vlv {
-                eew: SEW::E8,
+                eew: BaseSew::E8,
                 data: F::Vl {
                     vd: 0,
                     rs1: A1,
@@ -47,7 +47,7 @@ fn main() {
                 rs2: T0,
             }),
             I::Vsv {
-                eew: SEW::E8,
+                eew: BaseSew::E8,
                 data: F::Vs {
                     vs3: 0,
                     rs1: A3,

@@ -2,7 +2,7 @@ use crate::rv_core::instruction::executor::prelude::*;
 
 pub fn v(
     Vsx { vs3, rs1, vs2, vm }: Vsx,
-    eew: SEW,
+    eew: BaseSew,
     nf: usize,
     v: &VectorContext<'_>,
     x: &IntegerRegisters,
@@ -21,11 +21,10 @@ pub fn v(
                     .wrapping_add(segment.wrapping_mul(v.vec_engine.sew.byte_length()));
                 if mask == 1 {
                     match v.vec_engine.sew {
-                        SEW::E8 => mem.set(address, (vs3 as u8).to_le_bytes()),
-                        SEW::E16 => mem.set(address, (vs3 as u16).to_le_bytes()),
-                        SEW::E32 => mem.set(address, (vs3 as u32).to_le_bytes()),
-                        SEW::E64 => mem.set(address, vs3.to_le_bytes()),
-                        SEW::E128 => unimplemented!(),
+                        BaseSew::E8 => mem.set(address, (vs3 as u8).to_le_bytes()),
+                        BaseSew::E16 => mem.set(address, (vs3 as u16).to_le_bytes()),
+                        BaseSew::E32 => mem.set(address, (vs3 as u32).to_le_bytes()),
+                        BaseSew::E64 => mem.set(address, vs3.to_le_bytes()),
                     };
                 }
             });

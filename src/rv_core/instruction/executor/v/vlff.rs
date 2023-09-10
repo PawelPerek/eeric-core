@@ -2,7 +2,7 @@ use crate::rv_core::{instruction::executor::prelude::*, registers::aliases::csr}
 
 pub fn v(
     Vl { vd, rs1, vm }: Vl,
-    eew: SEW,
+    eew: BaseSew,
     v: &mut VectorContext<'_>,
     x: &IntegerRegisters,
     mem: &Memory,
@@ -17,20 +17,19 @@ pub fn v(
         let address = addr.wrapping_add(offset.wrapping_mul(eew.byte_length()));
 
         let result = match eew {
-            SEW::E8 => mem
+            BaseSew::E8 => mem
                 .fallible_get(address)
                 .map(u8::from_le_bytes)
                 .map(Into::into),
-            SEW::E16 => mem
+            BaseSew::E16 => mem
                 .fallible_get(address)
                 .map(u16::from_le_bytes)
                 .map(Into::into),
-            SEW::E32 => mem
+            BaseSew::E32 => mem
                 .fallible_get(address)
                 .map(u32::from_le_bytes)
                 .map(Into::into),
-            SEW::E64 => mem.fallible_get(address).map(u64::from_le_bytes),
-            _ => unimplemented!(),
+            BaseSew::E64 => mem.fallible_get(address).map(u64::from_le_bytes),
         };
 
         match result {

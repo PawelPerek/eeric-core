@@ -1,13 +1,14 @@
 mod lmul;
 mod mask_behaviour;
-mod sew;
+pub mod sew;
 mod vlen;
 
 use derive_builder::Builder;
 pub use lmul::LMUL;
 pub use mask_behaviour::MaskBehavior;
-pub use sew::SEW;
 pub use vlen::VLEN;
+
+use self::sew::BaseSew;
 
 use super::snapshot::Snapshotable;
 
@@ -17,7 +18,7 @@ use super::snapshot::Snapshotable;
 pub struct VectorEngine {
     pub lmul: LMUL,
     pub vlen: VLEN,
-    pub sew: SEW,
+    pub sew: BaseSew,
     #[allow(dead_code)]
     pub tail_elements: MaskBehavior,
     #[allow(dead_code)]
@@ -28,7 +29,7 @@ impl VectorEngine {
     pub fn new(
         lmul: LMUL,
         vlen: VLEN,
-        sew: SEW,
+        sew: BaseSew,
         tail_elements: MaskBehavior,
         inactive_elements: MaskBehavior,
     ) -> Self {

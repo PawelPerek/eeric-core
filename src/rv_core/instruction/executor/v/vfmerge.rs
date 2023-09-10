@@ -9,8 +9,8 @@ pub fn vfm(
     }: Opfvf,
     v: &mut VectorContext<'_>,
     f: &FloatRegisters,
-) {
-    let vreg = izip!(v.default_mask(true), v.get(vs2).iter_fp())
+) -> Result<(), String> {
+    let vreg = izip!(v.default_mask(true), v.get(vs2).iter_fp()?)
         .map(|(mask, vs2)| {
             if mask == 1 {
                 ArbitraryFloat::copy_type(&vs2, f[rs1])
@@ -21,4 +21,6 @@ pub fn vfm(
         .collect_fp();
 
     v.apply(vd, vreg);
+
+    Ok(())
 }
