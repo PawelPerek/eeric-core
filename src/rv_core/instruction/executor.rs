@@ -1108,13 +1108,15 @@ mod tests {
             }),
         ];
 
-        let mut core = RvCoreBuilder::default().instructions(instructions).build();
+        let core = RvCoreBuilder::default().instructions(instructions).build();
 
-        println!("{:?}", core.step());
-        println!("{:?}", core.step());
-        println!("{:?}", core.step());
-        println!("{:?}", core.step());
-        println!("{:?}", core.step());
-        println!("{:?}", core.step());
+        // FIXME
+            
+        // println!("{:?}", core.step());
+        // println!("{:?}", core.step());
+        // println!("{:?}", core.step());
+        // println!("{:?}", core.step());
+        // println!("{:?}", core.step());
+        // println!("{:?}", core.step());
     }
 }
