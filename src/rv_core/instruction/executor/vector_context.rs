@@ -27,11 +27,11 @@ impl VectorContext<'_> {
 
         // Note: Since we are working on multiples of two
         // multiplying 2^n (vlenb) by 2^(±n) (lmul) will not create floating point errors
-        let vlmax = (self.vec_engine.vlen.byte_length() as f32 * lmul.ratio()) as usize;
+        let vlbmax = self.vlmax_custom_emul(lmul) * self.vec_engine.sew.byte_length();
 
-        let vl = self.csr[VL];
+        let vlb = self.csr[VL] * self.vec_engine.sew.byte_length() as u64;
 
-        self.v.0[start..start + vlmax.min(vl as usize)]
+        self.v.0[start..start + vlbmax.min(vlb as usize)]
             .iter()
             .copied()
     }
@@ -41,7 +41,10 @@ impl VectorContext<'_> {
     }
 
     pub fn get(&self, nth: usize) -> Vreg {
-        Vreg::new(self.register_view(nth).collect(), self.vec_engine.sew)
+        Vreg::new(
+            self.register_view(nth).collect(), 
+            self.vec_engine.sew
+        )
     }
 
     fn wide_register_view(&self, nth: usize) -> Result<impl Iterator<Item = u8> + '_, String> {

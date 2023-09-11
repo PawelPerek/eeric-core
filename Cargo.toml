@@ -1,6 +1,6 @@
 [package]
 name = "eeric"
-version = "0.0.44"
+version = "0.0.45"
 edition = "2021"
 description = "An easily embeddable RV64I core with MFDV extensions"
 license = "MIT"

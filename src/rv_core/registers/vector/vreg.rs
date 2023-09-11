@@ -96,7 +96,9 @@ impl<'a, S: Sew> Iterator for VregEEWIterator<'a, S> {
     type Item = u64;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.byte_iterator.len() == 0 {
+        let len = self.byte_iterator.len();
+
+        if len == 0 {
             return None;
         }
 
