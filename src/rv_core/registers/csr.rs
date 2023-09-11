@@ -2,7 +2,7 @@ use crate::prelude::Snapshotable;
 
 #[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
-enum CsrPrivilege {
+pub enum CsrPrivilege {
     ReadOnly,
     ReadWrite
 }
@@ -11,7 +11,7 @@ enum CsrPrivilege {
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct CsrRegister {
     value: u64,
-    privilege: CsrPrivilege
+    pub privilege: CsrPrivilege
 }
 
 impl CsrRegister {
