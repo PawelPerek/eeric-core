@@ -129,7 +129,7 @@ impl VectorContext<'_> {
     }
 
     pub fn set_vtype(&mut self, value: u64) -> Result<(), String> {
-        self.csr[VTYPE].set(value);
+        unsafe { self.csr[VTYPE].set(value) };
 
         let raw_vtype = Self::decompose_vtype(value)?;
 

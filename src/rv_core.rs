@@ -5,6 +5,8 @@ pub mod registers;
 pub mod snapshot;
 pub mod vector_engine;
 
+use std::time::Instant;
+
 use derive_builder::Builder;
 
 use instruction::{executor::Executor, Instruction};
@@ -22,6 +24,7 @@ pub struct RvCore {
     #[builder(setter(skip))]
     pub registers: Registers,
     pub vec_engine: VectorEngine,
+    timer: Instant
 }
 
 impl RvCore {
@@ -41,8 +44,9 @@ impl Default for RvCore {
         Self {
             memory: Memory::default(),
             instructions: Vec::new(),
-            registers: Registers::default(&vec_engine),
+            registers: Registers::new(&vec_engine),
             vec_engine,
+            timer: Instant::now()
         }
     }
 }
@@ -52,13 +56,14 @@ impl RvCoreBuilder {
         let memory = self.memory.clone().unwrap_or_default();
         let instructions = self.instructions.clone().unwrap_or_default();
         let vec_engine = self.vec_engine.unwrap_or_default();
-        let registers = Registers::default(&vec_engine);
+        let registers = Registers::new(&vec_engine);
 
         RvCore {
             memory,
             instructions,
             vec_engine,
             registers,
+            timer: Instant::now()
         }
     }
 }
@@ -83,6 +88,7 @@ impl Iterator for RunningRvCore<'_> {
                 &mut self.core.registers,
                 &mut self.core.memory,
                 &mut self.core.vec_engine,
+                &self.core.timer
             )
             .execute(instruction),
         )

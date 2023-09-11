@@ -4,7 +4,7 @@ pub fn vsetvl(
     Vsetvl { rd, rs1, rs2 }: Vsetvl,
     x: &mut IntegerRegisters,
     v: &mut VectorContext<'_>,
-) -> Result<(), String> {
+) {
     v.set_vtype(x[rs2]).unwrap();
 
     let avl = match (rd, rs1) {
@@ -13,8 +13,6 @@ pub fn vsetvl(
         (_, rs1) => x[rs1].min(v.vlmax() as u64),
     };
 
-    v.csr[VL].write(avl)?;
+    unsafe { v.csr[VL].set(avl) };
     x[rd] = avl;
-
-    Ok(())
 }

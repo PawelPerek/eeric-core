@@ -35,11 +35,8 @@ pub mod integer {
 
 pub mod csr {
     pub const INSTRET: usize = 0x0c02;
-    pub const INSTRETH: usize = 0x0c82;
     pub const CYCLE: usize = 0x0c00;
-    pub const CYCLEH: usize = 0x0c80;
     pub const TIME: usize = 0x0c01;
-    pub const TIMEH: usize = 0x0c81;
     pub const MARCHID: usize = 0x0f12;
     pub const FCSR: usize = 0x0003;
     pub const FFLAGS: usize = 0x0001;

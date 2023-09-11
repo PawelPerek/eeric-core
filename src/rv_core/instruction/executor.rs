@@ -1,3 +1,5 @@
+use std::time::Instant;
+
 use prelude::*;
 
 mod base;
@@ -17,6 +19,7 @@ pub struct Executor<'core> {
     memory: &'core mut Memory,
     registers: &'core mut Registers,
     vec_engine: &'core mut VectorEngine,
+    timer: &'core Instant
 }
 
 impl<'c> Executor<'c> {
@@ -24,16 +27,24 @@ impl<'c> Executor<'c> {
         registers: &'c mut Registers,
         memory: &'c mut Memory,
         vec_engine: &'c mut VectorEngine,
+        timer: &'c Instant
     ) -> Self {
         Self {
             registers,
             memory,
             vec_engine,
+            timer
         }
     }
 
     pub fn execute(&mut self, input: Instruction) -> Result<(), String> {
         use Instruction::*;
+
+        let current_cycle = self.registers.c[CYCLE].read();
+        unsafe { self.registers.c[CYCLE].set(current_cycle + 1); }
+
+        unsafe { self.registers.c[TIME].set(self.timer.elapsed().as_secs()) }
+
 
         match input {
             Add(args) => base::add(args, &mut self.registers.x),
@@ -179,6 +190,9 @@ impl<'c> Executor<'c> {
             _ => self.vector_execute(input)?,
         };
 
+
+        let current_instret = self.registers.c[INSTRET].read();
+        unsafe { self.registers.c[INSTRET].set(current_instret + 1); } 
         self.registers.pc = self.registers.pc.wrapping_add(4);
 
         Ok(())
@@ -194,9 +208,9 @@ impl<'c> Executor<'c> {
         };
 
         match input {
-            Vsetvli(args) => v::vsetvli(args, &mut self.registers.x, &mut vctx)?,
-            Vsetivli(args) => v::vsetivli(args, &mut self.registers.x, &mut vctx)?,
-            Vsetvl(args) => v::vsetvl(args, &mut self.registers.x, &mut vctx)?,
+            Vsetvli(args) => v::vsetvli(args, &mut self.registers.x, &mut vctx),
+            Vsetivli(args) => v::vsetivli(args, &mut self.registers.x, &mut vctx),
+            Vsetvl(args) => v::vsetvl(args, &mut self.registers.x, &mut vctx),
 
             Vlv { data: args, eew } => {
                 v::vl::v(args, eew, &self.registers.x, &mut vctx, self.memory)?

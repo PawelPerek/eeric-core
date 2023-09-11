@@ -22,11 +22,11 @@ pub struct Registers {
 }
 
 impl Registers {
-    pub fn default(vec_engine: &VectorEngine) -> Self {
+    pub fn new(vec_engine: &VectorEngine) -> Self {
         Self {
             pc: 0,
             x: IntegerRegisters::default(),
-            c: CsrRegisters::default(),
+            c: CsrRegisters::new(&vec_engine.vlen),
             f: FloatRegisters::default(),
             v: VectorRegisters::default(vec_engine),
         }
