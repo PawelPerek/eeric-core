@@ -5,9 +5,8 @@ pub mod registers;
 pub mod snapshot;
 pub mod vector_engine;
 
-use std::time::Instant;
-
 use derive_builder::Builder;
+use instant::Instant;
 
 use instruction::{executor::Executor, Instruction};
 use memory::Memory;
@@ -46,7 +45,7 @@ impl Default for RvCore {
             instructions: Vec::new(),
             registers: Registers::new(&vec_engine),
             vec_engine,
-            timer: Instant::now()
+            timer: instant::Instant::now()
         }
     }
 }
@@ -63,7 +62,7 @@ impl RvCoreBuilder {
             instructions,
             vec_engine,
             registers,
-            timer: Instant::now()
+            timer: instant::Instant::now()
         }
     }
 }
@@ -97,7 +96,7 @@ impl Iterator for RunningRvCore<'_> {
 
 #[cfg(test)]
 mod tests {
-    use crate::rv_core::{snapshot::Snapshotable, vector_engine::Vlen};
+    use crate::rv_core::{snapshot::Snapshotable, vector_engine::{Vlen, VectorEngineBuilder, sew::{Sew, BaseSew}}, registers::aliases::csr::VLENB};
 
     use super::*;
 
@@ -107,6 +106,33 @@ mod tests {
         assert_eq!(
             core.registers.snapshot().v.len(),
             32 * Vlen::V128.byte_length()
+        );
+    }
+
+    #[test]
+    fn custom_vlen_works() {
+        use Instruction::*;
+
+        let core = RvCoreBuilder::default()
+            .instructions(vec![
+                Vsetvli(instruction::format::Vsetvli { rd: 5, rs1: 12, vtypei: 195 })
+            ])
+            .vec_engine(VectorEngineBuilder::default().vlen(Vlen::V256).build())
+            .build();
+        assert_eq!(
+            core.registers.snapshot().v.len(),
+            32 * Vlen::V256.byte_length()
+        );
+    }
+
+    #[test]
+    fn vlenb_csr_works() {
+        let core = RvCoreBuilder::default()
+            .vec_engine(VectorEngineBuilder::default().vlen(Vlen::V256).build())
+            .build();
+        assert_eq!(
+            core.registers.snapshot().c[VLENB].read(),
+            Vlen::V256.byte_length() as u64
         );
     }
 }

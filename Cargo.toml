@@ -1,6 +1,6 @@
 [package]
 name = "eeric"
-version = "0.0.49"
+version = "0.0.50"
 edition = "2021"
 description = "An easily embeddable RV64I core with MFDV extensions"
 license = "MIT"
@@ -18,5 +18,6 @@ codegen-units = 1
 
 [dependencies]
 derive_builder = "0.12.0"
+instant = { version = "0.1.12", features = ["stdweb"] }
 itertools = "0.11.0"
 num-traits = "0.2.16"
