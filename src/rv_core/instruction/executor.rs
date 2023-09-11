@@ -1,5 +1,3 @@
-use std::time::Instant;
-
 use prelude::*;
 
 mod base;
@@ -18,22 +16,19 @@ pub use vector_context::VectorContext;
 pub struct Executor<'core> {
     memory: &'core mut Memory,
     registers: &'core mut Registers,
-    vec_engine: &'core mut VectorEngine,
-    timer: &'core Instant
+    vec_engine: &'core mut VectorEngine
 }
 
 impl<'c> Executor<'c> {
     pub fn new(
         registers: &'c mut Registers,
         memory: &'c mut Memory,
-        vec_engine: &'c mut VectorEngine,
-        timer: &'c Instant
+        vec_engine: &'c mut VectorEngine
     ) -> Self {
         Self {
             registers,
             memory,
-            vec_engine,
-            timer
+            vec_engine
         }
     }
 
@@ -43,7 +38,7 @@ impl<'c> Executor<'c> {
         let current_cycle = self.registers.c[CYCLE].read();
         unsafe { self.registers.c[CYCLE].set(current_cycle + 1); }
 
-        unsafe { self.registers.c[TIME].set(self.timer.elapsed().as_secs()) }
+        unsafe { self.registers.c[TIME].set(current_cycle) }
 
 
         match input {
