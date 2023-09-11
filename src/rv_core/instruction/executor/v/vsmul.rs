@@ -15,7 +15,7 @@ pub fn vv(Opivv { vd, vs1, vs2, vm }: Opivv, v: &mut VectorContext<'_>) {
             let is_overflow = vs2 == vs1 && vs1 == int_min as u64;
 
             if is_overflow {
-                v.set_csr(VXSAT, 1);
+                v.csr[VXSAT].write(1);
                 int_max as u64
             } else {
                 roundoff_signed(
@@ -44,7 +44,7 @@ pub fn vx(Opivx { vd, rs1, vs2, vm }: Opivx, v: &mut VectorContext<'_>, x: &Inte
             let is_overflow = vs2 == x[rs1] && x[rs1] == int_min as u64;
 
             if is_overflow {
-                v.set_csr(VXSAT, 1);
+                v.csr[VXSAT].write(1);
                 int_max as u64
             } else {
                 roundoff_signed(

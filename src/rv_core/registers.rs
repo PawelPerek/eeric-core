@@ -6,7 +6,7 @@ pub mod vector;
 
 use super::{snapshot::Snapshotable, vector_engine::VectorEngine};
 
-pub use csr::CsrRegisters;
+pub use csr::{CsrRegisters, CsrRegister};
 pub use float::FloatRegisters;
 pub use integer::IntegerRegisters;
 pub use vector::VectorRegisters;
@@ -37,7 +37,7 @@ impl Registers {
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct RegistersSnapshot {
     pub x: [u64; 32],
-    pub c: [u64; 4096],
+    pub c: [CsrRegister; 4096],
     pub f: [f64; 32],
     pub v: Vec<u8>,
     pub pc: u64,
@@ -61,7 +61,7 @@ impl Default for RegistersSnapshot {
     fn default() -> Self {
         Self {
             x: [0; 32],
-            c: [0; 4096],
+            c: CsrRegisters::default().snapshot(),
             f: [0.0; 32],
             v: Vec::new(),
             pc: 0,

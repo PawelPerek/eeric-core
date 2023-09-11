@@ -18,7 +18,7 @@ pub fn wv(Opivv { vd, vs1, vs2, vm }: Opivv, v: &mut VectorContext<'_>) {
             );
 
             if sign_mask & result != 0 {
-                v.set_csr(VXSAT, 1);
+                v.csr[VXSAT].write(1);
                 uint_max
             } else {
                 result
@@ -47,7 +47,7 @@ pub fn wx(Opivx { vd, rs1, vs2, vm }: Opivx, v: &mut VectorContext<'_>, x: &Inte
             );
 
             if sign_mask & result != 0 {
-                v.set_csr(VXSAT, 1);
+                v.csr[VXSAT].write(1);
                 uint_max
             } else {
                 result
@@ -76,7 +76,7 @@ pub fn wi(Opivi { vd, imm5, vs2, vm }: Opivi, v: &mut VectorContext<'_>) {
             );
 
             if sign_mask & result != 0 {
-                v.set_csr(VXSAT, 1);
+                v.csr[VXSAT].write(1);
                 uint_max
             } else {
                 result

@@ -1,4 +1,4 @@
-use crate::rv_core::{instruction::executor::prelude::*, registers::aliases::csr};
+use crate::rv_core::instruction::executor::prelude::*;
 
 pub fn v(
     Vl { vd, rs1, vm }: Vl,
@@ -38,7 +38,7 @@ pub fn v(
                 if offset == 0 {
                     return Err(String::from("Fault-Only-First Load trap"));
                 } else {
-                    v.set_csr(csr::VL, offset as u64);
+                    v.csr[VL].write(offset as u64)?;
                 }
             }
         };

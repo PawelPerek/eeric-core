@@ -86,12 +86,12 @@ impl<'c> Executor<'c> {
             Jal(args) => base::jal(args, &mut self.registers.x, &mut self.registers.pc),
             Jalr(args) => base::jalr(args, &mut self.registers.x, &mut self.registers.pc),
 
-            Csrrw(args) => zicsr::csrrw(args, &mut self.registers.x, &mut self.registers.c),
-            Csrrs(args) => zicsr::csrrs(args, &mut self.registers.x, &mut self.registers.c),
-            Csrrc(args) => zicsr::csrrc(args, &mut self.registers.x, &mut self.registers.c),
-            Csrrwi(args) => zicsr::csrrwi(args, &mut self.registers.x, &mut self.registers.c),
-            Csrrsi(args) => zicsr::csrrsi(args, &mut self.registers.x, &mut self.registers.c),
-            Csrrci(args) => zicsr::csrrci(args, &mut self.registers.x, &mut self.registers.c),
+            Csrrw(args) => zicsr::csrrw(args, &mut self.registers.x, &mut self.registers.c)?,
+            Csrrs(args) => zicsr::csrrs(args, &mut self.registers.x, &mut self.registers.c)?,
+            Csrrc(args) => zicsr::csrrc(args, &mut self.registers.x, &mut self.registers.c)?,
+            Csrrwi(args) => zicsr::csrrwi(args, &mut self.registers.x, &mut self.registers.c)?,
+            Csrrsi(args) => zicsr::csrrsi(args, &mut self.registers.x, &mut self.registers.c)?,
+            Csrrci(args) => zicsr::csrrci(args, &mut self.registers.x, &mut self.registers.c)?,
 
             Mul(args) => m::mul(args, &mut self.registers.x),
             Mulh(args) => m::mulh(args, &mut self.registers.x),
@@ -194,9 +194,9 @@ impl<'c> Executor<'c> {
         };
 
         match input {
-            Vsetvli(args) => v::vsetvli(args, &mut self.registers.x, &mut vctx),
-            Vsetivli(args) => v::vsetivli(args, &mut self.registers.x, &mut vctx),
-            Vsetvl(args) => v::vsetvl(args, &mut self.registers.x, &mut vctx),
+            Vsetvli(args) => v::vsetvli(args, &mut self.registers.x, &mut vctx)?,
+            Vsetivli(args) => v::vsetivli(args, &mut self.registers.x, &mut vctx)?,
+            Vsetvl(args) => v::vsetvl(args, &mut self.registers.x, &mut vctx)?,
 
             Vlv { data: args, eew } => {
                 v::vl::v(args, eew, &self.registers.x, &mut vctx, self.memory)?

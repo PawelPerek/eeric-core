@@ -29,7 +29,7 @@ impl VectorContext<'_> {
         // multiplying 2^n (vlenb) by 2^(±n) (lmul) will not create floating point errors
         let vlbmax = self.vlmax_custom_emul(lmul) * self.vec_engine.sew.byte_length();
 
-        let vlb = self.csr[VL] * self.vec_engine.sew.byte_length() as u64;
+        let vlb = self.csr[VL].read() * self.vec_engine.sew.byte_length() as u64;
 
         self.v.0[start..start + vlbmax.min(vlb as usize)]
             .iter()
@@ -106,10 +106,6 @@ impl VectorContext<'_> {
             * emul.ratio()) as usize
     }
 
-    pub fn set_csr(&mut self, csr: usize, value: u64) {
-        self.csr[csr] = value;
-    }
-
     fn decompose_vtype(vtype: u64) -> Result<RawVType, String> {
         let vlmul = (vtype & 0b111) as u8;
         let vsew = ((vtype >> 3) & 0b111) as u8;
@@ -133,7 +129,7 @@ impl VectorContext<'_> {
     }
 
     pub fn set_vtype(&mut self, value: u64) -> Result<(), String> {
-        self.csr[VTYPE] = value;
+        self.csr[VTYPE].set(value);
 
         let raw_vtype = Self::decompose_vtype(value)?;
 

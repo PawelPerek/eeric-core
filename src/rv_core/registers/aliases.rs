@@ -47,12 +47,12 @@ pub mod csr {
     pub const MSTATUS: usize = 0x0300;
     pub const VSSTATUS: usize = 0x0200;
     pub const VTYPE: usize = 0x0c21;
-    pub const VL: usize = 0xC20;
-    pub const VLENB: usize = 0xC22;
-    pub const VSTART: usize = 0x008;
-    pub const VXRM: usize = 0x00A;
-    pub const VXSAT: usize = 0x009;
-    pub const VCSR: usize = 0x00F;
+    pub const VL: usize = 0x0C20;
+    pub const VLENB: usize = 0x0C22;
+    pub const VSTART: usize = 0x0008;
+    pub const VXRM: usize = 0x000A;
+    pub const VXSAT: usize = 0x0009;
+    pub const VCSR: usize = 0x000F;
 }
 
 pub mod float {
