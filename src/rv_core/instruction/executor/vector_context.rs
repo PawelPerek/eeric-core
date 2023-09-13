@@ -6,7 +6,7 @@ use crate::rv_core::{
 };
 
 use super::prelude::{
-    aliases::csr::{VL, VTYPE},
+    aliases::csr::{VL, VTYPE, VSTART},
     vector::{Vreg, WideVreg},
     BaseSew, Lmul, Sew,
 };
@@ -19,19 +19,28 @@ pub struct VectorContext<'c> {
 
 impl VectorContext<'_> {
     fn start_ptr(&self, nth: usize) -> usize {
-        nth * self.vec_engine.vlen.byte_length()
+        let vstart = self.csr[VSTART].read() as usize * self.vec_engine.sew.byte_length();
+        let vlen = self.vec_engine.vlen.byte_length(); 
+        nth * vlen + vstart
+    }
+
+    fn end_ptr(&self, nth: usize, lmul: Lmul) -> usize {
+        let sewb = self.vec_engine.sew.byte_length();
+
+        let vstart = self.csr[VSTART].read() as usize * sewb;
+        let vlbmax = self.vlmax_custom_emul(lmul) * sewb;
+        let vlb = self.csr[VL].read() as usize * sewb;
+        
+        let start = self.start_ptr(nth);
+
+        start + usize::min(vlbmax, vlb) - vstart
     }
 
     fn register_view_with_lmul(&self, nth: usize, lmul: Lmul) -> impl Iterator<Item = u8> + '_ {
         let start = self.start_ptr(nth);
-
-        // Note: Since we are working on multiples of two
-        // multiplying 2^n (vlenb) by 2^(±n) (lmul) will not create floating point errors
-        let vlbmax = self.vlmax_custom_emul(lmul) * self.vec_engine.sew.byte_length();
-
-        let vlb = self.csr[VL].read() * self.vec_engine.sew.byte_length() as u64;
-
-        self.v.0[start..start + vlbmax.min(vlb as usize)]
+        let end = self.end_ptr(nth, lmul);
+        
+        self.v.0[start..end]
             .iter()
             .copied()
     }
@@ -78,12 +87,14 @@ impl VectorContext<'_> {
     }
 
     pub fn apply(&mut self, nth: usize, vreg: Vreg) {
-        let engine_vlen =
-            (self.vec_engine.vlen.byte_length() as f32 * self.vec_engine.lmul.ratio()) as usize;
+        let sewb = self.vec_engine.sew.byte_length();
+        let engine_vlen = self.vlmax() * sewb;
+        let vstart = self.csr[VSTART].read() as usize * sewb;
+        
         let start = self.start_ptr(nth);
 
-        if vreg.iter_byte().len() >= engine_vlen {
-            let end = start + engine_vlen;
+        if vreg.iter_byte().len() >= engine_vlen - vstart {
+            let end = self.end_ptr(nth, self.vec_engine.lmul);
             let vreg_length = end - start;
 
             self.v.0[start..end].clone_from_slice(&vreg.raw[0..vreg_length])
@@ -97,13 +108,11 @@ impl VectorContext<'_> {
     }
 
     pub fn vlmax(&self) -> usize {
-        ((self.vec_engine.vlen.byte_length() / self.vec_engine.sew.byte_length()) as f32
-            * self.vec_engine.lmul.ratio()) as usize
+        self.vec_engine.lmul.multiply(self.vec_engine.vlen.byte_length() / self.vec_engine.sew.byte_length())
     }
 
     pub fn vlmax_custom_emul(&self, emul: Lmul) -> usize {
-        ((self.vec_engine.vlen.byte_length() / self.vec_engine.sew.byte_length()) as f32
-            * emul.ratio()) as usize
+        emul.multiply(self.vec_engine.vlen.byte_length() / self.vec_engine.sew.byte_length())
     }
 
     fn decompose_vtype(vtype: u64) -> Result<RawVType, String> {
@@ -159,6 +168,12 @@ impl VectorContext<'_> {
         self.vec_engine.inactive_elements = if raw_vtype.vma { Agnostic } else { Undisturbed };
 
         Ok(())
+    }
+}
+
+impl Drop for VectorContext<'_> {
+    fn drop(&mut self) {
+        unsafe { self.csr[VSTART].set(0) };
     }
 }
 

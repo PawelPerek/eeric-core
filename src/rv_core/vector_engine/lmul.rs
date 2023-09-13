@@ -16,15 +16,27 @@ pub enum Lmul {
 }
 
 impl Lmul {
+    pub fn multiply(&self, other: usize) -> usize {
+        match self {
+            Self::MF8 => other / 8,
+            Self::MF4 => other / 4,
+            Self::MF2 => other / 2,
+            Self::M1 => other,
+            Self::M2 => other * 2,
+            Self::M4 => other * 4,
+            Self::M8 => other * 8,
+        }
+    }
+
     pub fn ratio(&self) -> f32 {
         match self {
             Self::MF8 => 0.125,
             Self::MF4 => 0.25,
             Self::MF2 => 0.5,
-            Self::M1 => 1.,
-            Self::M2 => 2.,
-            Self::M4 => 4.,
-            Self::M8 => 8.,
+            Self::M1 => 1.0,
+            Self::M2 => 2.0,
+            Self::M4 => 4.0,
+            Self::M8 => 8.0,
         }
     }
 
