@@ -37,11 +37,12 @@ impl RvCore {
 impl Default for RvCore {
     fn default() -> Self {
         let vec_engine = VectorEngine::default();
+        let memory = Memory::default();
 
         Self {
-            memory: Memory::default(),
             instructions: Vec::new(),
-            registers: Registers::new(&vec_engine),
+            registers: Registers::new(&vec_engine, &memory),
+            memory,
             vec_engine,
         }
     }
@@ -52,7 +53,7 @@ impl RvCoreBuilder {
         let memory = self.memory.clone().unwrap_or_default();
         let instructions = self.instructions.clone().unwrap_or_default();
         let vec_engine = self.vec_engine.unwrap_or_default();
-        let registers = Registers::new(&vec_engine);
+        let registers = Registers::new(&vec_engine, &memory);
 
         RvCore {
             memory,
@@ -92,7 +93,7 @@ impl Iterator for RunningRvCore<'_> {
 #[cfg(test)]
 mod tests {
     use crate::rv_core::{
-        registers::aliases::csr::VLENB,
+        registers::aliases::{csr::VLENB, integer::SP},
         snapshot::Snapshotable,
         vector_engine::{
             VectorEngineBuilder, Vlen,
@@ -136,6 +137,20 @@ mod tests {
         assert_eq!(
             core.registers.snapshot().c[VLENB].read(),
             Vlen::V256.byte_length() as u64
+        );
+    }
+
+    #[test]
+    fn sp_points_to_stack() {
+        let memory = Memory::new([5,2,1,3,4].into_iter());
+        
+        let core = RvCoreBuilder::default()
+            .memory(memory)
+            .build();
+        
+        assert_eq!(
+            core.registers.snapshot().x[SP],
+            4
         );
     }
 }

@@ -4,7 +4,7 @@ mod float;
 mod integer;
 pub mod vector;
 
-use super::{snapshot::Snapshotable, vector_engine::VectorEngine};
+use super::{snapshot::Snapshotable, vector_engine::VectorEngine, memory::Memory};
 
 pub use csr::{CsrPrivilege, CsrRegister, CsrRegisters};
 pub use float::FloatRegisters;
@@ -22,10 +22,10 @@ pub struct Registers {
 }
 
 impl Registers {
-    pub fn new(vec_engine: &VectorEngine) -> Self {
+    pub fn new(vec_engine: &VectorEngine, mem: &Memory) -> Self {
         Self {
             pc: 0,
-            x: IntegerRegisters::default(),
+            x: IntegerRegisters::new(mem),
             c: CsrRegisters::new(&vec_engine.vlen),
             f: FloatRegisters::default(),
             v: VectorRegisters::default(vec_engine),

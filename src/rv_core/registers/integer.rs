@@ -1,8 +1,20 @@
-use crate::prelude::Snapshotable;
+use crate::{prelude::Snapshotable, rv_core::memory::Memory};
 
-#[derive(Clone, Default, PartialEq)]
+use super::aliases::integer::SP;
+
+#[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct IntegerRegisters([u64; 31]);
+
+impl IntegerRegisters {
+    pub fn new(mem: &Memory) -> Self {
+        let mut regs: [u64; 31] = Default::default();
+
+        regs[SP - 1] = mem.len() as u64 - 1;
+
+        Self(regs)
+    }
+}
 
 impl Snapshotable for IntegerRegisters {
     type Snapshot = [u64; 32];
