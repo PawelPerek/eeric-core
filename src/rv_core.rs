@@ -21,7 +21,7 @@ pub struct RvCore {
     pub instructions: Vec<Instruction>,
     #[builder(setter(skip))]
     pub registers: Registers,
-    pub vec_engine: VectorEngine
+    pub vec_engine: VectorEngine,
 }
 
 impl RvCore {
@@ -42,7 +42,7 @@ impl Default for RvCore {
             memory: Memory::default(),
             instructions: Vec::new(),
             registers: Registers::new(&vec_engine),
-            vec_engine
+            vec_engine,
         }
     }
 }
@@ -58,7 +58,7 @@ impl RvCoreBuilder {
             memory,
             instructions,
             vec_engine,
-            registers
+            registers,
         }
     }
 }
@@ -91,7 +91,13 @@ impl Iterator for RunningRvCore<'_> {
 
 #[cfg(test)]
 mod tests {
-    use crate::rv_core::{snapshot::Snapshotable, vector_engine::{Vlen, VectorEngineBuilder, sew::{Sew, BaseSew}}, registers::aliases::csr::VLENB};
+    use crate::rv_core::{
+        registers::aliases::csr::VLENB,
+        snapshot::Snapshotable,
+        vector_engine::{
+            VectorEngineBuilder, Vlen,
+        },
+    };
 
     use super::*;
 
@@ -109,9 +115,11 @@ mod tests {
         use Instruction::*;
 
         let core = RvCoreBuilder::default()
-            .instructions(vec![
-                Vsetvli(instruction::format::Vsetvli { rd: 5, rs1: 12, vtypei: 195 })
-            ])
+            .instructions(vec![Vsetvli(instruction::format::Vsetvli {
+                rd: 5,
+                rs1: 12,
+                vtypei: 195,
+            })])
             .vec_engine(VectorEngineBuilder::default().vlen(Vlen::V256).build())
             .build();
         assert_eq!(

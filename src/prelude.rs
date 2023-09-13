@@ -1,7 +1,7 @@
 pub use crate::rv_core::{
     instruction::{format, Instruction},
     memory::Memory,
-    registers::{Registers, RegistersSnapshot, CsrPrivilege},
+    registers::{CsrPrivilege, Registers, RegistersSnapshot},
     snapshot::Snapshotable,
     vector_engine::{
         sew::{BaseSew, Sew},

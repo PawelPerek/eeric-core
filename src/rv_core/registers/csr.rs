@@ -6,14 +6,14 @@ use super::aliases::csr::VLENB;
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub enum CsrPrivilege {
     ReadOnly,
-    ReadWrite
+    ReadWrite,
 }
 
 #[derive(Clone, PartialEq)]
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct CsrRegister {
     value: u64,
-    pub privilege: CsrPrivilege
+    pub privilege: CsrPrivilege,
 }
 
 impl CsrRegister {
@@ -26,7 +26,9 @@ impl CsrRegister {
             return Err("Cannot write to read-only register".to_owned());
         }
 
-        unsafe { self.set(value); }
+        unsafe {
+            self.set(value);
+        }
 
         Ok(())
     }
@@ -34,7 +36,6 @@ impl CsrRegister {
     pub unsafe fn set(&mut self, value: u64) {
         self.value = value;
     }
-
 }
 
 #[derive(Clone, PartialEq)]
@@ -63,10 +64,14 @@ impl Default for CsrRegisters {
     fn default() -> Self {
         let mut index = 0;
         Self([0; 4096].map(|_| {
-            let privilege = if ((index >> 10) & 0b11) == 0b11 { CsrPrivilege::ReadOnly } else { CsrPrivilege::ReadWrite };
-            let register = CsrRegister { 
-                value: 0, 
-                privilege 
+            let privilege = if ((index >> 10) & 0b11) == 0b11 {
+                CsrPrivilege::ReadOnly
+            } else {
+                CsrPrivilege::ReadWrite
+            };
+            let register = CsrRegister {
+                value: 0,
+                privilege,
             };
 
             index += 1;

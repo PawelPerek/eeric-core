@@ -6,7 +6,7 @@ pub mod vector;
 
 use super::{snapshot::Snapshotable, vector_engine::VectorEngine};
 
-pub use csr::{CsrRegisters, CsrRegister, CsrPrivilege};
+pub use csr::{CsrPrivilege, CsrRegister, CsrRegisters};
 pub use float::FloatRegisters;
 pub use integer::IntegerRegisters;
 pub use vector::VectorRegisters;

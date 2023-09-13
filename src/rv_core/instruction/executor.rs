@@ -16,19 +16,19 @@ pub use vector_context::VectorContext;
 pub struct Executor<'core> {
     memory: &'core mut Memory,
     registers: &'core mut Registers,
-    vec_engine: &'core mut VectorEngine
+    vec_engine: &'core mut VectorEngine,
 }
 
 impl<'c> Executor<'c> {
     pub fn new(
         registers: &'c mut Registers,
         memory: &'c mut Memory,
-        vec_engine: &'c mut VectorEngine
+        vec_engine: &'c mut VectorEngine,
     ) -> Self {
         Self {
             registers,
             memory,
-            vec_engine
+            vec_engine,
         }
     }
 
@@ -36,10 +36,11 @@ impl<'c> Executor<'c> {
         use Instruction::*;
 
         let current_cycle = self.registers.c[CYCLE].read();
-        unsafe { self.registers.c[CYCLE].set(current_cycle + 1); }
+        unsafe {
+            self.registers.c[CYCLE].set(current_cycle + 1);
+        }
 
         unsafe { self.registers.c[TIME].set(current_cycle) }
-
 
         match input {
             Add(args) => base::add(args, &mut self.registers.x),
@@ -185,9 +186,10 @@ impl<'c> Executor<'c> {
             _ => self.vector_execute(input)?,
         };
 
-
         let current_instret = self.registers.c[INSTRET].read();
-        unsafe { self.registers.c[INSTRET].set(current_instret + 1); } 
+        unsafe {
+            self.registers.c[INSTRET].set(current_instret + 1);
+        }
         self.registers.pc = self.registers.pc.wrapping_add(4);
 
         Ok(())
@@ -1118,7 +1120,7 @@ mod tests {
         ];
 
         let mut core = RvCoreBuilder::default().instructions(instructions).build();
-            
+
         core.step();
         core.step();
         core.step();

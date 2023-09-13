@@ -6,7 +6,7 @@ use crate::rv_core::{
 };
 
 use super::prelude::{
-    aliases::csr::{VL, VTYPE, VSTART},
+    aliases::csr::{VL, VSTART, VTYPE},
     vector::{Vreg, WideVreg},
     BaseSew, Lmul, Sew,
 };
@@ -20,7 +20,7 @@ pub struct VectorContext<'c> {
 impl VectorContext<'_> {
     fn start_ptr(&self, nth: usize) -> usize {
         let vstart = self.csr[VSTART].read() as usize * self.vec_engine.sew.byte_length();
-        let vlen = self.vec_engine.vlen.byte_length(); 
+        let vlen = self.vec_engine.vlen.byte_length();
         nth * vlen + vstart
     }
 
@@ -30,7 +30,7 @@ impl VectorContext<'_> {
         let vstart = self.csr[VSTART].read() as usize * sewb;
         let vlbmax = self.vlmax_custom_emul(lmul) * sewb;
         let vlb = self.csr[VL].read() as usize * sewb;
-        
+
         let start = self.start_ptr(nth);
 
         start + usize::min(vlbmax, vlb) - vstart
@@ -39,10 +39,8 @@ impl VectorContext<'_> {
     fn register_view_with_lmul(&self, nth: usize, lmul: Lmul) -> impl Iterator<Item = u8> + '_ {
         let start = self.start_ptr(nth);
         let end = self.end_ptr(nth, lmul);
-        
-        self.v.0[start..end]
-            .iter()
-            .copied()
+
+        self.v.0[start..end].iter().copied()
     }
 
     fn register_view(&self, nth: usize) -> impl Iterator<Item = u8> + '_ {
@@ -50,10 +48,7 @@ impl VectorContext<'_> {
     }
 
     pub fn get(&self, nth: usize) -> Vreg {
-        Vreg::new(
-            self.register_view(nth).collect(), 
-            self.vec_engine.sew
-        )
+        Vreg::new(self.register_view(nth).collect(), self.vec_engine.sew)
     }
 
     fn wide_register_view(&self, nth: usize) -> Result<impl Iterator<Item = u8> + '_, String> {
@@ -90,7 +85,7 @@ impl VectorContext<'_> {
         let sewb = self.vec_engine.sew.byte_length();
         let engine_vlen = self.vlmax() * sewb;
         let vstart = self.csr[VSTART].read() as usize * sewb;
-        
+
         let start = self.start_ptr(nth);
 
         if vreg.iter_byte().len() >= engine_vlen - vstart {
@@ -108,7 +103,9 @@ impl VectorContext<'_> {
     }
 
     pub fn vlmax(&self) -> usize {
-        self.vec_engine.lmul.multiply(self.vec_engine.vlen.byte_length() / self.vec_engine.sew.byte_length())
+        self.vec_engine
+            .lmul
+            .multiply(self.vec_engine.vlen.byte_length() / self.vec_engine.sew.byte_length())
     }
 
     pub fn vlmax_custom_emul(&self, emul: Lmul) -> usize {

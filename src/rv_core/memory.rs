@@ -4,7 +4,7 @@ use super::snapshot::Snapshotable;
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub struct Memory {
     raw: Vec<u8>,
-    data_ptr: usize
+    data_ptr: usize,
 }
 
 impl Snapshotable for Memory {
@@ -18,10 +18,7 @@ impl Snapshotable for Memory {
 impl Memory {
     fn new(raw: Vec<u8>) -> Self {
         let data_ptr = raw.len();
-        Self {
-            raw,
-            data_ptr
-        }
+        Self { raw, data_ptr }
     }
 
     pub fn get<const BYTES: usize>(&self, address: usize) -> [u8; BYTES] {
@@ -51,7 +48,7 @@ impl Memory {
     }
 
     pub fn assign(&mut self, data: &[u8]) {
-        &self.raw[self.data_ptr - data.len() .. self.data_ptr].copy_from_slice(data);
+        self.raw[self.data_ptr - data.len()..self.data_ptr].copy_from_slice(data);
         self.data_ptr -= data.len();
     }
 }
@@ -74,23 +71,22 @@ impl Default for Memory {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
     #[test]
     fn assign_works() {
         let mut mem = Memory::new(vec![0; 0x10]);
 
         assert_eq!(mem.data_ptr, 0x10);
 
-        mem.assign(&[1,2]);
+        mem.assign(&[1, 2]);
 
         assert_eq!(mem.data_ptr, 0xE);
         assert_eq!(mem.raw, &[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2]);
 
-        mem.assign(&[5,10,15]);
+        mem.assign(&[5, 10, 15]);
 
         assert_eq!(mem.data_ptr, 0xB);
         assert_eq!(mem.raw, &[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 10, 15, 1, 2]);
