@@ -1,7 +1,5 @@
 use crate::rv_core::instruction::executor::prelude::*;
 
-// TODO: Check overflow behaviour
-
 use super::utils::rounding::Roundoff;
 
 pub fn vv(

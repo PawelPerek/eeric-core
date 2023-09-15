@@ -179,6 +179,9 @@ impl<'c> Executor<'c> {
             Fmvdx(args) => d::fmv::dx(args, &self.registers.x, &mut self.registers.f),
 
             Fusion(first, second) => {
+                // FIXME
+                self.registers.pc = self.registers.pc.wrapping_sub(4);
+
                 self.execute(*first)?;
                 self.execute(*second)?;
             }

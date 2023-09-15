@@ -24,7 +24,7 @@ impl TryFrom<usize> for BaseSew {
             16 => Self::E16,
             32 => Self::E32,
             64 => Self::E64,
-            _ => return Err(format!("Expected SEW= 8 | 16 | 32 | 64, got SEW={}", value)),
+            _ => return Err(format!("Expected SEW = 8b, 16b, 32b or 64b, got SEW = {}b", value)),
         };
 
         Ok(sew)
@@ -48,7 +48,7 @@ impl BaseSew {
             Self::E16 => HalfSew::E8,
             _ => {
                 return Err(format!(
-                    "Expected SEW = 16 | 32 | 64 to half, got SEW = {}",
+                    "SEW has to be equal 16b, 32b or 64b for halving operations, got SEW = {}b",
                     self.bit_length()
                 ))
             }
@@ -63,7 +63,7 @@ impl BaseSew {
             Self::E32 => FourthSew::E8,
             _ => {
                 return Err(format!(
-                    "Expected SEW = 32 | 64 to fourth, got SEW = {}",
+                    "SEW has to be equal 32b or 64b for fourthing operations, got SEW = {}b",
                     self.bit_length()
                 ))
             }
@@ -77,7 +77,7 @@ impl BaseSew {
             Self::E64 => EighthSew::E8,
             _ => {
                 return Err(format!(
-                    "Expected SEW = 64 to eighth, got SEW = {}",
+                    "SEW has to be equal 64b for eighthing operations, got SEW = {}b",
                     self.bit_length()
                 ))
             }
@@ -92,7 +92,7 @@ impl BaseSew {
             Self::E64 => FpSew::E64,
             _ => {
                 return Err(format!(
-                    "Expected SEW = 32 | 64 to FP, got SEW = {}",
+                    "When using FP vector operations, SEW has to be either 32b or 64b, got SEW = {}b",
                     self.bit_length()
                 ))
             }
@@ -128,8 +128,8 @@ impl DoubleSew {
             Self::E64 => DoubleFpSew::E64,
             _ => {
                 return Err(format!(
-                "Expected double SEW = 64 (SEW = 32) for wide FP operations, got double SEW = {}",
-                self.bit_length()
+                "When using widening FP vector operations, SEW has to be either 32b, got SEW = {}b",
+                self.bit_length() / 2
             ))
             }
         };
