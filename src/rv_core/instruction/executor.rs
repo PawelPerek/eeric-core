@@ -180,7 +180,7 @@ impl<'c> Executor<'c> {
 
             Fusion(first, second) => {
                 // FIXME
-                self.registers.pc = self.registers.pc.wrapping_sub(4);
+                self.registers.pc = self.registers.pc.wrapping_sub(8);
 
                 self.execute(*first)?;
                 self.execute(*second)?;
